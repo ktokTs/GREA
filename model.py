@@ -1,6 +1,5 @@
 import torch
 import torch.nn.functional as F
-from torch_scatter import scatter_add
 from torch_geometric.nn.inits import reset
 
 from conv import GNN_node, GNN_node_Virtualnode
@@ -83,16 +82,32 @@ class separator(torch.nn.Module):
         batch = batched_data.batch
         x = x.unsqueeze(-1) if x.dim() == 1 else x
         size = batch[-1].item() + 1 if size is None else size
-
+    
         gate = self.gate_nn(x).view(-1, 1)
         h_node = self.nn(h_node) if self.nn is not None else h_node
         assert gate.dim() == h_node.dim() and gate.size(0) == h_node.size(0)
         gate = torch.sigmoid(gate)
-
-        h_out = scatter_add(gate * h_node, batch, dim=0, dim_size=size)
-        c_out = scatter_add((1 - gate) * h_node, batch, dim=0, dim_size=size)
-
-        r_node_num = scatter_add(gate, batch, dim=0, dim_size=size)
-        env_node_num = scatter_add((1 - gate), batch, dim=0, dim_size=size)
-
-        return h_out, c_out, r_node_num + 1e-8 , env_node_num + 1e-8 
+    
+        # 出力テンソル形状の決定（h_node の次元に依存）
+        out_shape = (size,) + tuple(h_node.shape[1:])  # h_node.dim()==1 の時は (size,)
+        device = h_node.device
+        dtype = h_node.dtype
+    
+        h_out = h_node.new_zeros(out_shape)
+        c_out = h_node.new_zeros(out_shape)
+    
+        # batch は long 型であること（なければ変換）
+        if batch.dtype != torch.long:
+            batch = batch.long()
+    
+        h_out.index_add_(0, batch, gate * h_node)
+        c_out.index_add_(0, batch, (1.0 - gate) * h_node)
+    
+        # r_node_num / env_node_num は (size, 1) にしておく（元の動作に合わせる）
+        r_node_num = gate.new_zeros((size, gate.size(1)))
+        env_node_num = gate.new_zeros((size, gate.size(1)))
+    
+        r_node_num.index_add_(0, batch, gate)
+        env_node_num.index_add_(0, batch, (1.0 - gate))
+    
+        return h_out, c_out, r_node_num + 1e-8, env_node_num + 1e-8

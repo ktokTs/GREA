@@ -5,7 +5,6 @@ from torch_geometric.nn import global_mean_pool, global_add_pool
 from torch_geometric.nn.inits import reset
 from ogb.graphproppred.mol_encoder import AtomEncoder,BondEncoder
 from torch_geometric.utils import degree
-from torch_scatter import scatter_add, scatter_min, scatter_max, scatter_mean
 from torch_geometric.utils import softmax
 from torch_geometric.nn.norm import GraphNorm
 import math

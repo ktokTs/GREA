@@ -35,7 +35,7 @@ class PolymerRegDataset(InMemoryDataset):
         super(PolymerRegDataset, self).__init__(self.processed_root, transform, pre_transform)
 
         print(self.processed_paths[0])
-        self.data, self.slices = torch.load(self.processed_paths[0])
+        self.data, self.slices = torch.load(self.processed_paths[0], weights_only=False)
     @property
     def processed_file_names(self):
         return 'geometric_data_processed.pt'
@@ -75,7 +75,7 @@ class PolymerRegDataset(InMemoryDataset):
         for smiles_idx in df_full.index[:]:
             graph_dict = smiles2graph(smiles_idx)
             props = df_full.loc[smiles_idx]
-            for (name,value) in props.iteritems():
+            for (name,value) in props.items():
                 graph_dict[name] = np.array([[value]])
             graph_list.append(graph_dict)
         return graph_list
@@ -128,7 +128,7 @@ def smiles2graph(smiles_string):
         atom_label.append(atom.GetSymbol())
 
     x = np.array(atom_features_list, dtype = np.int64)
-    atom_label = np.array(atom_label, dtype = np.str)
+    atom_label = np.array(atom_label, dtype = str)
 
     # bonds
     num_bond_features = 3  # bond type, bond stereo, is_conjugated

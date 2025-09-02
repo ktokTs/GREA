@@ -1,0 +1,2048 @@
+Namespace(device=0, gnn='gin-virtual', drop_ratio=0.1, num_layer=3, emb_dim=128, use_linear_predictor=False, gamma=0.2, batch_size=32, epochs=400, patience=50, lr=0.01, l2reg=0.0001, use_lr_scheduler=False, use_clip_norm=False, path_list=[1, 4], initw_name='default', dataset='plym-o2_prop', trails=5, by_default=True, plym_prop='o2')
+/workspaces/GREA/data/o2_prop/processed/geometric_data_processed.pt
+# Train: 356  #Test: 179.0 #Val: 60
+initialize network with default
+=====Epoch 0
+{'Metric': 'RMSE', 'Train': np.float64(1271.3876022942193), 'Validation': np.float64(2519.9260716645504), 'Test': np.float64(2223.667570255764), 'Test R2': -0.03858901537411419}
+=====Epoch 1
+{'Metric': 'RMSE', 'Train': np.float64(1251.2284996912933), 'Validation': np.float64(2491.3573481123435), 'Test': np.float64(2197.9825613571093), 'Test R2': -0.014734637410394047}
+=====Epoch 2
+{'Train': np.float64(1530.3338276182078), 'Validation': np.float64(2566.8686977481198)}
+=====Epoch 3
+{'Train': np.float64(1352.0344205282029), 'Validation': np.float64(2534.786576645699)}
+=====Epoch 4
+{'Metric': 'RMSE', 'Train': np.float64(1236.060912842105), 'Validation': np.float64(2464.3384932638405), 'Test': np.float64(2171.4527993967404), 'Test R2': 0.009613327793312698}
+=====Epoch 5
+{'Metric': 'RMSE', 'Train': np.float64(1173.5856856265318), 'Validation': np.float64(2356.5580956668396), 'Test': np.float64(2070.414874298816), 'Test R2': 0.09963468071629678}
+=====Epoch 6
+{'Metric': 'RMSE', 'Train': np.float64(1133.4837565266039), 'Validation': np.float64(2294.093343113703), 'Test': np.float64(2013.0245685943162), 'Test R2': 0.1488577462878623}
+=====Epoch 7
+{'Metric': 'RMSE', 'Train': np.float64(1116.3120772038665), 'Validation': np.float64(2260.7991277202295), 'Test': np.float64(1998.0620093444493), 'Test R2': 0.1614635900315472}
+=====Epoch 8
+{'Train': np.float64(1169.674837262401), 'Validation': np.float64(2364.070830378553)}
+=====Epoch 9
+{'Metric': 'RMSE', 'Train': np.float64(1168.553019538671), 'Validation': np.float64(2247.5644127881937), 'Test': np.float64(1982.9893345591192), 'Test R2': 0.17406711736611724}
+=====Epoch 10
+{'Train': np.float64(4738.601466926043), 'Validation': np.float64(5087.0538592018265)}
+=====Epoch 11
+{'Train': np.float64(1264.5281000201417), 'Validation': np.float64(2508.693024207481)}
+=====Epoch 12
+{'Train': np.float64(1141.494953898855), 'Validation': np.float64(2318.2204198108957)}
+=====Epoch 13
+{'Train': np.float64(1260.2925682352934), 'Validation': np.float64(2503.823822929044)}
+=====Epoch 14
+{'Metric': 'RMSE', 'Train': np.float64(2062.6474701147818), 'Validation': np.float64(2224.220342820374), 'Test': np.float64(2067.352460847778), 'Test R2': 0.1022962261896625}
+=====Epoch 15
+{'Metric': 'RMSE', 'Train': np.float64(1415.8404519417718), 'Validation': np.float64(1911.2133000970766), 'Test': np.float64(1686.7613607236403), 'Test R2': 0.40239903792814613}
+=====Epoch 16
+{'Train': np.float64(946.4186566315657), 'Validation': np.float64(1914.2060668506508)}
+=====Epoch 17
+{'Train': np.float64(957.8032555527055), 'Validation': np.float64(1928.182471638986)}
+=====Epoch 18
+{'Train': np.float64(940.4171056151499), 'Validation': np.float64(1994.6591399678687)}
+=====Epoch 19
+{'Metric': 'RMSE', 'Train': np.float64(809.9521701679508), 'Validation': np.float64(1428.287539606377), 'Test': np.float64(1164.6055061295774), 'Test R2': 0.7151201852187254}
+=====Epoch 20
+{'Train': np.float64(764.2872003875791), 'Validation': np.float64(1650.1420101974459)}
+=====Epoch 21
+{'Train': np.float64(1718.0982534952202), 'Validation': np.float64(1937.5212753416147)}
+=====Epoch 22
+{'Train': np.float64(1141.1489455132237), 'Validation': np.float64(2312.4518210294614)}
+=====Epoch 23
+{'Train': np.float64(1057.0778113867636), 'Validation': np.float64(2143.1293059428594)}
+=====Epoch 24
+{'Train': np.float64(855.8890944691074), 'Validation': np.float64(1837.5181212311816)}
+=====Epoch 25
+{'Train': np.float64(3054.0873214506328), 'Validation': np.float64(3088.1879012015083)}
+=====Epoch 26
+{'Train': np.float64(1933.9000179050279), 'Validation': np.float64(1933.665579980721)}
+=====Epoch 27
+{'Train': np.float64(2800.9680804096893), 'Validation': np.float64(3227.971825950636)}
+=====Epoch 28
+{'Train': np.float64(890.3100551741592), 'Validation': np.float64(1889.7272208105944)}
+=====Epoch 29
+{'Train': np.float64(817.5072484206615), 'Validation': np.float64(1784.6877018728585)}
+=====Epoch 30
+{'Train': np.float64(766.5315072302606), 'Validation': np.float64(1691.8460969935236)}
+=====Epoch 31
+{'Train': np.float64(809.8366954577671), 'Validation': np.float64(1786.6175899704187)}
+=====Epoch 32
+{'Train': np.float64(764.5439755909254), 'Validation': np.float64(1692.7133746785398)}
+=====Epoch 33
+{'Train': np.float64(653.6345724882334), 'Validation': np.float64(1480.1973927797349)}
+=====Epoch 34
+{'Train': np.float64(799.0715470613762), 'Validation': np.float64(1750.4792094770846)}
+=====Epoch 35
+{'Train': np.float64(890.1308569452543), 'Validation': np.float64(1918.4637537965548)}
+=====Epoch 36
+{'Train': np.float64(669.963343938456), 'Validation': np.float64(1468.9694938772911)}
+=====Epoch 37
+{'Train': np.float64(1726.4448467212203), 'Validation': np.float64(1805.1597947979255)}
+=====Epoch 38
+{'Train': np.float64(888.192128745626), 'Validation': np.float64(1884.1813269725267)}
+=====Epoch 39
+{'Train': np.float64(1034.6590529849311), 'Validation': np.float64(2141.979814511917)}
+=====Epoch 40
+{'Train': np.float64(748.2221560131705), 'Validation': np.float64(1663.2504084143955)}
+=====Epoch 41
+{'Metric': 'RMSE', 'Train': np.float64(677.3302210311057), 'Validation': np.float64(1291.4110079124273), 'Test': np.float64(1004.9479770077559), 'Test R2': 0.7878753392721206}
+=====Epoch 42
+{'Train': np.float64(843.1301728810101), 'Validation': np.float64(1345.581229198115)}
+=====Epoch 43
+{'Train': np.float64(703.7611936243284), 'Validation': np.float64(1583.5187562395727)}
+=====Epoch 44
+{'Train': np.float64(647.5085070969891), 'Validation': np.float64(1397.4144290112208)}
+=====Epoch 45
+{'Train': np.float64(618.125800423383), 'Validation': np.float64(1413.3795008523964)}
+=====Epoch 46
+{'Train': np.float64(645.6883024278062), 'Validation': np.float64(1438.989558832319)}
+=====Epoch 47
+{'Train': np.float64(766.3275262521987), 'Validation': np.float64(1693.7021599713514)}
+=====Epoch 48
+{'Metric': 'RMSE', 'Train': np.float64(513.3693312255102), 'Validation': np.float64(1260.6948018976905), 'Test': np.float64(923.1498779247466), 'Test R2': 0.8210018949628564}
+=====Epoch 49
+{'Train': np.float64(676.8986384025662), 'Validation': np.float64(1538.6703534874307)}
+=====Epoch 50
+{'Train': np.float64(707.2235169750032), 'Validation': np.float64(1580.7442199600655)}
+=====Epoch 51
+{'Train': np.float64(1087.7064915148965), 'Validation': np.float64(1444.3814313121431)}
+=====Epoch 52
+{'Train': np.float64(616.0600549850991), 'Validation': np.float64(1298.6874622306782)}
+=====Epoch 53
+{'Train': np.float64(1438.895108258655), 'Validation': np.float64(1821.633424545373)}
+=====Epoch 54
+{'Train': np.float64(615.4195948055607), 'Validation': np.float64(1406.1737715864115)}
+=====Epoch 55
+{'Train': np.float64(707.0138832199402), 'Validation': np.float64(1620.6500249684557)}
+=====Epoch 56
+{'Train': np.float64(615.1366733821043), 'Validation': np.float64(1475.0328067846647)}
+=====Epoch 57
+{'Train': np.float64(561.723316562389), 'Validation': np.float64(1370.9523024206062)}
+=====Epoch 58
+{'Train': np.float64(1212.9366519294608), 'Validation': np.float64(2430.459088844961)}
+=====Epoch 59
+{'Train': np.float64(775.4782405900085), 'Validation': np.float64(1705.5664422203638)}
+=====Epoch 60
+{'Metric': 'RMSE', 'Train': np.float64(482.9056559509879), 'Validation': np.float64(1175.3035016124022), 'Test': np.float64(776.4136396453297), 'Test R2': 0.8733834975796191}
+=====Epoch 61
+{'Train': np.float64(979.8412598879104), 'Validation': np.float64(1389.2912521322842)}
+=====Epoch 62
+{'Train': np.float64(958.8101530918746), 'Validation': np.float64(1385.830160408049)}
+=====Epoch 63
+{'Train': np.float64(720.7221135781872), 'Validation': np.float64(1269.71055750483)}
+=====Epoch 64
+{'Train': np.float64(875.596453322862), 'Validation': np.float64(1433.4241943744955)}
+=====Epoch 65
+{'Train': np.float64(785.9497041432328), 'Validation': np.float64(1745.3060598025017)}
+=====Epoch 66
+{'Train': np.float64(1015.9573835476698), 'Validation': np.float64(2117.756822155773)}
+=====Epoch 67
+{'Train': np.float64(1077.4541174720448), 'Validation': np.float64(1763.2595226808344)}
+=====Epoch 68
+{'Train': np.float64(885.7497287588137), 'Validation': np.float64(1505.4866009912782)}
+=====Epoch 69
+{'Metric': 'RMSE', 'Train': np.float64(446.7768215796992), 'Validation': np.float64(1115.7650251367252), 'Test': np.float64(764.1373537123684), 'Test R2': 0.8773558436187956}
+=====Epoch 70
+{'Train': np.float64(767.2260876829516), 'Validation': np.float64(1234.4299145967555)}
+=====Epoch 71
+{'Metric': 'RMSE', 'Train': np.float64(511.70700651967917), 'Validation': np.float64(1093.0341049437718), 'Test': np.float64(860.1352782408305), 'Test R2': 0.8446048281139751}
+=====Epoch 72
+{'Metric': 'RMSE', 'Train': np.float64(520.6360249451309), 'Validation': np.float64(1075.8036391073852), 'Test': np.float64(676.9569905338166), 'Test R2': 0.9037443669167026}
+=====Epoch 73
+{'Train': np.float64(761.5564020488814), 'Validation': np.float64(1431.8073691275563)}
+=====Epoch 74
+{'Train': np.float64(622.2485686568413), 'Validation': np.float64(1172.1602214432737)}
+=====Epoch 75
+{'Train': np.float64(553.8795291845233), 'Validation': np.float64(1233.7356071520448)}
+=====Epoch 76
+{'Train': np.float64(734.8491985549578), 'Validation': np.float64(1432.1474792588954)}
+=====Epoch 77
+{'Train': np.float64(618.4673672595577), 'Validation': np.float64(1318.6543727540227)}
+=====Epoch 78
+{'Train': np.float64(3134.1403511017375), 'Validation': np.float64(4102.019909047414)}
+=====Epoch 79
+{'Train': np.float64(696.7666738579477), 'Validation': np.float64(1450.1270013000478)}
+=====Epoch 80
+{'Train': np.float64(475.77495113212126), 'Validation': np.float64(1211.7040386393335)}
+=====Epoch 81
+{'Train': np.float64(869.2369996139155), 'Validation': np.float64(1835.704928251351)}
+=====Epoch 82
+{'Train': np.float64(475.78678675957826), 'Validation': np.float64(1226.385573068285)}
+=====Epoch 83
+{'Train': np.float64(451.28837471702525), 'Validation': np.float64(1171.0945183154715)}
+=====Epoch 84
+{'Train': np.float64(573.6045890403424), 'Validation': np.float64(1277.0492724515723)}
+=====Epoch 85
+{'Train': np.float64(458.4746663893574), 'Validation': np.float64(1207.0538032404277)}
+=====Epoch 86
+{'Train': np.float64(527.5925345763459), 'Validation': np.float64(1333.657722779632)}
+=====Epoch 87
+{'Train': np.float64(524.1808255037806), 'Validation': np.float64(1171.9456414710585)}
+=====Epoch 88
+{'Train': np.float64(485.22898124474375), 'Validation': np.float64(1112.1105774398943)}
+=====Epoch 89
+{'Train': np.float64(583.903106016298), 'Validation': np.float64(1240.8595198146406)}
+=====Epoch 90
+{'Train': np.float64(1552.340472787183), 'Validation': np.float64(2523.960284543952)}
+=====Epoch 91
+{'Train': np.float64(1199.390055830438), 'Validation': np.float64(1788.5649894295996)}
+=====Epoch 92
+{'Metric': 'RMSE', 'Train': np.float64(566.4959390006499), 'Validation': np.float64(1006.6676223352207), 'Test': np.float64(681.0506849097767), 'Test R2': 0.9025766928335481}
+=====Epoch 93
+{'Train': np.float64(736.6195409207431), 'Validation': np.float64(1106.3803854537177)}
+=====Epoch 94
+{'Train': np.float64(1231.8550593599841), 'Validation': np.float64(2463.0319584684553)}
+=====Epoch 95
+{'Train': np.float64(504.3791610048003), 'Validation': np.float64(1317.2994744806965)}
+=====Epoch 96
+{'Train': np.float64(488.50059653200714), 'Validation': np.float64(1234.0821585250226)}
+=====Epoch 97
+{'Train': np.float64(1052.587759934699), 'Validation': np.float64(2142.454929027951)}
+=====Epoch 98
+{'Train': np.float64(1234.9861519744213), 'Validation': np.float64(2459.321593434713)}
+=====Epoch 99
+{'Train': np.float64(660.9835615429146), 'Validation': np.float64(1268.194407558149)}
+=====Epoch 100
+{'Train': np.float64(617.8163326547565), 'Validation': np.float64(1309.0664798469527)}
+=====Epoch 101
+{'Train': np.float64(756.0336771247756), 'Validation': np.float64(1298.864049901414)}
+=====Epoch 102
+{'Train': np.float64(595.2003853655463), 'Validation': np.float64(1229.5738974218052)}
+=====Epoch 103
+{'Train': np.float64(531.4694011770564), 'Validation': np.float64(1252.7088224913844)}
+=====Epoch 104
+{'Train': np.float64(532.92999320767), 'Validation': np.float64(1350.10175251915)}
+=====Epoch 105
+{'Train': np.float64(651.8791715682751), 'Validation': np.float64(1493.1584932636192)}
+=====Epoch 106
+{'Train': np.float64(640.0007609705027), 'Validation': np.float64(1349.9565755600722)}
+=====Epoch 107
+{'Train': np.float64(1088.1533633062002), 'Validation': np.float64(2046.3536045596713)}
+=====Epoch 108
+{'Train': np.float64(598.0404063389226), 'Validation': np.float64(1387.8471396413295)}
+=====Epoch 109
+{'Train': np.float64(604.3356012548369), 'Validation': np.float64(1370.4147443797797)}
+=====Epoch 110
+{'Train': np.float64(547.7310563952925), 'Validation': np.float64(1295.8929535683546)}
+=====Epoch 111
+{'Train': np.float64(451.05318124918864), 'Validation': np.float64(1237.7281183038094)}
+=====Epoch 112
+{'Train': np.float64(476.4886479817069), 'Validation': np.float64(1286.9084940399866)}
+=====Epoch 113
+{'Train': np.float64(593.1696854936322), 'Validation': np.float64(1438.201809621167)}
+=====Epoch 114
+{'Train': np.float64(557.7966528312496), 'Validation': np.float64(1396.6186996786446)}
+=====Epoch 115
+{'Train': np.float64(1616.632720369156), 'Validation': np.float64(2944.2875504200747)}
+=====Epoch 116
+{'Train': np.float64(1483.2311045171584), 'Validation': np.float64(2784.2516138845754)}
+=====Epoch 117
+{'Train': np.float64(599.0031591493164), 'Validation': np.float64(1274.3632843924115)}
+=====Epoch 118
+{'Train': np.float64(673.7915827121784), 'Validation': np.float64(1549.8537214945818)}
+=====Epoch 119
+{'Train': np.float64(807.4066047352967), 'Validation': np.float64(1766.3282448125128)}
+=====Epoch 120
+{'Train': np.float64(590.7845453576494), 'Validation': np.float64(1433.9879147179759)}
+=====Epoch 121
+{'Train': np.float64(1202.675378332157), 'Validation': np.float64(2247.389069540926)}
+=====Epoch 122
+{'Train': np.float64(793.147731738685), 'Validation': np.float64(1744.752377273742)}
+=====Epoch 123
+{'Train': np.float64(1132.8995905984486), 'Validation': np.float64(2330.2374612794397)}
+=====Epoch 124
+{'Train': np.float64(1658.7618431728818), 'Validation': np.float64(3241.130017528311)}
+=====Epoch 125
+{'Train': np.float64(637.44199469265), 'Validation': np.float64(1447.8947190105982)}
+=====Epoch 126
+{'Train': np.float64(806.3951453287735), 'Validation': np.float64(1479.2389675947538)}
+=====Epoch 127
+{'Train': np.float64(438.67313653704775), 'Validation': np.float64(1223.513821459388)}
+=====Epoch 128
+{'Train': np.float64(707.2133264331561), 'Validation': np.float64(1580.658981697723)}
+=====Epoch 129
+{'Train': np.float64(652.5260774621613), 'Validation': np.float64(1477.881699276523)}
+=====Epoch 130
+{'Train': np.float64(752.2974698650042), 'Validation': np.float64(1627.9291671724848)}
+=====Epoch 131
+{'Train': np.float64(1643.1831397123397), 'Validation': np.float64(2932.640890194206)}
+=====Epoch 132
+{'Train': np.float64(1343.6900423866348), 'Validation': np.float64(2693.527867168974)}
+=====Epoch 133
+{'Train': np.float64(694.5341670866081), 'Validation': np.float64(1558.309298085734)}
+=====Epoch 134
+{'Train': np.float64(1908.1196094531947), 'Validation': np.float64(3388.97246899854)}
+=====Epoch 135
+{'Train': np.float64(639.3120451267577), 'Validation': np.float64(1374.09957306523)}
+=====Epoch 136
+{'Train': np.float64(522.3548913684672), 'Validation': np.float64(1243.4533158623665)}
+=====Epoch 137
+{'Train': np.float64(515.8491815084599), 'Validation': np.float64(1233.7895919830028)}
+=====Epoch 138
+{'Train': np.float64(518.6401529616365), 'Validation': np.float64(1294.673163586962)}
+=====Epoch 139
+{'Train': np.float64(594.4909914009701), 'Validation': np.float64(1398.5682862587162)}
+=====Epoch 140
+{'Train': np.float64(620.1438376398155), 'Validation': np.float64(1455.1328843391395)}
+=====Epoch 141
+{'Train': np.float64(508.4744230900572), 'Validation': np.float64(1300.334704791672)}
+=====Epoch 142
+{'Train': np.float64(694.344238066165), 'Validation': np.float64(1557.9274681593022)}
+=====Epoch 143
+{'Train': np.float64(963.9856702618201), 'Validation': np.float64(1960.9523883314553)}
+Finished training! Results from epoch 92 with best validation 1006.6676223352207.
+Test rmse: 681.0506849097767, Test r2: 0.9025766928335481 
+
+Namespace(device=0, gnn='gin-virtual', drop_ratio=0.1, num_layer=3, emb_dim=128, use_linear_predictor=False, gamma=0.2, batch_size=32, epochs=400, patience=50, lr=0.01, l2reg=0.0001, use_lr_scheduler=False, use_clip_norm=False, path_list=[1, 4], initw_name='default', dataset='plym-o2_prop', trails=5, by_default=True, plym_prop='o2')
+/workspaces/GREA/data/o2_prop/processed/geometric_data_processed.pt
+# Train: 356  #Test: 179.0 #Val: 60
+initialize network with default
+=====Epoch 0
+{'Metric': 'RMSE', 'Train': np.float64(1271.3278558681218), 'Validation': np.float64(2519.849046082361), 'Test': np.float64(2223.6000313586082), 'Test R2': -0.03852592672508792}
+=====Epoch 1
+{'Metric': 'RMSE', 'Train': np.float64(1268.923183363142), 'Validation': np.float64(2516.5999964512844), 'Test': np.float64(2220.6022406952643), 'Test R2': -0.03572759549155324}
+=====Epoch 2
+{'Metric': 'RMSE', 'Train': np.float64(1266.3130888685098), 'Validation': np.float64(2513.051039821316), 'Test': np.float64(2217.2468464149206), 'Test R2': -0.032599931503732416}
+=====Epoch 3
+{'Metric': 'RMSE', 'Train': np.float64(1261.823608089324), 'Validation': np.float64(2503.013681185504), 'Test': np.float64(2208.0759097509176), 'Test R2': -0.024075554569059188}
+=====Epoch 4
+{'Metric': 'RMSE', 'Train': np.float64(1254.896709115836), 'Validation': np.float64(2495.6882804135544), 'Test': np.float64(2200.9507494971726), 'Test R2': -0.017477113207923}
+=====Epoch 5
+{'Metric': 'RMSE', 'Train': np.float64(1235.9177078725545), 'Validation': np.float64(2414.5141746740437), 'Test': np.float64(2122.5894202072827), 'Test R2': 0.05368441942296187}
+=====Epoch 6
+{'Train': np.float64(1267.0190253740423), 'Validation': np.float64(2514.4536427907633)}
+=====Epoch 7
+{'Metric': 'RMSE', 'Train': np.float64(1457.4947860950533), 'Validation': np.float64(2396.74603676005), 'Test': np.float64(2082.6440622892933), 'Test R2': 0.0889670072018739}
+=====Epoch 8
+{'Metric': 'RMSE', 'Train': np.float64(1174.2649159587324), 'Validation': np.float64(2361.6623694577515), 'Test': np.float64(2075.041973110781), 'Test R2': 0.09560579291757332}
+=====Epoch 9
+{'Metric': 'RMSE', 'Train': np.float64(1103.9035239800428), 'Validation': np.float64(2240.8896278073694), 'Test': np.float64(1978.6044585728196), 'Test R2': 0.17771575940622097}
+=====Epoch 10
+{'Metric': 'RMSE', 'Train': np.float64(1097.5149973652808), 'Validation': np.float64(2230.1616566546554), 'Test': np.float64(1965.9058651809676), 'Test R2': 0.18823665509032772}
+=====Epoch 11
+{'Train': np.float64(1135.3732436541145), 'Validation': np.float64(2272.9771062720247)}
+=====Epoch 12
+{'Metric': 'RMSE', 'Train': np.float64(1087.29918596467), 'Validation': np.float64(2214.5732828274063), 'Test': np.float64(1952.209417161606), 'Test R2': 0.19950834840590848}
+=====Epoch 13
+{'Train': np.float64(3396.154412043899), 'Validation': np.float64(3986.203367705502)}
+=====Epoch 14
+{'Metric': 'RMSE', 'Train': np.float64(1289.5821487601459), 'Validation': np.float64(2179.3652269176864), 'Test': np.float64(1791.032366899257), 'Test R2': 0.3262312427378402}
+=====Epoch 15
+{'Metric': 'RMSE', 'Train': np.float64(1024.601070042381), 'Validation': np.float64(2099.8582224563015), 'Test': np.float64(1846.7368915781626), 'Test R2': 0.2836684984871233}
+=====Epoch 16
+{'Metric': 'RMSE', 'Train': np.float64(919.1903918791654), 'Validation': np.float64(1888.7449448405346), 'Test': np.float64(1647.2519776806225), 'Test R2': 0.430066643843677}
+=====Epoch 17
+{'Metric': 'RMSE', 'Train': np.float64(1225.7867440073906), 'Validation': np.float64(1867.0284811296215), 'Test': np.float64(1569.7657855516109), 'Test R2': 0.4824244906593347}
+=====Epoch 18
+{'Train': np.float64(2020.0968397754432), 'Validation': np.float64(2515.069862696726)}
+=====Epoch 19
+{'Train': np.float64(1284.3267562727688), 'Validation': np.float64(2521.669467557017)}
+=====Epoch 20
+{'Train': np.float64(1059.1623172381103), 'Validation': np.float64(2157.981580016768)}
+=====Epoch 21
+{'Train': np.float64(3282.3757023395697), 'Validation': np.float64(3918.4758402833313)}
+=====Epoch 22
+{'Train': np.float64(3000.20837847258), 'Validation': np.float64(3876.3601644001787)}
+=====Epoch 23
+{'Metric': 'RMSE', 'Train': np.float64(791.3589733638239), 'Validation': np.float64(1721.3480553179872), 'Test': np.float64(1462.6593281059017), 'Test R2': 0.5506441804208713}
+=====Epoch 24
+{'Metric': 'RMSE', 'Train': np.float64(748.5160780162844), 'Validation': np.float64(1656.3384547204419), 'Test': np.float64(1390.3076655066288), 'Test R2': 0.5940001859329949}
+=====Epoch 25
+{'Metric': 'RMSE', 'Train': np.float64(718.0564460781319), 'Validation': np.float64(1611.4515403183716), 'Test': np.float64(1326.527772921025), 'Test R2': 0.6303959731389666}
+=====Epoch 26
+{'Metric': 'RMSE', 'Train': np.float64(706.7871046168996), 'Validation': np.float64(1573.1580439941824), 'Test': np.float64(1288.1807451195984), 'Test R2': 0.6514560033661408}
+=====Epoch 27
+{'Metric': 'RMSE', 'Train': np.float64(1009.287887210628), 'Validation': np.float64(1477.0356365953132), 'Test': np.float64(1163.8565639177314), 'Test R2': 0.7154864721948153}
+=====Epoch 28
+{'Train': np.float64(794.5774973577761), 'Validation': np.float64(1615.7291440476406)}
+=====Epoch 29
+{'Train': np.float64(871.5470109358339), 'Validation': np.float64(1781.058908866226)}
+=====Epoch 30
+{'Train': np.float64(1237.6439503856582), 'Validation': np.float64(2340.462099874379)}
+=====Epoch 31
+{'Train': np.float64(998.8649152772182), 'Validation': np.float64(1485.2851145061932)}
+=====Epoch 32
+{'Metric': 'RMSE', 'Train': np.float64(789.7013589293948), 'Validation': np.float64(1342.6486262491962), 'Test': np.float64(1120.3284559788035), 'Test R2': 0.7363700579029204}
+=====Epoch 33
+{'Train': np.float64(833.7284381472833), 'Validation': np.float64(1780.6383849236545)}
+=====Epoch 34
+{'Train': np.float64(660.4422747624029), 'Validation': np.float64(1369.6214263637864)}
+=====Epoch 35
+{'Train': np.float64(744.0608708464539), 'Validation': np.float64(1648.8414640063431)}
+=====Epoch 36
+{'Train': np.float64(701.7255371545347), 'Validation': np.float64(1552.037909411776)}
+=====Epoch 37
+{'Train': np.float64(703.6079794329218), 'Validation': np.float64(1495.0227556219388)}
+=====Epoch 38
+{'Train': np.float64(850.066299306754), 'Validation': np.float64(1988.5134875806648)}
+=====Epoch 39
+{'Train': np.float64(942.6591460356509), 'Validation': np.float64(1376.657990128215)}
+=====Epoch 40
+{'Metric': 'RMSE', 'Train': np.float64(671.9994267251889), 'Validation': np.float64(1296.3020141553063), 'Test': np.float64(944.8213752128278), 'Test R2': 0.8124990725930827}
+=====Epoch 41
+{'Train': np.float64(9130.644798849215), 'Validation': np.float64(11537.915614505433)}
+=====Epoch 42
+{'Train': np.float64(783.444678587714), 'Validation': np.float64(1601.6782328164893)}
+=====Epoch 43
+{'Train': np.float64(1737.3497643568087), 'Validation': np.float64(1837.591217383148)}
+=====Epoch 44
+{'Metric': 'RMSE', 'Train': np.float64(847.3233623533391), 'Validation': np.float64(1279.0657424985282), 'Test': np.float64(931.1985589286538), 'Test R2': 0.8178670211941406}
+=====Epoch 45
+{'Train': np.float64(1331.9959940163412), 'Validation': np.float64(1333.1181754699182)}
+=====Epoch 46
+{'Train': np.float64(744.955839126202), 'Validation': np.float64(1680.5678346738293)}
+=====Epoch 47
+{'Train': np.float64(625.4625973906035), 'Validation': np.float64(1440.357951298856)}
+=====Epoch 48
+{'Metric': 'RMSE', 'Train': np.float64(546.757232297225), 'Validation': np.float64(1265.3261904575331), 'Test': np.float64(892.5357717424072), 'Test R2': 0.8326771464859148}
+=====Epoch 49
+{'Metric': 'RMSE', 'Train': np.float64(578.7310523454097), 'Validation': np.float64(1237.3445424926972), 'Test': np.float64(998.1999649112275), 'Test R2': 0.7907145189498838}
+=====Epoch 50
+{'Train': np.float64(592.0474994015478), 'Validation': np.float64(1314.387302964236)}
+=====Epoch 51
+{'Train': np.float64(548.5974396500699), 'Validation': np.float64(1317.2961193567146)}
+=====Epoch 52
+{'Train': np.float64(549.1644942045043), 'Validation': np.float64(1340.1801444242428)}
+=====Epoch 53
+{'Train': np.float64(623.3528783602474), 'Validation': np.float64(1458.9192088674888)}
+=====Epoch 54
+{'Train': np.float64(882.522498100945), 'Validation': np.float64(1861.6142817978696)}
+=====Epoch 55
+{'Train': np.float64(587.792834137231), 'Validation': np.float64(1325.073279523577)}
+=====Epoch 56
+{'Train': np.float64(569.4960840318532), 'Validation': np.float64(1311.7300589928773)}
+=====Epoch 57
+{'Train': np.float64(895.8129876948988), 'Validation': np.float64(1333.6811678260551)}
+=====Epoch 58
+{'Train': np.float64(855.7892540423055), 'Validation': np.float64(1357.719449079035)}
+=====Epoch 59
+{'Train': np.float64(986.8074310389654), 'Validation': np.float64(1439.7756964349269)}
+=====Epoch 60
+{'Train': np.float64(810.5711304955161), 'Validation': np.float64(1372.231045954472)}
+=====Epoch 61
+{'Train': np.float64(2614.4326287285826), 'Validation': np.float64(2687.516305442741)}
+=====Epoch 62
+{'Train': np.float64(531.587666498709), 'Validation': np.float64(1369.5039794516094)}
+=====Epoch 63
+{'Train': np.float64(666.4772672404057), 'Validation': np.float64(1576.2452916740272)}
+=====Epoch 64
+{'Train': np.float64(556.4877804534364), 'Validation': np.float64(1341.592212308751)}
+=====Epoch 65
+{'Train': np.float64(639.9518254297365), 'Validation': np.float64(1532.4145246722103)}
+=====Epoch 66
+{'Train': np.float64(579.0408828363043), 'Validation': np.float64(1417.7059693018846)}
+=====Epoch 67
+{'Train': np.float64(721.7166216850446), 'Validation': np.float64(1263.5295285184677)}
+=====Epoch 68
+{'Train': np.float64(611.4455455656847), 'Validation': np.float64(1258.3012708991348)}
+=====Epoch 69
+{'Train': np.float64(603.7459958760437), 'Validation': np.float64(1452.814835398886)}
+=====Epoch 70
+{'Train': np.float64(649.040134761592), 'Validation': np.float64(1510.5943626784021)}
+=====Epoch 71
+{'Train': np.float64(566.1474718109664), 'Validation': np.float64(1352.0978552951087)}
+=====Epoch 72
+{'Metric': 'RMSE', 'Train': np.float64(542.8157468281179), 'Validation': np.float64(1108.6441393166656), 'Test': np.float64(735.7094926021198), 'Test R2': 0.8863114521083023}
+=====Epoch 73
+{'Metric': 'RMSE', 'Train': np.float64(806.5007966692175), 'Validation': np.float64(1071.1241586527742), 'Test': np.float64(486.9705400974475), 'Test R2': 0.9501908216397367}
+=====Epoch 74
+{'Train': np.float64(1004.2283198186352), 'Validation': np.float64(1178.0055217344866)}
+=====Epoch 75
+{'Train': np.float64(7652.50688803158), 'Validation': np.float64(7441.653391645665)}
+=====Epoch 76
+{'Train': np.float64(2094.1318676156616), 'Validation': np.float64(2695.580705183699)}
+=====Epoch 77
+{'Train': np.float64(1340.6324297195576), 'Validation': np.float64(2225.7203786601144)}
+=====Epoch 78
+{'Train': np.float64(1165.0112119149082), 'Validation': np.float64(2271.3597515706165)}
+=====Epoch 79
+{'Train': np.float64(732.7858927686173), 'Validation': np.float64(1543.7512760254551)}
+=====Epoch 80
+{'Train': np.float64(662.0418025022008), 'Validation': np.float64(1467.5674281145602)}
+=====Epoch 81
+{'Train': np.float64(760.6392647871455), 'Validation': np.float64(1696.952449153736)}
+=====Epoch 82
+{'Train': np.float64(555.4083322061837), 'Validation': np.float64(1245.4999213587384)}
+=====Epoch 83
+{'Train': np.float64(848.5898484081669), 'Validation': np.float64(1829.1566670905895)}
+=====Epoch 84
+{'Train': np.float64(689.856023051172), 'Validation': np.float64(1570.4234997911115)}
+=====Epoch 85
+{'Train': np.float64(766.0539077664336), 'Validation': np.float64(1323.8075375935491)}
+=====Epoch 86
+{'Train': np.float64(763.0313917659975), 'Validation': np.float64(1296.1476331654085)}
+=====Epoch 87
+{'Train': np.float64(909.8011600689746), 'Validation': np.float64(1904.7462300631194)}
+=====Epoch 88
+{'Train': np.float64(691.5644033801757), 'Validation': np.float64(1496.7158576309876)}
+=====Epoch 89
+{'Train': np.float64(480.3563111938205), 'Validation': np.float64(1265.0405950733398)}
+=====Epoch 90
+{'Train': np.float64(742.3870538329232), 'Validation': np.float64(1435.4729741536341)}
+=====Epoch 91
+{'Train': np.float64(489.60917855921764), 'Validation': np.float64(1231.6422075676842)}
+=====Epoch 92
+{'Train': np.float64(529.9076558034033), 'Validation': np.float64(1275.970981540635)}
+=====Epoch 93
+{'Train': np.float64(707.5303617454608), 'Validation': np.float64(1297.7476645538673)}
+=====Epoch 94
+{'Train': np.float64(940.8315380552644), 'Validation': np.float64(1867.1503383554207)}
+=====Epoch 95
+{'Train': np.float64(15307.865077128448), 'Validation': np.float64(13499.483771650137)}
+=====Epoch 96
+{'Train': np.float64(3543.1469088836866), 'Validation': np.float64(3387.470143058159)}
+=====Epoch 97
+{'Train': np.float64(1835.5630893092264), 'Validation': np.float64(2011.980814102965)}
+=====Epoch 98
+{'Train': np.float64(591.9091542160656), 'Validation': np.float64(1366.1709713807556)}
+=====Epoch 99
+{'Train': np.float64(565.2733905509973), 'Validation': np.float64(1292.670638072745)}
+=====Epoch 100
+{'Train': np.float64(598.4944147158948), 'Validation': np.float64(1399.5417110677527)}
+=====Epoch 101
+{'Train': np.float64(589.551579608495), 'Validation': np.float64(1259.6944901612053)}
+=====Epoch 102
+{'Train': np.float64(1194.9196071973633), 'Validation': np.float64(2069.930079034141)}
+=====Epoch 103
+{'Train': np.float64(635.7081858838674), 'Validation': np.float64(1335.0904379159617)}
+=====Epoch 104
+{'Train': np.float64(722.1217624429294), 'Validation': np.float64(1481.2296473032284)}
+=====Epoch 105
+{'Train': np.float64(681.0794047057642), 'Validation': np.float64(1561.2265678410647)}
+=====Epoch 106
+{'Train': np.float64(628.7898533014671), 'Validation': np.float64(1134.739327410348)}
+=====Epoch 107
+{'Train': np.float64(925.1664863015028), 'Validation': np.float64(1969.6616164547474)}
+=====Epoch 108
+{'Train': np.float64(603.7319738559688), 'Validation': np.float64(1445.6469727820195)}
+=====Epoch 109
+{'Train': np.float64(559.0054656849884), 'Validation': np.float64(1381.4279541178448)}
+=====Epoch 110
+{'Train': np.float64(1094.0889661105487), 'Validation': np.float64(1842.795671152088)}
+=====Epoch 111
+{'Train': np.float64(868.9752279011939), 'Validation': np.float64(1698.4031929466132)}
+=====Epoch 112
+{'Train': np.float64(974.3895979519235), 'Validation': np.float64(1840.8542522080456)}
+=====Epoch 113
+{'Train': np.float64(602.444432931874), 'Validation': np.float64(1354.6085969422893)}
+=====Epoch 114
+{'Train': np.float64(474.00727629302946), 'Validation': np.float64(1219.9938349358044)}
+=====Epoch 115
+{'Train': np.float64(659.8826801551969), 'Validation': np.float64(1541.260401802066)}
+=====Epoch 116
+{'Train': np.float64(437.90972116076125), 'Validation': np.float64(1175.4541980588215)}
+=====Epoch 117
+{'Train': np.float64(612.7780098611215), 'Validation': np.float64(1280.6412194884063)}
+=====Epoch 118
+{'Train': np.float64(635.8446375259227), 'Validation': np.float64(1298.7498428147455)}
+=====Epoch 119
+{'Train': np.float64(596.6120200939899), 'Validation': np.float64(1304.3344676318463)}
+=====Epoch 120
+{'Train': np.float64(664.7678493236278), 'Validation': np.float64(1408.4723202888147)}
+=====Epoch 121
+{'Train': np.float64(575.2090414281632), 'Validation': np.float64(1411.450469608545)}
+=====Epoch 122
+{'Train': np.float64(507.25996709106386), 'Validation': np.float64(1242.4458892620385)}
+=====Epoch 123
+{'Train': np.float64(463.91188317040053), 'Validation': np.float64(1252.1209745077563)}
+=====Epoch 124
+{'Train': np.float64(417.1105479775332), 'Validation': np.float64(1171.7646837264515)}
+Finished training! Results from epoch 73 with best validation 1071.1241586527742.
+Test rmse: 486.9705400974475, Test r2: 0.9501908216397367 
+
+Namespace(device=0, gnn='gin-virtual', drop_ratio=0.1, num_layer=3, emb_dim=128, use_linear_predictor=False, gamma=0.2, batch_size=32, epochs=400, patience=50, lr=0.01, l2reg=0.0001, use_lr_scheduler=False, use_clip_norm=False, path_list=[1, 4], initw_name='default', dataset='plym-o2_prop', trails=5, by_default=True, plym_prop='o2')
+/workspaces/GREA/data/o2_prop/processed/geometric_data_processed.pt
+# Train: 356  #Test: 179.0 #Val: 60
+initialize network with default
+=====Epoch 0
+{'Metric': 'RMSE', 'Train': np.float64(1271.3688092727018), 'Validation': np.float64(2519.903077413106), 'Test': np.float64(2223.6482881385305), 'Test R2': -0.03857100359160448}
+=====Epoch 1
+{'Metric': 'RMSE', 'Train': np.float64(1250.3090937463182), 'Validation': np.float64(2487.798511263582), 'Test': np.float64(2191.8950696503534), 'Test R2': -0.009121640578961143}
+=====Epoch 2
+{'Metric': 'RMSE', 'Train': np.float64(1234.9334248614093), 'Validation': np.float64(2466.395957318238), 'Test': np.float64(2174.54103569878), 'Test R2': 0.006794272268987878}
+=====Epoch 3
+{'Train': np.float64(1247.0605183944785), 'Validation': np.float64(2482.9024675540354)}
+=====Epoch 4
+{'Train': np.float64(1244.3654982888484), 'Validation': np.float64(2479.572429422982)}
+=====Epoch 5
+{'Metric': 'RMSE', 'Train': np.float64(1447.9648995069479), 'Validation': np.float64(2283.2890759753327), 'Test': np.float64(2021.6904263789097), 'Test R2': 0.1415138181241843}
+=====Epoch 6
+{'Train': np.float64(1196.346489400372), 'Validation': np.float64(2399.6112052995218)}
+=====Epoch 7
+{'Train': np.float64(1208.9091071952816), 'Validation': np.float64(2425.711046154773)}
+=====Epoch 8
+{'Train': np.float64(1185.301891224761), 'Validation': np.float64(2389.285766776816)}
+=====Epoch 9
+{'Train': np.float64(1152.2743113763113), 'Validation': np.float64(2335.400334241295)}
+=====Epoch 10
+{'Metric': 'RMSE', 'Train': np.float64(1367.2909564112485), 'Validation': np.float64(2152.4208368889026), 'Test': np.float64(1915.3603900110338), 'Test R2': 0.22944258506772708}
+=====Epoch 11
+{'Metric': 'RMSE', 'Train': np.float64(1169.8751968734414), 'Validation': np.float64(2030.0159921348684), 'Test': np.float64(1779.8186157591917), 'Test R2': 0.3346418361904604}
+=====Epoch 12
+{'Train': np.float64(1039.714515009633), 'Validation': np.float64(2154.6809329543785)}
+=====Epoch 13
+{'Train': np.float64(1233.1898777712072), 'Validation': np.float64(2468.975852981177)}
+=====Epoch 14
+{'Train': np.float64(1194.1320322937515), 'Validation': np.float64(2393.8758269854093)}
+=====Epoch 15
+{'Metric': 'RMSE', 'Train': np.float64(983.8638518909081), 'Validation': np.float64(1941.699112605087), 'Test': np.float64(1702.7154772087856), 'Test R2': 0.39104084008274564}
+=====Epoch 16
+{'Train': np.float64(1014.5885810889833), 'Validation': np.float64(2068.6202540243094)}
+=====Epoch 17
+{'Metric': 'RMSE', 'Train': np.float64(1154.3552367441503), 'Validation': np.float64(1822.2496133984757), 'Test': np.float64(1498.3553657568452), 'Test R2': 0.5284435874881286}
+=====Epoch 18
+{'Train': np.float64(998.5516274230324), 'Validation': np.float64(2067.5287838515565)}
+=====Epoch 19
+{'Train': np.float64(1157.8368266072732), 'Validation': np.float64(2313.122454273072)}
+=====Epoch 20
+{'Train': np.float64(1034.8118729404066), 'Validation': np.float64(2054.3663413175937)}
+=====Epoch 21
+{'Train': np.float64(1976.3225961598885), 'Validation': np.float64(1906.2786292192648)}
+=====Epoch 22
+{'Train': np.float64(3302.6388634140635), 'Validation': np.float64(3168.802966215341)}
+=====Epoch 23
+{'Metric': 'RMSE', 'Train': np.float64(864.756274455126), 'Validation': np.float64(1475.407047979403), 'Test': np.float64(1206.4298250074285), 'Test R2': 0.6942910661439019}
+=====Epoch 24
+{'Train': np.float64(727.8997052379159), 'Validation': np.float64(1556.9612093137964)}
+=====Epoch 25
+{'Train': np.float64(821.7396085330107), 'Validation': np.float64(1579.525234379822)}
+=====Epoch 26
+{'Train': np.float64(1167.479434809627), 'Validation': np.float64(2341.955688812062)}
+=====Epoch 27
+{'Train': np.float64(1010.0092971053596), 'Validation': np.float64(2077.0852211773413)}
+=====Epoch 28
+{'Train': np.float64(826.3335437818733), 'Validation': np.float64(1780.0234439726696)}
+=====Epoch 29
+{'Metric': 'RMSE', 'Train': np.float64(611.1124824913431), 'Validation': np.float64(1256.980085324607), 'Test': np.float64(885.9949636422948), 'Test R2': 0.8351205589365864}
+=====Epoch 30
+{'Train': np.float64(558.657394527206), 'Validation': np.float64(1373.9473737058813)}
+=====Epoch 31
+{'Train': np.float64(983.785688414968), 'Validation': np.float64(1408.7076856592028)}
+=====Epoch 32
+{'Train': np.float64(969.8377506094004), 'Validation': np.float64(1698.4581798003658)}
+=====Epoch 33
+{'Train': np.float64(1246.7359730695482), 'Validation': np.float64(1712.9798131999482)}
+=====Epoch 34
+{'Train': np.float64(955.9190878877743), 'Validation': np.float64(1546.032113008195)}
+=====Epoch 35
+{'Train': np.float64(902.6967891504296), 'Validation': np.float64(1733.7853374687138)}
+=====Epoch 36
+{'Train': np.float64(736.369724607509), 'Validation': np.float64(1641.4476538789634)}
+=====Epoch 37
+{'Train': np.float64(662.8926453107409), 'Validation': np.float64(1506.3382417022435)}
+=====Epoch 38
+{'Train': np.float64(599.2786461121589), 'Validation': np.float64(1308.9807201795636)}
+=====Epoch 39
+{'Metric': 'RMSE', 'Train': np.float64(598.4870892375703), 'Validation': np.float64(1229.7659644146331), 'Test': np.float64(833.9266839048147), 'Test R2': 0.8539304331926901}
+=====Epoch 40
+{'Train': np.float64(564.5566528107319), 'Validation': np.float64(1310.5503411895618)}
+=====Epoch 41
+{'Train': np.float64(639.9633808219672), 'Validation': np.float64(1435.1448014158398)}
+=====Epoch 42
+{'Train': np.float64(1006.4780970729529), 'Validation': np.float64(2133.4914350440413)}
+=====Epoch 43
+{'Train': np.float64(1237.6816832612972), 'Validation': np.float64(2455.2910666949087)}
+=====Epoch 44
+{'Train': np.float64(659.6926357736611), 'Validation': np.float64(1512.6772849876559)}
+=====Epoch 45
+{'Train': np.float64(1364.6503768218313), 'Validation': np.float64(2194.389717458132)}
+=====Epoch 46
+{'Train': np.float64(686.9450484873656), 'Validation': np.float64(1265.4125102545597)}
+=====Epoch 47
+{'Train': np.float64(982.31762820853), 'Validation': np.float64(1452.3112490178285)}
+=====Epoch 48
+{'Train': np.float64(662.6621781043256), 'Validation': np.float64(1536.611408373839)}
+=====Epoch 49
+{'Train': np.float64(731.6086416706615), 'Validation': np.float64(1338.5966798909537)}
+=====Epoch 50
+{'Train': np.float64(2922.6460039657454), 'Validation': np.float64(3387.924230875327)}
+=====Epoch 51
+{'Train': np.float64(544.7194145039616), 'Validation': np.float64(1271.7475738642174)}
+=====Epoch 52
+{'Train': np.float64(679.73717994005), 'Validation': np.float64(1528.668201561959)}
+=====Epoch 53
+{'Metric': 'RMSE', 'Train': np.float64(558.2312354107723), 'Validation': np.float64(1197.3586146620048), 'Test': np.float64(786.7058827883166), 'Test R2': 0.870004357272349}
+=====Epoch 54
+{'Train': np.float64(625.5049595630506), 'Validation': np.float64(1459.2007523481643)}
+=====Epoch 55
+{'Train': np.float64(547.0733774759466), 'Validation': np.float64(1320.606452177538)}
+=====Epoch 56
+{'Train': np.float64(605.6478052881173), 'Validation': np.float64(1445.480120030338)}
+=====Epoch 57
+{'Metric': 'RMSE', 'Train': np.float64(501.3746370940348), 'Validation': np.float64(1136.9208535333792), 'Test': np.float64(832.2065129374869), 'Test R2': 0.8545324177232807}
+=====Epoch 58
+{'Train': np.float64(727.7459718864498), 'Validation': np.float64(1590.1678466686196)}
+=====Epoch 59
+{'Train': np.float64(672.5741573184677), 'Validation': np.float64(1561.923239775377)}
+=====Epoch 60
+{'Metric': 'RMSE', 'Train': np.float64(455.9717450521389), 'Validation': np.float64(1093.0762563714345), 'Test': np.float64(830.2980265086549), 'Test R2': 0.8551988498362787}
+=====Epoch 61
+{'Train': np.float64(745.9887641129751), 'Validation': np.float64(1103.22135246193)}
+=====Epoch 62
+{'Train': np.float64(748.4440622909657), 'Validation': np.float64(1321.4440184978776)}
+=====Epoch 63
+{'Train': np.float64(2118.9665355337465), 'Validation': np.float64(3377.519796858438)}
+=====Epoch 64
+{'Train': np.float64(586.0546543018366), 'Validation': np.float64(1142.2633233740664)}
+=====Epoch 65
+{'Train': np.float64(2156.9501378944406), 'Validation': np.float64(3007.744711592406)}
+=====Epoch 66
+{'Train': np.float64(1163.001006310031), 'Validation': np.float64(2378.9027583194725)}
+=====Epoch 67
+{'Train': np.float64(898.4807130992483), 'Validation': np.float64(1155.6057906618196)}
+=====Epoch 68
+{'Metric': 'RMSE', 'Train': np.float64(539.6793662304877), 'Validation': np.float64(1088.309216259226), 'Test': np.float64(717.9347362699162), 'Test R2': 0.8917385266215065}
+=====Epoch 69
+{'Train': np.float64(1129.341433550527), 'Validation': np.float64(1475.1281369201793)}
+=====Epoch 70
+{'Train': np.float64(623.0288262057156), 'Validation': np.float64(1117.005337199728)}
+=====Epoch 71
+{'Metric': 'RMSE', 'Train': np.float64(511.1377710626372), 'Validation': np.float64(1039.146554566781), 'Test': np.float64(477.08751444065456), 'Test R2': 0.9521920521269521}
+=====Epoch 72
+{'Train': np.float64(655.5512848798903), 'Validation': np.float64(1135.521389115671)}
+=====Epoch 73
+{'Train': np.float64(1769.6642636380734), 'Validation': np.float64(2489.9947442517423)}
+=====Epoch 74
+{'Train': np.float64(1822.8333347045711), 'Validation': np.float64(2516.541760380506)}
+=====Epoch 75
+{'Train': np.float64(1043.3746399681854), 'Validation': np.float64(1964.1519834004782)}
+=====Epoch 76
+{'Train': np.float64(512.2946298976357), 'Validation': np.float64(1235.551397700355)}
+=====Epoch 77
+{'Train': np.float64(653.7811155372967), 'Validation': np.float64(1323.6511232085081)}
+=====Epoch 78
+{'Train': np.float64(493.1985978636436), 'Validation': np.float64(1203.2031596398433)}
+=====Epoch 79
+{'Train': np.float64(505.35690500474345), 'Validation': np.float64(1262.7952445142464)}
+=====Epoch 80
+{'Train': np.float64(608.6895580702947), 'Validation': np.float64(1257.9296420403505)}
+=====Epoch 81
+{'Train': np.float64(796.0444865849114), 'Validation': np.float64(1727.0383991470987)}
+=====Epoch 82
+{'Train': np.float64(816.502982444078), 'Validation': np.float64(1566.0143263065952)}
+=====Epoch 83
+{'Train': np.float64(1112.3424395739505), 'Validation': np.float64(1673.7093371082478)}
+=====Epoch 84
+{'Train': np.float64(1136.4425816702922), 'Validation': np.float64(1674.3519880458894)}
+=====Epoch 85
+{'Train': np.float64(1131.7715662112114), 'Validation': np.float64(1801.05656313539)}
+=====Epoch 86
+{'Train': np.float64(882.3225098211167), 'Validation': np.float64(1670.0484701346422)}
+=====Epoch 87
+{'Train': np.float64(684.0822158647694), 'Validation': np.float64(1520.3019439647912)}
+=====Epoch 88
+{'Train': np.float64(676.4425679928063), 'Validation': np.float64(1505.232352315025)}
+=====Epoch 89
+{'Train': np.float64(953.3541333971925), 'Validation': np.float64(1721.1010007291743)}
+=====Epoch 90
+{'Train': np.float64(477.82201715510934), 'Validation': np.float64(1231.7168603435662)}
+=====Epoch 91
+{'Train': np.float64(493.50175984015755), 'Validation': np.float64(1099.4298252085068)}
+=====Epoch 92
+{'Train': np.float64(482.61942356599184), 'Validation': np.float64(1180.756938686258)}
+=====Epoch 93
+{'Train': np.float64(2585.0916048003915), 'Validation': np.float64(3896.2220926638915)}
+=====Epoch 94
+{'Train': np.float64(611.3862825640763), 'Validation': np.float64(1047.5016384954001)}
+=====Epoch 95
+{'Metric': 'RMSE', 'Train': np.float64(421.62316938480905), 'Validation': np.float64(1001.1051406592951), 'Test': np.float64(666.4219516226102), 'Test R2': 0.9067169820231966}
+=====Epoch 96
+{'Metric': 'RMSE', 'Train': np.float64(398.65484214344906), 'Validation': np.float64(942.4877057698511), 'Test': np.float64(667.2104297093514), 'Test R2': 0.906496115568512}
+=====Epoch 97
+{'Train': np.float64(896.9321616474049), 'Validation': np.float64(1378.518326576587)}
+=====Epoch 98
+{'Train': np.float64(1357.9200943836609), 'Validation': np.float64(2144.8983732583697)}
+=====Epoch 99
+{'Train': np.float64(997.0766657262113), 'Validation': np.float64(2089.768974890777)}
+=====Epoch 100
+{'Train': np.float64(1018.8851849447699), 'Validation': np.float64(2124.2105548214704)}
+=====Epoch 101
+{'Train': np.float64(1277.2455354429064), 'Validation': np.float64(1930.75462073448)}
+=====Epoch 102
+{'Train': np.float64(560.0285854945831), 'Validation': np.float64(978.7518542015118)}
+=====Epoch 103
+{'Train': np.float64(600.2766564127915), 'Validation': np.float64(1428.8809429505468)}
+=====Epoch 104
+{'Train': np.float64(439.57305978862223), 'Validation': np.float64(1154.4571818366203)}
+=====Epoch 105
+{'Train': np.float64(495.0927144202156), 'Validation': np.float64(1130.4444407968986)}
+=====Epoch 106
+{'Train': np.float64(611.2835296918186), 'Validation': np.float64(1213.0816927044173)}
+=====Epoch 107
+{'Train': np.float64(529.2654472646185), 'Validation': np.float64(1245.0802255351894)}
+=====Epoch 108
+{'Train': np.float64(581.005985242063), 'Validation': np.float64(1165.2789987238766)}
+=====Epoch 109
+{'Train': np.float64(677.5009128804246), 'Validation': np.float64(1334.262488891076)}
+=====Epoch 110
+{'Train': np.float64(852.4972178753733), 'Validation': np.float64(1501.074564573101)}
+=====Epoch 111
+{'Train': np.float64(502.99476690459517), 'Validation': np.float64(1243.1615428804528)}
+=====Epoch 112
+{'Train': np.float64(966.3214519016118), 'Validation': np.float64(2065.986522676675)}
+=====Epoch 113
+{'Train': np.float64(742.9260223588952), 'Validation': np.float64(1312.9516504061498)}
+=====Epoch 114
+{'Train': np.float64(649.2494643636104), 'Validation': np.float64(1372.331524090222)}
+=====Epoch 115
+{'Train': np.float64(520.5834588405199), 'Validation': np.float64(1191.992808168393)}
+=====Epoch 116
+{'Train': np.float64(538.3179265640235), 'Validation': np.float64(1222.7025720215272)}
+=====Epoch 117
+{'Train': np.float64(474.9421514947109), 'Validation': np.float64(1131.9277004888359)}
+=====Epoch 118
+{'Train': np.float64(491.35448791530354), 'Validation': np.float64(1114.1344199939529)}
+=====Epoch 119
+{'Train': np.float64(497.41522978020157), 'Validation': np.float64(1160.6079304439306)}
+=====Epoch 120
+{'Train': np.float64(485.07100434274207), 'Validation': np.float64(1186.6871569426874)}
+=====Epoch 121
+{'Train': np.float64(508.38826973035276), 'Validation': np.float64(1237.6979201998506)}
+=====Epoch 122
+{'Train': np.float64(474.08385966673137), 'Validation': np.float64(1169.1391519781967)}
+=====Epoch 123
+{'Train': np.float64(696.555403455999), 'Validation': np.float64(1395.2934453083665)}
+=====Epoch 124
+{'Train': np.float64(503.092070796387), 'Validation': np.float64(1141.575319691313)}
+=====Epoch 125
+{'Train': np.float64(634.7333157705039), 'Validation': np.float64(1218.299300146919)}
+=====Epoch 126
+{'Train': np.float64(469.92272653661405), 'Validation': np.float64(1129.5917322509831)}
+=====Epoch 127
+{'Train': np.float64(639.0624527898627), 'Validation': np.float64(1330.6429016390393)}
+=====Epoch 128
+{'Train': np.float64(559.2530424158901), 'Validation': np.float64(1260.9347425702886)}
+=====Epoch 129
+{'Train': np.float64(610.6462273138758), 'Validation': np.float64(1283.6490214216174)}
+=====Epoch 130
+{'Train': np.float64(826.876306454763), 'Validation': np.float64(1723.286107352326)}
+=====Epoch 131
+{'Train': np.float64(1382.5637015127488), 'Validation': np.float64(2501.854157778968)}
+=====Epoch 132
+{'Train': np.float64(847.3508432084312), 'Validation': np.float64(1679.0996222765584)}
+=====Epoch 133
+{'Train': np.float64(1288.2798133321178), 'Validation': np.float64(2306.1801212804244)}
+=====Epoch 134
+{'Train': np.float64(452.48990000834056), 'Validation': np.float64(1111.7000029465482)}
+=====Epoch 135
+{'Metric': 'RMSE', 'Train': np.float64(579.703967566234), 'Validation': np.float64(871.9927619242302), 'Test': np.float64(544.9576039888469), 'Test R2': 0.9376222890173779}
+=====Epoch 136
+{'Train': np.float64(425.39094318136364), 'Validation': np.float64(962.3780342731583)}
+=====Epoch 137
+{'Train': np.float64(494.96382099846494), 'Validation': np.float64(939.765747869416)}
+=====Epoch 138
+{'Train': np.float64(660.5597704727238), 'Validation': np.float64(1401.0836142006856)}
+=====Epoch 139
+{'Train': np.float64(695.6590524119549), 'Validation': np.float64(1424.6957080015056)}
+=====Epoch 140
+{'Train': np.float64(520.7361256959534), 'Validation': np.float64(1166.8501913234288)}
+=====Epoch 141
+{'Train': np.float64(442.5840692046216), 'Validation': np.float64(1112.2603829777343)}
+=====Epoch 142
+{'Train': np.float64(845.6933565356313), 'Validation': np.float64(1744.3272052636007)}
+=====Epoch 143
+{'Train': np.float64(1714.348699158257), 'Validation': np.float64(3232.6420746517315)}
+=====Epoch 144
+{'Train': np.float64(828.0512245595017), 'Validation': np.float64(1737.8776335565815)}
+=====Epoch 145
+{'Train': np.float64(634.6148653081117), 'Validation': np.float64(1225.033283977288)}
+=====Epoch 146
+{'Train': np.float64(733.1487991130921), 'Validation': np.float64(1484.2863997345694)}
+=====Epoch 147
+{'Train': np.float64(1720.0232639385454), 'Validation': np.float64(1534.4673092327032)}
+=====Epoch 148
+{'Train': np.float64(594.40129142404), 'Validation': np.float64(1268.9578801233101)}
+=====Epoch 149
+{'Train': np.float64(745.400312598374), 'Validation': np.float64(1665.928712346699)}
+=====Epoch 150
+{'Train': np.float64(582.3328322773361), 'Validation': np.float64(1013.0955114326379)}
+=====Epoch 151
+{'Train': np.float64(511.4557097611508), 'Validation': np.float64(979.3757212503285)}
+=====Epoch 152
+{'Train': np.float64(455.28905390775674), 'Validation': np.float64(978.0347287769686)}
+=====Epoch 153
+{'Train': np.float64(484.24362838385247), 'Validation': np.float64(1116.86009328728)}
+=====Epoch 154
+{'Train': np.float64(780.6574537059679), 'Validation': np.float64(1733.1409017294225)}
+=====Epoch 155
+{'Train': np.float64(746.810435775501), 'Validation': np.float64(1639.4150383872638)}
+=====Epoch 156
+{'Train': np.float64(462.31593472411254), 'Validation': np.float64(1048.1145745978658)}
+=====Epoch 157
+{'Train': np.float64(521.1446998049726), 'Validation': np.float64(1247.9013522988403)}
+=====Epoch 158
+{'Train': np.float64(450.9876001825521), 'Validation': np.float64(1043.5854492491017)}
+=====Epoch 159
+{'Train': np.float64(465.9975931134655), 'Validation': np.float64(1114.2745147638002)}
+=====Epoch 160
+{'Train': np.float64(572.914588873146), 'Validation': np.float64(1343.713804711451)}
+=====Epoch 161
+{'Train': np.float64(566.741622347958), 'Validation': np.float64(1334.1694061685396)}
+=====Epoch 162
+{'Train': np.float64(504.9274906523455), 'Validation': np.float64(932.3498912521243)}
+=====Epoch 163
+{'Train': np.float64(468.6228154901321), 'Validation': np.float64(1019.4981258130997)}
+=====Epoch 164
+{'Train': np.float64(505.16205832358867), 'Validation': np.float64(1160.7270139546706)}
+=====Epoch 165
+{'Train': np.float64(550.8076102767462), 'Validation': np.float64(1038.315605864853)}
+=====Epoch 166
+{'Train': np.float64(660.7942591964672), 'Validation': np.float64(1446.5159296228894)}
+=====Epoch 167
+{'Train': np.float64(460.00830489510497), 'Validation': np.float64(1133.7142512251714)}
+=====Epoch 168
+{'Train': np.float64(454.3383485399757), 'Validation': np.float64(1119.8893031674754)}
+=====Epoch 169
+{'Train': np.float64(1023.4870616032603), 'Validation': np.float64(1753.3813099417064)}
+=====Epoch 170
+{'Train': np.float64(463.12903934384246), 'Validation': np.float64(1134.2880360681763)}
+=====Epoch 171
+{'Train': np.float64(1045.5038362578296), 'Validation': np.float64(2175.113978398975)}
+=====Epoch 172
+{'Train': np.float64(740.6089579466269), 'Validation': np.float64(1670.6802423944252)}
+=====Epoch 173
+{'Train': np.float64(1119.3645155968914), 'Validation': np.float64(1807.0430632457242)}
+=====Epoch 174
+{'Train': np.float64(583.5775003788981), 'Validation': np.float64(1352.9350284734894)}
+=====Epoch 175
+{'Train': np.float64(501.76626468874804), 'Validation': np.float64(1151.2416576660426)}
+=====Epoch 176
+{'Train': np.float64(487.80756013057004), 'Validation': np.float64(1052.2887175616036)}
+=====Epoch 177
+{'Train': np.float64(507.95457582548136), 'Validation': np.float64(1022.2762986694394)}
+=====Epoch 178
+{'Train': np.float64(497.14429719703), 'Validation': np.float64(962.9197116104831)}
+=====Epoch 179
+{'Train': np.float64(509.80467371574434), 'Validation': np.float64(1081.7240918418704)}
+=====Epoch 180
+{'Train': np.float64(494.5104300525256), 'Validation': np.float64(937.2255115996059)}
+=====Epoch 181
+{'Train': np.float64(464.1345371708982), 'Validation': np.float64(914.420192016392)}
+=====Epoch 182
+{'Train': np.float64(566.3512987643128), 'Validation': np.float64(1033.6963687791413)}
+=====Epoch 183
+{'Metric': 'RMSE', 'Train': np.float64(439.1256063242667), 'Validation': np.float64(711.7449720648576), 'Test': np.float64(520.4677134389128), 'Test R2': 0.9431027091988976}
+=====Epoch 184
+{'Train': np.float64(430.07771207150404), 'Validation': np.float64(742.8769055910993)}
+=====Epoch 185
+{'Train': np.float64(442.9937896094379), 'Validation': np.float64(767.245839568598)}
+=====Epoch 186
+{'Train': np.float64(465.1170139194213), 'Validation': np.float64(1128.4419604931477)}
+=====Epoch 187
+{'Train': np.float64(555.6197794617914), 'Validation': np.float64(872.2173993264487)}
+=====Epoch 188
+{'Train': np.float64(544.1359129237275), 'Validation': np.float64(937.6085387397949)}
+=====Epoch 189
+{'Train': np.float64(625.2682670256331), 'Validation': np.float64(1343.4032393670464)}
+=====Epoch 190
+{'Train': np.float64(727.2841978976375), 'Validation': np.float64(1601.8230611175438)}
+=====Epoch 191
+{'Train': np.float64(572.92155334614), 'Validation': np.float64(1099.6475997240618)}
+=====Epoch 192
+{'Train': np.float64(514.9191583539431), 'Validation': np.float64(1025.4114934738684)}
+=====Epoch 193
+{'Train': np.float64(527.0454729196427), 'Validation': np.float64(1160.1162974873228)}
+=====Epoch 194
+{'Train': np.float64(500.39640952533813), 'Validation': np.float64(1099.8959954411469)}
+=====Epoch 195
+{'Train': np.float64(444.28140522985603), 'Validation': np.float64(949.2586663918577)}
+=====Epoch 196
+{'Train': np.float64(443.05653288094777), 'Validation': np.float64(885.7317432394631)}
+=====Epoch 197
+{'Train': np.float64(537.738451669529), 'Validation': np.float64(1257.79936743213)}
+=====Epoch 198
+{'Train': np.float64(498.1121447141377), 'Validation': np.float64(954.4443693588157)}
+=====Epoch 199
+{'Train': np.float64(541.0455157770198), 'Validation': np.float64(924.6235249936258)}
+=====Epoch 200
+{'Train': np.float64(588.2591771854628), 'Validation': np.float64(924.2229652750754)}
+=====Epoch 201
+{'Train': np.float64(564.0464631527639), 'Validation': np.float64(1017.782092546878)}
+=====Epoch 202
+{'Train': np.float64(1056.5738611600912), 'Validation': np.float64(1667.2350405811246)}
+=====Epoch 203
+{'Train': np.float64(491.81575233094577), 'Validation': np.float64(904.0022919540726)}
+=====Epoch 204
+{'Metric': 'RMSE', 'Train': np.float64(515.0479467010967), 'Validation': np.float64(669.222088833225), 'Test': np.float64(493.67903660236414), 'Test R2': 0.9488090284649424}
+=====Epoch 205
+{'Train': np.float64(414.9990232424297), 'Validation': np.float64(753.3202686727097)}
+=====Epoch 206
+{'Train': np.float64(355.9386185984429), 'Validation': np.float64(877.7109373583255)}
+=====Epoch 207
+{'Train': np.float64(622.4856675818294), 'Validation': np.float64(1385.077982519464)}
+=====Epoch 208
+{'Metric': 'RMSE', 'Train': np.float64(460.8199136754314), 'Validation': np.float64(611.952889954317), 'Test': np.float64(454.33253325679465), 'Test R2': 0.9566437538971234}
+=====Epoch 209
+{'Train': np.float64(489.0351163378874), 'Validation': np.float64(1171.5940540828453)}
+=====Epoch 210
+{'Train': np.float64(709.5418434976873), 'Validation': np.float64(1011.9465499987181)}
+=====Epoch 211
+{'Train': np.float64(707.9955854713036), 'Validation': np.float64(1118.2638107509897)}
+=====Epoch 212
+{'Train': np.float64(454.4498674652475), 'Validation': np.float64(900.1863962562408)}
+=====Epoch 213
+{'Train': np.float64(425.78922999846213), 'Validation': np.float64(854.0906876021959)}
+=====Epoch 214
+{'Train': np.float64(955.2692525156918), 'Validation': np.float64(1188.7669693638359)}
+=====Epoch 215
+{'Train': np.float64(425.1618367209843), 'Validation': np.float64(720.598070520675)}
+=====Epoch 216
+{'Train': np.float64(522.9187800413418), 'Validation': np.float64(1240.8123738129561)}
+=====Epoch 217
+{'Train': np.float64(538.6243870601512), 'Validation': np.float64(688.1988604421148)}
+=====Epoch 218
+{'Train': np.float64(439.291703810768), 'Validation': np.float64(997.453362514329)}
+=====Epoch 219
+{'Train': np.float64(440.0647104217368), 'Validation': np.float64(970.6008550983528)}
+=====Epoch 220
+{'Train': np.float64(490.3970843613167), 'Validation': np.float64(895.3063596861692)}
+=====Epoch 221
+{'Train': np.float64(444.36054671335637), 'Validation': np.float64(929.6131765179646)}
+=====Epoch 222
+{'Train': np.float64(500.7516781519743), 'Validation': np.float64(1167.8744763327654)}
+=====Epoch 223
+{'Train': np.float64(515.7267598959444), 'Validation': np.float64(1032.7537223767297)}
+=====Epoch 224
+{'Train': np.float64(697.9172961497641), 'Validation': np.float64(1149.1337378051767)}
+=====Epoch 225
+{'Train': np.float64(544.3648741970064), 'Validation': np.float64(928.1334679057535)}
+=====Epoch 226
+{'Train': np.float64(542.3940855903282), 'Validation': np.float64(1235.8122411081242)}
+=====Epoch 227
+{'Train': np.float64(589.1189271042518), 'Validation': np.float64(894.3613570564012)}
+=====Epoch 228
+{'Train': np.float64(647.5844527583326), 'Validation': np.float64(965.7451815355397)}
+=====Epoch 229
+{'Train': np.float64(521.2777614950433), 'Validation': np.float64(1019.6665734157338)}
+=====Epoch 230
+{'Train': np.float64(636.5160127426934), 'Validation': np.float64(959.6178496684688)}
+=====Epoch 231
+{'Train': np.float64(801.0911280517521), 'Validation': np.float64(1429.8050216670504)}
+=====Epoch 232
+{'Train': np.float64(505.18443719780055), 'Validation': np.float64(1070.5412432281826)}
+=====Epoch 233
+{'Train': np.float64(585.1804539226331), 'Validation': np.float64(1340.4564281365497)}
+=====Epoch 234
+{'Metric': 'RMSE', 'Train': np.float64(471.98686554087834), 'Validation': np.float64(562.7946144627873), 'Test': np.float64(442.73048023301243), 'Test R2': 0.9588298124836765}
+=====Epoch 235
+{'Train': np.float64(424.6558279133915), 'Validation': np.float64(1113.6781717298065)}
+=====Epoch 236
+{'Train': np.float64(385.1847416668266), 'Validation': np.float64(987.019744380352)}
+=====Epoch 237
+{'Train': np.float64(633.6316114791742), 'Validation': np.float64(1458.9749995589598)}
+=====Epoch 238
+{'Train': np.float64(775.0897498105808), 'Validation': np.float64(1683.9143811294962)}
+=====Epoch 239
+{'Train': np.float64(472.3235047915625), 'Validation': np.float64(1056.9272177018108)}
+=====Epoch 240
+{'Train': np.float64(512.8556336599228), 'Validation': np.float64(1116.2863567126622)}
+=====Epoch 241
+{'Train': np.float64(480.70451091908393), 'Validation': np.float64(1109.2006083004642)}
+=====Epoch 242
+{'Train': np.float64(572.0821506108431), 'Validation': np.float64(1171.2200017890077)}
+=====Epoch 243
+{'Train': np.float64(499.3723790628335), 'Validation': np.float64(1137.715166307703)}
+=====Epoch 244
+{'Train': np.float64(498.22958995305436), 'Validation': np.float64(1144.5437032892182)}
+=====Epoch 245
+{'Train': np.float64(602.7120289824888), 'Validation': np.float64(1228.468912111687)}
+=====Epoch 246
+{'Train': np.float64(515.1804919691278), 'Validation': np.float64(1186.483242679613)}
+=====Epoch 247
+{'Train': np.float64(728.7515362320025), 'Validation': np.float64(1194.5087273756308)}
+=====Epoch 248
+{'Train': np.float64(509.174932458755), 'Validation': np.float64(941.6157300800539)}
+=====Epoch 249
+{'Train': np.float64(788.1445234896557), 'Validation': np.float64(1673.0518981854289)}
+=====Epoch 250
+{'Train': np.float64(509.8121999897383), 'Validation': np.float64(1151.8430356784093)}
+=====Epoch 251
+{'Train': np.float64(487.93351746607186), 'Validation': np.float64(970.1301035134574)}
+=====Epoch 252
+{'Train': np.float64(469.5416625835093), 'Validation': np.float64(973.2192446677365)}
+=====Epoch 253
+{'Train': np.float64(474.5894972841912), 'Validation': np.float64(989.5646020597538)}
+=====Epoch 254
+{'Train': np.float64(785.929865954662), 'Validation': np.float64(1730.6132372758225)}
+=====Epoch 255
+{'Train': np.float64(994.0015910149391), 'Validation': np.float64(1687.2441526931277)}
+=====Epoch 256
+{'Train': np.float64(589.6324331928525), 'Validation': np.float64(1116.3292479246118)}
+=====Epoch 257
+{'Train': np.float64(1061.6657661205513), 'Validation': np.float64(1804.57638722674)}
+=====Epoch 258
+{'Train': np.float64(544.9156429675539), 'Validation': np.float64(1223.3917501266171)}
+=====Epoch 259
+{'Train': np.float64(494.6970260468041), 'Validation': np.float64(1111.0504936302643)}
+=====Epoch 260
+{'Train': np.float64(499.4518109420899), 'Validation': np.float64(1141.3494054607331)}
+=====Epoch 261
+{'Train': np.float64(508.7122396981768), 'Validation': np.float64(1164.9154610161154)}
+=====Epoch 262
+{'Train': np.float64(560.8732703082105), 'Validation': np.float64(1236.708414036385)}
+=====Epoch 263
+{'Train': np.float64(582.8196402235136), 'Validation': np.float64(1190.6427751766803)}
+=====Epoch 264
+{'Train': np.float64(715.5934398977254), 'Validation': np.float64(1288.906896477334)}
+=====Epoch 265
+{'Train': np.float64(582.6423686039105), 'Validation': np.float64(1105.6772238225085)}
+=====Epoch 266
+{'Train': np.float64(624.9082102986015), 'Validation': np.float64(1136.6443625915833)}
+=====Epoch 267
+{'Train': np.float64(562.6792261387352), 'Validation': np.float64(1033.0742472297645)}
+=====Epoch 268
+{'Train': np.float64(551.2073553017326), 'Validation': np.float64(1045.455145602745)}
+=====Epoch 269
+{'Train': np.float64(480.55769242426817), 'Validation': np.float64(1059.5637615730564)}
+=====Epoch 270
+{'Train': np.float64(526.2317595940103), 'Validation': np.float64(969.7682843313161)}
+=====Epoch 271
+{'Train': np.float64(377.4683406353533), 'Validation': np.float64(860.4612892786458)}
+=====Epoch 272
+{'Train': np.float64(427.37100099143237), 'Validation': np.float64(644.3204593538243)}
+=====Epoch 273
+{'Train': np.float64(402.5020028487369), 'Validation': np.float64(956.2602791251742)}
+=====Epoch 274
+{'Train': np.float64(609.641572157708), 'Validation': np.float64(1436.406149716841)}
+=====Epoch 275
+{'Train': np.float64(742.7440395150744), 'Validation': np.float64(908.4421138654177)}
+=====Epoch 276
+{'Train': np.float64(789.9058375891336), 'Validation': np.float64(780.1934089293883)}
+=====Epoch 277
+{'Train': np.float64(890.2036655028697), 'Validation': np.float64(1505.329816833531)}
+=====Epoch 278
+{'Train': np.float64(1097.488030175821), 'Validation': np.float64(1461.1777392129673)}
+=====Epoch 279
+{'Train': np.float64(383.62114265445365), 'Validation': np.float64(666.3882495743253)}
+=====Epoch 280
+{'Train': np.float64(678.8028328794218), 'Validation': np.float64(766.6609753591755)}
+=====Epoch 281
+{'Train': np.float64(1137.7587455125154), 'Validation': np.float64(1704.0795314371653)}
+=====Epoch 282
+{'Metric': 'RMSE', 'Train': np.float64(440.273985922651), 'Validation': np.float64(526.5443266794135), 'Test': np.float64(505.1151213541062), 'Test R2': 0.9464098787025648}
+=====Epoch 283
+{'Train': np.float64(1114.123200747469), 'Validation': np.float64(2278.646369171919)}
+=====Epoch 284
+{'Train': np.float64(774.196104540318), 'Validation': np.float64(1729.1793856301508)}
+=====Epoch 285
+{'Train': np.float64(590.4202480579181), 'Validation': np.float64(1357.3311369412993)}
+=====Epoch 286
+{'Train': np.float64(1999.044122583675), 'Validation': np.float64(3534.0037749907146)}
+=====Epoch 287
+{'Train': np.float64(865.2037865059257), 'Validation': np.float64(1554.679225333116)}
+=====Epoch 288
+{'Train': np.float64(537.4736911122926), 'Validation': np.float64(1361.378582162625)}
+=====Epoch 289
+{'Train': np.float64(651.3975072659032), 'Validation': np.float64(1145.797778788384)}
+=====Epoch 290
+{'Train': np.float64(634.0729028723874), 'Validation': np.float64(1111.6452982406001)}
+=====Epoch 291
+{'Train': np.float64(577.0723189303097), 'Validation': np.float64(1277.6769663237706)}
+=====Epoch 292
+{'Train': np.float64(526.8365373591827), 'Validation': np.float64(1106.008039991657)}
+=====Epoch 293
+{'Train': np.float64(500.0534409839291), 'Validation': np.float64(916.7564254854857)}
+=====Epoch 294
+{'Train': np.float64(525.5418158316608), 'Validation': np.float64(1019.1932326249095)}
+=====Epoch 295
+{'Train': np.float64(508.0976004059481), 'Validation': np.float64(1058.8292037558838)}
+=====Epoch 296
+{'Train': np.float64(480.9060849913156), 'Validation': np.float64(893.2905313644254)}
+=====Epoch 297
+{'Train': np.float64(541.1616818317761), 'Validation': np.float64(811.9836251896454)}
+=====Epoch 298
+{'Train': np.float64(683.3895392538346), 'Validation': np.float64(1554.0320489775345)}
+=====Epoch 299
+{'Train': np.float64(355.39802332095246), 'Validation': np.float64(883.9855213367971)}
+=====Epoch 300
+{'Train': np.float64(355.85479483390816), 'Validation': np.float64(875.439575714285)}
+=====Epoch 301
+{'Train': np.float64(583.7816229539167), 'Validation': np.float64(892.5501857082829)}
+=====Epoch 302
+{'Train': np.float64(590.9401539576993), 'Validation': np.float64(655.5142707436894)}
+=====Epoch 303
+{'Train': np.float64(336.17007681555174), 'Validation': np.float64(790.8007980978458)}
+=====Epoch 304
+{'Train': np.float64(373.9982594599335), 'Validation': np.float64(885.5845929269994)}
+=====Epoch 305
+{'Train': np.float64(372.5016886631404), 'Validation': np.float64(874.8874555452854)}
+=====Epoch 306
+{'Train': np.float64(449.3989970050416), 'Validation': np.float64(549.7118246869355)}
+=====Epoch 307
+{'Train': np.float64(349.8167521366337), 'Validation': np.float64(659.9409177165332)}
+=====Epoch 308
+{'Train': np.float64(408.8615529570959), 'Validation': np.float64(1120.498180455375)}
+=====Epoch 309
+{'Metric': 'RMSE', 'Train': np.float64(522.4037534064081), 'Validation': np.float64(459.7953997561535), 'Test': np.float64(485.20910285423577), 'Test R2': 0.9505505028059673}
+=====Epoch 310
+{'Train': np.float64(391.48782842979637), 'Validation': np.float64(905.8551192007574)}
+=====Epoch 311
+{'Train': np.float64(416.43760558775267), 'Validation': np.float64(652.2776467882867)}
+=====Epoch 312
+{'Train': np.float64(537.0676059752976), 'Validation': np.float64(669.6969221114541)}
+=====Epoch 313
+{'Train': np.float64(452.2639960389026), 'Validation': np.float64(653.7446860616782)}
+=====Epoch 314
+{'Train': np.float64(579.3350849589904), 'Validation': np.float64(601.2464561151377)}
+=====Epoch 315
+{'Train': np.float64(347.99250770721625), 'Validation': np.float64(744.7114633641078)}
+=====Epoch 316
+{'Train': np.float64(321.2143761590337), 'Validation': np.float64(716.9234173720462)}
+=====Epoch 317
+{'Train': np.float64(322.26714583758843), 'Validation': np.float64(768.3679556815756)}
+=====Epoch 318
+{'Train': np.float64(313.84001535170694), 'Validation': np.float64(878.7385662886146)}
+=====Epoch 319
+{'Train': np.float64(313.400387588909), 'Validation': np.float64(787.6525056195728)}
+=====Epoch 320
+{'Train': np.float64(383.9384361977213), 'Validation': np.float64(1136.9024601587503)}
+=====Epoch 321
+{'Metric': 'RMSE', 'Train': np.float64(433.582288125044), 'Validation': np.float64(428.3846130357034), 'Test': np.float64(371.55294849860076), 'Test R2': 0.9710035103914597}
+=====Epoch 322
+{'Train': np.float64(364.77495054822737), 'Validation': np.float64(994.3948638969695)}
+=====Epoch 323
+{'Train': np.float64(846.6798441135148), 'Validation': np.float64(946.1520723550962)}
+=====Epoch 324
+{'Train': np.float64(360.6429270569716), 'Validation': np.float64(576.4381298857079)}
+=====Epoch 325
+{'Train': np.float64(461.95132216981136), 'Validation': np.float64(1290.3307137553707)}
+=====Epoch 326
+{'Train': np.float64(554.1722036087119), 'Validation': np.float64(1476.205468072236)}
+=====Epoch 327
+{'Train': np.float64(355.1187072488064), 'Validation': np.float64(1002.6919397006286)}
+=====Epoch 328
+{'Train': np.float64(340.4459948456618), 'Validation': np.float64(880.058606837401)}
+=====Epoch 329
+{'Train': np.float64(376.8400135624026), 'Validation': np.float64(958.9822935881527)}
+=====Epoch 330
+{'Train': np.float64(628.2317623803791), 'Validation': np.float64(727.9011964477586)}
+=====Epoch 331
+{'Train': np.float64(555.4602701921954), 'Validation': np.float64(1019.037225856861)}
+=====Epoch 332
+{'Train': np.float64(475.7633262399329), 'Validation': np.float64(1316.9126881794357)}
+=====Epoch 333
+{'Train': np.float64(318.17329202265535), 'Validation': np.float64(756.637088080293)}
+=====Epoch 334
+{'Train': np.float64(292.3866331248899), 'Validation': np.float64(921.1821421146648)}
+=====Epoch 335
+{'Train': np.float64(598.7703330590244), 'Validation': np.float64(660.1445411577475)}
+=====Epoch 336
+{'Train': np.float64(1641.8502679850315), 'Validation': np.float64(2529.7859298837943)}
+=====Epoch 337
+{'Train': np.float64(1323.0202744800445), 'Validation': np.float64(1582.0107351855454)}
+=====Epoch 338
+{'Train': np.float64(943.2066602413508), 'Validation': np.float64(1239.8875072735227)}
+=====Epoch 339
+{'Train': np.float64(1393.4586449996716), 'Validation': np.float64(1929.768418120349)}
+=====Epoch 340
+{'Train': np.float64(717.5366753888844), 'Validation': np.float64(943.9797372443754)}
+=====Epoch 341
+{'Train': np.float64(464.6258893788865), 'Validation': np.float64(1210.7050572167718)}
+=====Epoch 342
+{'Train': np.float64(443.6251148049849), 'Validation': np.float64(1114.8071458545091)}
+=====Epoch 343
+{'Train': np.float64(423.25518445064694), 'Validation': np.float64(1036.5641907621189)}
+=====Epoch 344
+{'Train': np.float64(503.92054426718374), 'Validation': np.float64(1016.897999995144)}
+=====Epoch 345
+{'Train': np.float64(494.1267660104114), 'Validation': np.float64(984.7257713956928)}
+=====Epoch 346
+{'Train': np.float64(357.8813235999572), 'Validation': np.float64(916.5522091598907)}
+=====Epoch 347
+{'Train': np.float64(312.14457184346566), 'Validation': np.float64(789.1041784944089)}
+=====Epoch 348
+{'Train': np.float64(391.1633796681573), 'Validation': np.float64(1070.3540271705847)}
+=====Epoch 349
+{'Train': np.float64(353.81490456109384), 'Validation': np.float64(1018.8200860564892)}
+=====Epoch 350
+{'Train': np.float64(761.9156729491142), 'Validation': np.float64(1125.0512279007444)}
+=====Epoch 351
+{'Train': np.float64(1376.3903446028132), 'Validation': np.float64(2295.897631010038)}
+=====Epoch 352
+{'Train': np.float64(814.819507584137), 'Validation': np.float64(1363.9625468573468)}
+=====Epoch 353
+{'Train': np.float64(594.4877864946025), 'Validation': np.float64(1208.0154869741361)}
+=====Epoch 354
+{'Train': np.float64(840.1764008071451), 'Validation': np.float64(1555.2611891180597)}
+=====Epoch 355
+{'Train': np.float64(676.5282428744634), 'Validation': np.float64(1075.530212054886)}
+=====Epoch 356
+{'Train': np.float64(542.2346700989007), 'Validation': np.float64(604.355349634989)}
+=====Epoch 357
+{'Train': np.float64(411.9586713298505), 'Validation': np.float64(602.1049960756525)}
+=====Epoch 358
+{'Train': np.float64(524.8928088846274), 'Validation': np.float64(1306.6356104547829)}
+=====Epoch 359
+{'Train': np.float64(537.6958628140208), 'Validation': np.float64(1385.525117632131)}
+=====Epoch 360
+{'Train': np.float64(420.4280859719367), 'Validation': np.float64(1140.8329293722643)}
+=====Epoch 361
+{'Train': np.float64(341.1071733532261), 'Validation': np.float64(737.2293855297327)}
+=====Epoch 362
+{'Train': np.float64(314.46551054424003), 'Validation': np.float64(868.9383046328865)}
+=====Epoch 363
+{'Train': np.float64(491.1143547583861), 'Validation': np.float64(1352.5051353802519)}
+=====Epoch 364
+{'Train': np.float64(306.67384611629774), 'Validation': np.float64(816.606670572917)}
+=====Epoch 365
+{'Train': np.float64(321.37245986898523), 'Validation': np.float64(789.2960981953073)}
+=====Epoch 366
+{'Train': np.float64(300.6475285047644), 'Validation': np.float64(730.0866688395926)}
+=====Epoch 367
+{'Train': np.float64(509.1208960305736), 'Validation': np.float64(1421.2960685942603)}
+=====Epoch 368
+{'Train': np.float64(304.56197515359884), 'Validation': np.float64(676.9479769423886)}
+=====Epoch 369
+{'Train': np.float64(415.1926005172903), 'Validation': np.float64(546.3053516699666)}
+=====Epoch 370
+{'Train': np.float64(412.4717296352435), 'Validation': np.float64(787.1260083460251)}
+=====Epoch 371
+{'Train': np.float64(364.0125903844253), 'Validation': np.float64(571.2630718706415)}
+=====Epoch 372
+{'Train': np.float64(369.7930967391721), 'Validation': np.float64(858.581625136607)}
+Finished training! Results from epoch 321 with best validation 428.3846130357034.
+Test rmse: 371.55294849860076, Test r2: 0.9710035103914597 
+
+Namespace(device=0, gnn='gin-virtual', drop_ratio=0.1, num_layer=3, emb_dim=128, use_linear_predictor=False, gamma=0.2, batch_size=32, epochs=400, patience=50, lr=0.01, l2reg=0.0001, use_lr_scheduler=False, use_clip_norm=False, path_list=[1, 4], initw_name='default', dataset='plym-o2_prop', trails=5, by_default=True, plym_prop='o2')
+/workspaces/GREA/data/o2_prop/processed/geometric_data_processed.pt
+# Train: 356  #Test: 179.0 #Val: 60
+initialize network with default
+=====Epoch 0
+{'Metric': 'RMSE', 'Train': np.float64(1271.3012297358434), 'Validation': np.float64(2519.8169624540274), 'Test': np.float64(2223.565691095508), 'Test R2': -0.03849384993279292}
+=====Epoch 1
+{'Metric': 'RMSE', 'Train': np.float64(1270.243446810847), 'Validation': np.float64(2518.7570309005996), 'Test': np.float64(2222.560494699697), 'Test R2': -0.03755512855744936}
+=====Epoch 2
+{'Metric': 'RMSE', 'Train': np.float64(1224.9014618355893), 'Validation': np.float64(2449.9708698038517), 'Test': np.float64(2158.804670422655), 'Test R2': 0.021117198849626706}
+=====Epoch 3
+{'Train': np.float64(1238.5823921077197), 'Validation': np.float64(2472.130278850804)}
+=====Epoch 4
+{'Train': np.float64(1236.4534847382781), 'Validation': np.float64(2469.9149150242197)}
+=====Epoch 5
+{'Metric': 'RMSE', 'Train': np.float64(1220.2593251707387), 'Validation': np.float64(2442.1468476760388), 'Test': np.float64(2149.4184878171895), 'Test R2': 0.02961078683605589}
+=====Epoch 6
+{'Metric': 'RMSE', 'Train': np.float64(1405.971134235929), 'Validation': np.float64(2384.0062990936913), 'Test': np.float64(2078.5744410098387), 'Test R2': 0.09252396339566848}
+=====Epoch 7
+{'Train': np.float64(1258.6708989689262), 'Validation': np.float64(2464.51479517372)}
+=====Epoch 8
+{'Train': np.float64(1246.7873266908598), 'Validation': np.float64(2484.1662673682135)}
+=====Epoch 9
+{'Metric': 'RMSE', 'Train': np.float64(1140.7307712132526), 'Validation': np.float64(2293.1258498965717), 'Test': np.float64(2011.859743430013), 'Test R2': 0.1498424785040332}
+=====Epoch 10
+{'Train': np.float64(1216.8018733761717), 'Validation': np.float64(2435.758312832133)}
+=====Epoch 11
+{'Metric': 'RMSE', 'Train': np.float64(1071.7038309052489), 'Validation': np.float64(2037.769702881619), 'Test': np.float64(1771.4759716866452), 'Test R2': 0.34086475901528845}
+=====Epoch 12
+{'Train': np.float64(1064.633305966884), 'Validation': np.float64(2195.021170904139)}
+=====Epoch 13
+{'Train': np.float64(1186.0887750001398), 'Validation': np.float64(2385.6915381403523)}
+=====Epoch 14
+{'Train': np.float64(1116.5266398980245), 'Validation': np.float64(2250.9718064845088)}
+=====Epoch 15
+{'Metric': 'RMSE', 'Train': np.float64(913.5895828431052), 'Validation': np.float64(1904.850801637738), 'Test': np.float64(1633.7929802866431), 'Test R2': 0.43934196360212785}
+=====Epoch 16
+{'Metric': 'RMSE', 'Train': np.float64(882.272569822411), 'Validation': np.float64(1898.942125624832), 'Test': np.float64(1633.4744082705297), 'Test R2': 0.439560586829981}
+=====Epoch 17
+{'Train': np.float64(1197.1709200120345), 'Validation': np.float64(2399.422475133649)}
+=====Epoch 18
+{'Metric': 'RMSE', 'Train': np.float64(797.9112161460872), 'Validation': np.float64(1667.8670713252488), 'Test': np.float64(1399.6607942067972), 'Test R2': 0.5885191808587711}
+=====Epoch 19
+{'Train': np.float64(1246.3538710108398), 'Validation': np.float64(2476.8216896003005)}
+=====Epoch 20
+{'Train': np.float64(848.4680705323808), 'Validation': np.float64(1802.3229595770517)}
+=====Epoch 21
+{'Train': np.float64(1074.29389034012), 'Validation': np.float64(2183.612318943172)}
+=====Epoch 22
+{'Train': np.float64(987.7978073855551), 'Validation': np.float64(2057.6257445955866)}
+=====Epoch 23
+{'Train': np.float64(920.5340876108414), 'Validation': np.float64(1959.745519063099)}
+=====Epoch 24
+{'Train': np.float64(830.7964521397038), 'Validation': np.float64(1785.536416714086)}
+=====Epoch 25
+{'Train': np.float64(1244.8667922588138), 'Validation': np.float64(2471.8550456730254)}
+=====Epoch 26
+{'Train': np.float64(2582.3237647436267), 'Validation': np.float64(3035.2735100970544)}
+=====Epoch 27
+{'Metric': 'RMSE', 'Train': np.float64(722.5003273818022), 'Validation': np.float64(1341.0871706080852), 'Test': np.float64(1081.107732956718), 'Test R2': 0.7545053976943417}
+=====Epoch 28
+{'Train': np.float64(664.2497314036193), 'Validation': np.float64(1469.7907313666403)}
+=====Epoch 29
+{'Train': np.float64(986.7677857566013), 'Validation': np.float64(2074.7557643874857)}
+=====Epoch 30
+{'Train': np.float64(733.2370328132605), 'Validation': np.float64(1625.0419013865148)}
+=====Epoch 31
+{'Train': np.float64(867.414411007983), 'Validation': np.float64(1507.295557542607)}
+=====Epoch 32
+{'Train': np.float64(765.3498989164256), 'Validation': np.float64(1599.6225938962086)}
+=====Epoch 33
+{'Train': np.float64(772.5734265016227), 'Validation': np.float64(1700.374449059472)}
+=====Epoch 34
+{'Train': np.float64(1914.7587615631928), 'Validation': np.float64(2145.9140376446244)}
+=====Epoch 35
+{'Train': np.float64(1649.7053556753208), 'Validation': np.float64(1887.2283301960356)}
+=====Epoch 36
+{'Metric': 'RMSE', 'Train': np.float64(765.100600021436), 'Validation': np.float64(1338.6476851122195), 'Test': np.float64(1024.8036352713452), 'Test R2': 0.7794102569728791}
+=====Epoch 37
+{'Train': np.float64(700.1708351658104), 'Validation': np.float64(1603.5302751134411)}
+=====Epoch 38
+{'Train': np.float64(763.7604211925935), 'Validation': np.float64(1709.2758889796091)}
+=====Epoch 39
+{'Metric': 'RMSE', 'Train': np.float64(607.6964576360768), 'Validation': np.float64(1308.0835072645584), 'Test': np.float64(1039.2232005691792), 'Test R2': 0.773158940181418}
+=====Epoch 40
+{'Metric': 'RMSE', 'Train': np.float64(671.0482353393855), 'Validation': np.float64(1145.9205934766794), 'Test': np.float64(829.8184905186878), 'Test R2': 0.8553660604257576}
+=====Epoch 41
+{'Train': np.float64(768.7133619924651), 'Validation': np.float64(1713.7409585426165)}
+=====Epoch 42
+{'Train': np.float64(1022.2695877746784), 'Validation': np.float64(2137.877483610622)}
+=====Epoch 43
+{'Train': np.float64(2976.5485624733296), 'Validation': np.float64(4047.236440087506)}
+=====Epoch 44
+{'Metric': 'RMSE', 'Train': np.float64(522.2027791752764), 'Validation': np.float64(1059.4811473586415), 'Test': np.float64(641.2514336956796), 'Test R2': 0.9136304417442603}
+=====Epoch 45
+{'Train': np.float64(20171.918315090057), 'Validation': np.float64(22172.348195519968)}
+=====Epoch 46
+{'Train': np.float64(1382.0149927217553), 'Validation': np.float64(2554.493336074191)}
+=====Epoch 47
+{'Train': np.float64(1079.4914945918194), 'Validation': np.float64(2155.2889820402097)}
+=====Epoch 48
+{'Train': np.float64(1061.1969177132412), 'Validation': np.float64(2116.229421915434)}
+=====Epoch 49
+{'Train': np.float64(1145.2485169021527), 'Validation': np.float64(1999.4534861514728)}
+=====Epoch 50
+{'Train': np.float64(796.8308192692062), 'Validation': np.float64(1468.2367381832394)}
+=====Epoch 51
+{'Train': np.float64(1001.2355080762038), 'Validation': np.float64(1682.192411875463)}
+=====Epoch 52
+{'Train': np.float64(926.9556118737951), 'Validation': np.float64(1731.9665334577858)}
+=====Epoch 53
+{'Train': np.float64(864.1067409762067), 'Validation': np.float64(1792.7132740772815)}
+=====Epoch 54
+{'Train': np.float64(808.8146945024307), 'Validation': np.float64(1766.0498960256832)}
+=====Epoch 55
+{'Train': np.float64(772.5723100824838), 'Validation': np.float64(1691.1208283903547)}
+=====Epoch 56
+{'Train': np.float64(646.3321959984761), 'Validation': np.float64(1439.0185904691448)}
+=====Epoch 57
+{'Train': np.float64(801.7862677043557), 'Validation': np.float64(1768.4576562662064)}
+=====Epoch 58
+{'Train': np.float64(834.4676385769624), 'Validation': np.float64(1839.8579373899506)}
+=====Epoch 59
+{'Train': np.float64(761.5343068980263), 'Validation': np.float64(1722.2647412429876)}
+=====Epoch 60
+{'Train': np.float64(662.0050937037231), 'Validation': np.float64(1528.5739108466266)}
+=====Epoch 61
+{'Train': np.float64(877.0890070468497), 'Validation': np.float64(1883.5792595781127)}
+=====Epoch 62
+{'Train': np.float64(1235.6501078101107), 'Validation': np.float64(2468.253030459999)}
+=====Epoch 63
+{'Train': np.float64(869.2425357644308), 'Validation': np.float64(1860.4236926826343)}
+=====Epoch 64
+{'Train': np.float64(431.49227758540417), 'Validation': np.float64(1130.9852983623566)}
+=====Epoch 65
+{'Train': np.float64(2258.1088860683617), 'Validation': np.float64(3298.190833783296)}
+=====Epoch 66
+{'Train': np.float64(2166.1557689741644), 'Validation': np.float64(2804.1707481406165)}
+=====Epoch 67
+{'Train': np.float64(1035.3055220716096), 'Validation': np.float64(1402.1660738693156)}
+=====Epoch 68
+{'Train': np.float64(712.6880114897422), 'Validation': np.float64(1275.1156080757821)}
+=====Epoch 69
+{'Train': np.float64(860.6117319284281), 'Validation': np.float64(1908.58911600999)}
+=====Epoch 70
+{'Train': np.float64(1115.1188296975893), 'Validation': np.float64(2275.759415759599)}
+=====Epoch 71
+{'Train': np.float64(1809.7061321478407), 'Validation': np.float64(2300.536429822325)}
+=====Epoch 72
+{'Train': np.float64(1009.9399120150391), 'Validation': np.float64(1463.1782276321735)}
+=====Epoch 73
+{'Train': np.float64(2038.836265527423), 'Validation': np.float64(2158.2180912647495)}
+=====Epoch 74
+{'Train': np.float64(563.9462700251448), 'Validation': np.float64(1360.0466180204492)}
+=====Epoch 75
+{'Train': np.float64(740.0646292402769), 'Validation': np.float64(1665.156089433385)}
+=====Epoch 76
+{'Train': np.float64(513.3397681692264), 'Validation': np.float64(1253.8123029258632)}
+=====Epoch 77
+{'Train': np.float64(481.6850741107249), 'Validation': np.float64(1243.9149357548836)}
+=====Epoch 78
+{'Train': np.float64(1438.7011533631894), 'Validation': np.float64(1871.3704566580298)}
+=====Epoch 79
+{'Train': np.float64(969.1791835372844), 'Validation': np.float64(2096.7188715969414)}
+=====Epoch 80
+{'Train': np.float64(512.6524479468281), 'Validation': np.float64(1292.3579060706077)}
+=====Epoch 81
+{'Train': np.float64(676.5126301662514), 'Validation': np.float64(1551.0849242990869)}
+=====Epoch 82
+{'Train': np.float64(1016.0755861639975), 'Validation': np.float64(2129.880727277523)}
+=====Epoch 83
+{'Train': np.float64(802.7368322456862), 'Validation': np.float64(1782.0116519046753)}
+=====Epoch 84
+{'Train': np.float64(588.8964735278228), 'Validation': np.float64(1417.9762221302651)}
+=====Epoch 85
+{'Train': np.float64(1398.3200896175344), 'Validation': np.float64(1876.437431878985)}
+=====Epoch 86
+{'Train': np.float64(662.8763226782482), 'Validation': np.float64(1156.603269056658)}
+=====Epoch 87
+{'Train': np.float64(601.6738857159651), 'Validation': np.float64(1414.9580544249181)}
+=====Epoch 88
+{'Metric': 'RMSE', 'Train': np.float64(415.3139084909721), 'Validation': np.float64(974.3210556624566), 'Test': np.float64(647.7351419649065), 'Test R2': 0.9118750426889874}
+=====Epoch 89
+{'Train': np.float64(469.59288894352153), 'Validation': np.float64(1033.515475348155)}
+=====Epoch 90
+{'Train': np.float64(868.6183921569561), 'Validation': np.float64(1306.0330334342655)}
+=====Epoch 91
+{'Train': np.float64(529.2372308602422), 'Validation': np.float64(1281.03566486784)}
+=====Epoch 92
+{'Train': np.float64(422.1448185580189), 'Validation': np.float64(1000.1793934057158)}
+=====Epoch 93
+{'Train': np.float64(479.28043753633), 'Validation': np.float64(1184.6703762863312)}
+=====Epoch 94
+{'Train': np.float64(473.34256021714344), 'Validation': np.float64(1201.6945455282275)}
+=====Epoch 95
+{'Train': np.float64(477.40426300062427), 'Validation': np.float64(1148.331624085687)}
+=====Epoch 96
+{'Train': np.float64(458.9497834156777), 'Validation': np.float64(1018.8054972411145)}
+=====Epoch 97
+{'Train': np.float64(2201.0501063122165), 'Validation': np.float64(2885.086390297492)}
+=====Epoch 98
+{'Train': np.float64(455.8182461234823), 'Validation': np.float64(1101.4085837975474)}
+=====Epoch 99
+{'Train': np.float64(521.8430101932971), 'Validation': np.float64(1284.4693872792832)}
+=====Epoch 100
+{'Train': np.float64(489.71009425417645), 'Validation': np.float64(1234.8028971312624)}
+=====Epoch 101
+{'Train': np.float64(449.409914975138), 'Validation': np.float64(994.3050756969103)}
+=====Epoch 102
+{'Train': np.float64(565.3901927605841), 'Validation': np.float64(1028.6127496584795)}
+=====Epoch 103
+{'Metric': 'RMSE', 'Train': np.float64(625.0394867737436), 'Validation': np.float64(951.7829782159102), 'Test': np.float64(443.86189094602884), 'Test R2': 0.9586191203715565}
+=====Epoch 104
+{'Metric': 'RMSE', 'Train': np.float64(507.51645877660377), 'Validation': np.float64(783.0561343077453), 'Test': np.float64(467.36826259173245), 'Test R2': 0.9541201028870772}
+=====Epoch 105
+{'Metric': 'RMSE', 'Train': np.float64(520.6803891699203), 'Validation': np.float64(735.0542299051949), 'Test': np.float64(471.2083064886726), 'Test R2': 0.9533630784528997}
+=====Epoch 106
+{'Train': np.float64(1196.693035087422), 'Validation': np.float64(1582.2474405574937)}
+=====Epoch 107
+{'Train': np.float64(1235.7384353669165), 'Validation': np.float64(2466.2040413011387)}
+=====Epoch 108
+{'Train': np.float64(1055.029462654176), 'Validation': np.float64(2086.1517717991865)}
+=====Epoch 109
+{'Train': np.float64(805.5996207860719), 'Validation': np.float64(1195.6974796140917)}
+=====Epoch 110
+{'Train': np.float64(464.8131390745917), 'Validation': np.float64(1218.4387299259802)}
+=====Epoch 111
+{'Train': np.float64(625.344991216452), 'Validation': np.float64(1493.3502949484337)}
+=====Epoch 112
+{'Train': np.float64(506.7221885253756), 'Validation': np.float64(1247.5786592879092)}
+=====Epoch 113
+{'Train': np.float64(673.2365043813824), 'Validation': np.float64(1200.6776369568381)}
+=====Epoch 114
+{'Train': np.float64(419.34655226300896), 'Validation': np.float64(1101.9548002031102)}
+=====Epoch 115
+{'Train': np.float64(602.5775286758709), 'Validation': np.float64(1118.9702667914048)}
+=====Epoch 116
+{'Train': np.float64(421.349081868141), 'Validation': np.float64(1001.1162522412612)}
+=====Epoch 117
+{'Train': np.float64(430.86043091618274), 'Validation': np.float64(1024.10431971959)}
+=====Epoch 118
+{'Train': np.float64(481.30113752818113), 'Validation': np.float64(966.0882022484996)}
+=====Epoch 119
+{'Train': np.float64(452.6848333477497), 'Validation': np.float64(970.4840571908107)}
+=====Epoch 120
+{'Train': np.float64(519.5536285172548), 'Validation': np.float64(1002.9447548017607)}
+=====Epoch 121
+{'Train': np.float64(438.9195534606113), 'Validation': np.float64(1068.5784823232575)}
+=====Epoch 122
+{'Train': np.float64(423.60290291445506), 'Validation': np.float64(944.4379600779979)}
+=====Epoch 123
+{'Train': np.float64(467.66951965134945), 'Validation': np.float64(955.6206956130071)}
+=====Epoch 124
+{'Train': np.float64(403.198136804377), 'Validation': np.float64(1005.6864876418085)}
+=====Epoch 125
+{'Train': np.float64(457.49906481818834), 'Validation': np.float64(1150.7413907295818)}
+=====Epoch 126
+{'Train': np.float64(1109.2526882660968), 'Validation': np.float64(1655.7672111005675)}
+=====Epoch 127
+{'Train': np.float64(427.2748036964162), 'Validation': np.float64(1013.8947766335104)}
+=====Epoch 128
+{'Train': np.float64(420.4228754509764), 'Validation': np.float64(903.3073892622604)}
+=====Epoch 129
+{'Train': np.float64(479.6107071354522), 'Validation': np.float64(890.7349565459383)}
+=====Epoch 130
+{'Train': np.float64(1724.6708216940622), 'Validation': np.float64(2568.562768182028)}
+=====Epoch 131
+{'Train': np.float64(444.79149400224185), 'Validation': np.float64(862.1688947845245)}
+=====Epoch 132
+{'Train': np.float64(576.457536314534), 'Validation': np.float64(898.838894166025)}
+=====Epoch 133
+{'Train': np.float64(1049.3302087271536), 'Validation': np.float64(1587.5177162117316)}
+=====Epoch 134
+{'Train': np.float64(713.42194315155), 'Validation': np.float64(1621.2828698122194)}
+=====Epoch 135
+{'Train': np.float64(553.8837149928474), 'Validation': np.float64(1127.3717596754068)}
+=====Epoch 136
+{'Train': np.float64(542.1259944641425), 'Validation': np.float64(999.1562598465489)}
+=====Epoch 137
+{'Train': np.float64(513.7299950432673), 'Validation': np.float64(1113.0249022113994)}
+=====Epoch 138
+{'Train': np.float64(722.2737600642679), 'Validation': np.float64(1250.4937895806543)}
+=====Epoch 139
+{'Train': np.float64(505.5510961407319), 'Validation': np.float64(1113.266630354404)}
+=====Epoch 140
+{'Train': np.float64(546.7530920838677), 'Validation': np.float64(1112.930622371665)}
+=====Epoch 141
+{'Train': np.float64(866.4660759514752), 'Validation': np.float64(1591.202323386026)}
+=====Epoch 142
+{'Train': np.float64(2523.2241573684514), 'Validation': np.float64(4276.248585454175)}
+=====Epoch 143
+{'Train': np.float64(703.7932835435884), 'Validation': np.float64(1264.176722589262)}
+=====Epoch 144
+{'Train': np.float64(478.4414797177701), 'Validation': np.float64(1008.4619500574233)}
+=====Epoch 145
+{'Train': np.float64(1196.9932772861741), 'Validation': np.float64(1763.3785343086056)}
+=====Epoch 146
+{'Train': np.float64(579.7081059693458), 'Validation': np.float64(1280.6335625928298)}
+=====Epoch 147
+{'Train': np.float64(1031.6546491267331), 'Validation': np.float64(2193.9597079503596)}
+=====Epoch 148
+{'Train': np.float64(673.9844378247651), 'Validation': np.float64(1530.3277308986674)}
+=====Epoch 149
+{'Train': np.float64(601.4516592857807), 'Validation': np.float64(1300.0048648966122)}
+=====Epoch 150
+{'Train': np.float64(411.2655765934261), 'Validation': np.float64(1155.1116560382482)}
+=====Epoch 151
+{'Train': np.float64(1064.902061305485), 'Validation': np.float64(1665.5917711137752)}
+=====Epoch 152
+{'Train': np.float64(765.9711833247042), 'Validation': np.float64(1395.7432209972417)}
+=====Epoch 153
+{'Train': np.float64(408.42249311192194), 'Validation': np.float64(1046.2626157856103)}
+=====Epoch 154
+{'Train': np.float64(421.6034601313367), 'Validation': np.float64(1033.9149867242506)}
+=====Epoch 155
+{'Train': np.float64(709.5385418836512), 'Validation': np.float64(1323.202745534766)}
+=====Epoch 156
+{'Train': np.float64(890.3279214346569), 'Validation': np.float64(1553.41498681536)}
+Finished training! Results from epoch 105 with best validation 735.0542299051949.
+Test rmse: 471.2083064886726, Test r2: 0.9533630784528997 
+
+Namespace(device=0, gnn='gin-virtual', drop_ratio=0.1, num_layer=3, emb_dim=128, use_linear_predictor=False, gamma=0.2, batch_size=32, epochs=400, patience=50, lr=0.01, l2reg=0.0001, use_lr_scheduler=False, use_clip_norm=False, path_list=[1, 4], initw_name='default', dataset='plym-o2_prop', trails=5, by_default=True, plym_prop='o2')
+/workspaces/GREA/data/o2_prop/processed/geometric_data_processed.pt
+# Train: 356  #Test: 179.0 #Val: 60
+initialize network with default
+=====Epoch 0
+{'Metric': 'RMSE', 'Train': np.float64(1271.4294477083763), 'Validation': np.float64(2519.976390684141), 'Test': np.float64(2223.7172199445877), 'Test R2': -0.03863539478603095}
+=====Epoch 1
+{'Metric': 'RMSE', 'Train': np.float64(1246.1330799575016), 'Validation': np.float64(2482.284797256186), 'Test': np.float64(2189.171476848755), 'Test R2': -0.006615381127211606}
+=====Epoch 2
+{'Metric': 'RMSE', 'Train': np.float64(1217.4483158982498), 'Validation': np.float64(2430.909794688119), 'Test': np.float64(2138.4624948465907), 'Test R2': 0.03947808990138746}
+=====Epoch 3
+{'Train': np.float64(1267.7575276396544), 'Validation': np.float64(2515.2840607159696)}
+=====Epoch 4
+{'Train': np.float64(1239.458787781163), 'Validation': np.float64(2474.848010282136)}
+=====Epoch 5
+{'Metric': 'RMSE', 'Train': np.float64(1187.0030471909658), 'Validation': np.float64(2390.1732933065227), 'Test': np.float64(2102.3926542612526), 'Test R2': 0.07160741936746018}
+=====Epoch 6
+{'Train': np.float64(1239.4683863282155), 'Validation': np.float64(2469.889819345362)}
+=====Epoch 7
+{'Train': np.float64(1670.5897862361494), 'Validation': np.float64(2474.8126399261805)}
+=====Epoch 8
+{'Metric': 'RMSE', 'Train': np.float64(1059.594193984943), 'Validation': np.float64(2183.9343189194824), 'Test': np.float64(1911.6898942702626), 'Test R2': 0.23239306654908032}
+=====Epoch 9
+{'Metric': 'RMSE', 'Train': np.float64(1081.9205589855435), 'Validation': np.float64(2151.35462744862), 'Test': np.float64(1879.1011779431296), 'Test R2': 0.258340900088993}
+=====Epoch 10
+{'Train': np.float64(1184.545373307161), 'Validation': np.float64(2379.9572948657537)}
+=====Epoch 11
+{'Metric': 'RMSE', 'Train': np.float64(1079.297591764867), 'Validation': np.float64(2132.5109053128685), 'Test': np.float64(1862.07177271921), 'Test R2': 0.2717225993601766}
+=====Epoch 12
+{'Train': np.float64(1029.9876704151209), 'Validation': np.float64(2143.6196268870563)}
+=====Epoch 13
+{'Train': np.float64(1141.6899504857709), 'Validation': np.float64(2314.4496275037113)}
+=====Epoch 14
+{'Metric': 'RMSE', 'Train': np.float64(993.5414166222342), 'Validation': np.float64(2049.838682639142), 'Test': np.float64(1796.0960753056982), 'Test R2': 0.32241602247031964}
+=====Epoch 15
+{'Metric': 'RMSE', 'Train': np.float64(924.5161167835365), 'Validation': np.float64(1927.4167680264325), 'Test': np.float64(1668.1463097320018), 'Test R2': 0.41551646936649433}
+=====Epoch 16
+{'Metric': 'RMSE', 'Train': np.float64(924.6007144100055), 'Validation': np.float64(1925.5688520684837), 'Test': np.float64(1668.4772804544339), 'Test R2': 0.41528451593914883}
+=====Epoch 17
+{'Train': np.float64(1170.3097866743344), 'Validation': np.float64(2242.667686138748)}
+=====Epoch 18
+{'Train': np.float64(993.0893938128373), 'Validation': np.float64(2035.4658206080878)}
+=====Epoch 19
+{'Train': np.float64(912.1046069836609), 'Validation': np.float64(1932.6804196068083)}
+=====Epoch 20
+{'Metric': 'RMSE', 'Train': np.float64(810.538644701484), 'Validation': np.float64(1753.2429681964823), 'Test': np.float64(1482.3512873728866), 'Test R2': 0.5384632687630306}
+=====Epoch 21
+{'Metric': 'RMSE', 'Train': np.float64(819.8766188861334), 'Validation': np.float64(1751.9161660335267), 'Test': np.float64(1487.0985456915316), 'Test R2': 0.5355023747837422}
+=====Epoch 22
+{'Metric': 'RMSE', 'Train': np.float64(1145.7398054719558), 'Validation': np.float64(1606.3232811023522), 'Test': np.float64(1172.1321481233103), 'Test R2': 0.7114260293465737}
+=====Epoch 23
+{'Train': np.float64(3038.8980181755837), 'Validation': np.float64(3451.7701689340483)}
+=====Epoch 24
+{'Train': np.float64(921.3354360830938), 'Validation': np.float64(1733.3354705039533)}
+=====Epoch 25
+{'Train': np.float64(907.7317034231443), 'Validation': np.float64(1963.3515753794334)}
+=====Epoch 26
+{'Train': np.float64(910.8510891066621), 'Validation': np.float64(1930.7447927766325)}
+=====Epoch 27
+{'Train': np.float64(1155.580329268158), 'Validation': np.float64(2346.513792614164)}
+=====Epoch 28
+{'Train': np.float64(929.1469200465018), 'Validation': np.float64(1959.0130398419692)}
+=====Epoch 29
+{'Metric': 'RMSE', 'Train': np.float64(773.6255774228069), 'Validation': np.float64(1550.9272010674647), 'Test': np.float64(1296.416536914499), 'Test R2': 0.6469850283571925}
+=====Epoch 30
+{'Metric': 'RMSE', 'Train': np.float64(808.3872950483178), 'Validation': np.float64(1547.7206070823274), 'Test': np.float64(1235.7126325455513), 'Test R2': 0.6792704513985799}
+=====Epoch 31
+{'Train': np.float64(1353.562743674382), 'Validation': np.float64(1594.0491760962511)}
+=====Epoch 32
+{'Train': np.float64(864.3762938969875), 'Validation': np.float64(1565.386676057364)}
+=====Epoch 33
+{'Metric': 'RMSE', 'Train': np.float64(729.4353262671063), 'Validation': np.float64(1530.9621525115606), 'Test': np.float64(1258.8900540167404), 'Test R2': 0.6671262068460057}
+=====Epoch 34
+{'Train': np.float64(742.0283032517075), 'Validation': np.float64(1579.5088783727585)}
+=====Epoch 35
+{'Train': np.float64(792.4702300583028), 'Validation': np.float64(1724.6859080845481)}
+=====Epoch 36
+{'Train': np.float64(757.7775221000225), 'Validation': np.float64(1640.4556690345291)}
+=====Epoch 37
+{'Train': np.float64(727.1041608879226), 'Validation': np.float64(1611.1168147561684)}
+=====Epoch 38
+{'Train': np.float64(679.1756124636339), 'Validation': np.float64(1574.7704169240792)}
+=====Epoch 39
+{'Metric': 'RMSE', 'Train': np.float64(679.7304809288926), 'Validation': np.float64(1297.906763916022), 'Test': np.float64(966.7569225527), 'Test R2': 0.8036917365537526}
+=====Epoch 40
+{'Train': np.float64(603.2150209571237), 'Validation': np.float64(1425.0735640456412)}
+=====Epoch 41
+{'Train': np.float64(718.8823695543174), 'Validation': np.float64(1416.4509926947007)}
+=====Epoch 42
+{'Train': np.float64(852.645808533199), 'Validation': np.float64(1840.3025505016328)}
+=====Epoch 43
+{'Train': np.float64(885.0518268633563), 'Validation': np.float64(1517.4352873168582)}
+=====Epoch 44
+{'Train': np.float64(804.9571401128401), 'Validation': np.float64(1713.6486987981948)}
+=====Epoch 45
+{'Train': np.float64(762.8260823388329), 'Validation': np.float64(1692.6337958826539)}
+=====Epoch 46
+{'Train': np.float64(732.9813193242617), 'Validation': np.float64(1377.06118832889)}
+=====Epoch 47
+{'Train': np.float64(798.0564897833148), 'Validation': np.float64(1570.0063798251886)}
+=====Epoch 48
+{'Train': np.float64(726.8457035305051), 'Validation': np.float64(1610.2629773281833)}
+=====Epoch 49
+{'Train': np.float64(658.3142216535895), 'Validation': np.float64(1469.466767973965)}
+=====Epoch 50
+{'Train': np.float64(596.6293923040503), 'Validation': np.float64(1405.8067520344766)}
+=====Epoch 51
+{'Train': np.float64(584.6567479579707), 'Validation': np.float64(1385.3819059890334)}
+=====Epoch 52
+{'Train': np.float64(625.6141959132316), 'Validation': np.float64(1499.8878470406576)}
+=====Epoch 53
+{'Train': np.float64(630.0886936338629), 'Validation': np.float64(1486.3795305941849)}
+=====Epoch 54
+{'Train': np.float64(587.4284912705493), 'Validation': np.float64(1318.577899367869)}
+=====Epoch 55
+{'Train': np.float64(983.2229409927556), 'Validation': np.float64(2069.87497725889)}
+=====Epoch 56
+{'Metric': 'RMSE', 'Train': np.float64(512.6677853223722), 'Validation': np.float64(1278.4226724853536), 'Test': np.float64(771.4739335364591), 'Test R2': 0.8749894938221211}
+=====Epoch 57
+{'Train': np.float64(617.2609085825563), 'Validation': np.float64(1383.540410100931)}
+=====Epoch 58
+{'Train': np.float64(750.0577941269884), 'Validation': np.float64(1630.9010146091734)}
+=====Epoch 59
+{'Train': np.float64(1726.928870753515), 'Validation': np.float64(2071.894648736245)}
+=====Epoch 60
+{'Metric': 'RMSE', 'Train': np.float64(727.4824882137514), 'Validation': np.float64(1273.188876198251), 'Test': np.float64(657.2143202492787), 'Test R2': 0.9092768677797014}
+=====Epoch 61
+{'Train': np.float64(870.091564431323), 'Validation': np.float64(1858.9758626017065)}
+=====Epoch 62
+{'Train': np.float64(806.5247058569511), 'Validation': np.float64(1763.8487882126542)}
+=====Epoch 63
+{'Metric': 'RMSE', 'Train': np.float64(633.0466578384594), 'Validation': np.float64(1248.5472316697833), 'Test': np.float64(848.6953675132949), 'Test R2': 0.8487108915959498}
+=====Epoch 64
+{'Train': np.float64(554.7053768056185), 'Validation': np.float64(1249.2117220035893)}
+=====Epoch 65
+{'Train': np.float64(726.2735766472326), 'Validation': np.float64(1651.7672403858862)}
+=====Epoch 66
+{'Train': np.float64(2274.364407729127), 'Validation': np.float64(2527.2226598948378)}
+=====Epoch 67
+{'Metric': 'RMSE', 'Train': np.float64(515.1279011622446), 'Validation': np.float64(1217.9313172010638), 'Test': np.float64(573.6752821391707), 'Test R2': 0.9308748198792609}
+=====Epoch 68
+{'Train': np.float64(506.207161574084), 'Validation': np.float64(1266.8047615327257)}
+=====Epoch 69
+{'Train': np.float64(948.730107388994), 'Validation': np.float64(2002.0695025573982)}
+=====Epoch 70
+{'Train': np.float64(881.9595665259744), 'Validation': np.float64(1561.1166083036999)}
+=====Epoch 71
+{'Train': np.float64(572.283370653052), 'Validation': np.float64(1350.565936940736)}
+=====Epoch 72
+{'Train': np.float64(551.5219476762879), 'Validation': np.float64(1342.1085829534304)}
+=====Epoch 73
+{'Train': np.float64(1255.369103508899), 'Validation': np.float64(2012.9791100051677)}
+=====Epoch 74
+{'Train': np.float64(641.2950166610145), 'Validation': np.float64(1273.8231457852003)}
+=====Epoch 75
+{'Train': np.float64(2015.6995513110553), 'Validation': np.float64(2229.9009833311197)}
+=====Epoch 76
+{'Train': np.float64(688.811675798137), 'Validation': np.float64(1266.9396710841897)}
+=====Epoch 77
+{'Train': np.float64(781.4427904296805), 'Validation': np.float64(1742.4509380910251)}
+=====Epoch 78
+{'Train': np.float64(3397.5850647115535), 'Validation': np.float64(4008.4870072420217)}
+=====Epoch 79
+{'Train': np.float64(636.2143183925797), 'Validation': np.float64(1417.902053253676)}
+=====Epoch 80
+{'Train': np.float64(643.6682647274561), 'Validation': np.float64(1400.6414501794757)}
+=====Epoch 81
+{'Train': np.float64(689.3540108813465), 'Validation': np.float64(1577.5853048161432)}
+=====Epoch 82
+{'Train': np.float64(605.9083425380926), 'Validation': np.float64(1232.3779513071543)}
+=====Epoch 83
+{'Train': np.float64(644.2257543295684), 'Validation': np.float64(1270.8943261977952)}
+=====Epoch 84
+{'Train': np.float64(802.5302967496268), 'Validation': np.float64(1434.4791827974182)}
+=====Epoch 85
+{'Train': np.float64(1209.2028053165695), 'Validation': np.float64(2425.3595442193123)}
+=====Epoch 86
+{'Train': np.float64(1121.6743005356843), 'Validation': np.float64(2271.2975190063903)}
+=====Epoch 87
+{'Train': np.float64(1513.4216498734047), 'Validation': np.float64(2095.0690287609355)}
+=====Epoch 88
+{'Train': np.float64(780.539758504663), 'Validation': np.float64(1277.3807766018542)}
+=====Epoch 89
+{'Train': np.float64(849.4792727774794), 'Validation': np.float64(1829.1723458639337)}
+=====Epoch 90
+{'Train': np.float64(1470.3131950775162), 'Validation': np.float64(2201.3443452507076)}
+=====Epoch 91
+{'Train': np.float64(657.2994240841379), 'Validation': np.float64(1405.4147619933244)}
+=====Epoch 92
+{'Metric': 'RMSE', 'Train': np.float64(599.8995434768068), 'Validation': np.float64(1188.6828609788215), 'Test': np.float64(871.906989767138), 'Test R2': 0.8403222815160002}
+=====Epoch 93
+{'Train': np.float64(1031.1454471739935), 'Validation': np.float64(2096.1238341049916)}
+=====Epoch 94
+{'Train': np.float64(611.5724591023368), 'Validation': np.float64(1353.1292576582)}
+=====Epoch 95
+{'Train': np.float64(567.9874467352732), 'Validation': np.float64(1359.8738314458853)}
+=====Epoch 96
+{'Train': np.float64(556.0262283922219), 'Validation': np.float64(1362.5512520224306)}
+=====Epoch 97
+{'Train': np.float64(491.91399100380346), 'Validation': np.float64(1205.8551603503956)}
+=====Epoch 98
+{'Train': np.float64(970.2993210124247), 'Validation': np.float64(2028.2029757595656)}
+=====Epoch 99
+{'Train': np.float64(930.7740827185613), 'Validation': np.float64(1672.724308701757)}
+=====Epoch 100
+{'Train': np.float64(856.3735955550543), 'Validation': np.float64(1437.6021152678186)}
+=====Epoch 101
+{'Train': np.float64(833.2621132338658), 'Validation': np.float64(1515.4571509846317)}
+=====Epoch 102
+{'Train': np.float64(534.4899277566818), 'Validation': np.float64(1363.87781314149)}
+=====Epoch 103
+{'Train': np.float64(503.65419243276875), 'Validation': np.float64(1226.0143333513956)}
+=====Epoch 104
+{'Train': np.float64(443.81668338196715), 'Validation': np.float64(1225.2078994810765)}
+=====Epoch 105
+{'Train': np.float64(2348.63464747172), 'Validation': np.float64(3781.0908372929816)}
+=====Epoch 106
+{'Train': np.float64(429.46221619462085), 'Validation': np.float64(1326.3201923984443)}
+=====Epoch 107
+{'Train': np.float64(469.0067547016379), 'Validation': np.float64(1290.4679856126238)}
+=====Epoch 108
+{'Train': np.float64(423.0722995633546), 'Validation': np.float64(1262.7895170733002)}
+=====Epoch 109
+{'Train': np.float64(1092.314999290565), 'Validation': np.float64(1893.0732882917098)}
+=====Epoch 110
+{'Train': np.float64(566.9406769414466), 'Validation': np.float64(1206.2725463092288)}
+=====Epoch 111
+{'Metric': 'RMSE', 'Train': np.float64(504.0615018821261), 'Validation': np.float64(1186.1191005820817), 'Test': np.float64(756.6644224292749), 'Test R2': 0.8797429270589293}
+=====Epoch 112
+{'Metric': 'RMSE', 'Train': np.float64(525.0001138840165), 'Validation': np.float64(1182.249665951974), 'Test': np.float64(738.5674486924319), 'Test R2': 0.8854264615750396}
+=====Epoch 113
+{'Train': np.float64(477.0096137020677), 'Validation': np.float64(1206.6114020795926)}
+=====Epoch 114
+{'Train': np.float64(1029.673585760026), 'Validation': np.float64(1846.5046532449285)}
+=====Epoch 115
+{'Train': np.float64(449.27601116139067), 'Validation': np.float64(1196.2856157619153)}
+=====Epoch 116
+{'Train': np.float64(551.0388363993271), 'Validation': np.float64(1331.7177460011153)}
+=====Epoch 117
+{'Train': np.float64(549.1729050598967), 'Validation': np.float64(1301.8446706074042)}
+=====Epoch 118
+{'Train': np.float64(1170.0922589553961), 'Validation': np.float64(2375.5406700122307)}
+=====Epoch 119
+{'Train': np.float64(1193.2806441515218), 'Validation': np.float64(2393.892987709255)}
+=====Epoch 120
+{'Train': np.float64(1358.2356636862066), 'Validation': np.float64(2617.0311214764765)}
+=====Epoch 121
+{'Metric': 'RMSE', 'Train': np.float64(508.39698791702887), 'Validation': np.float64(1175.2316172045662), 'Test': np.float64(452.9931595338586), 'Test R2': 0.956899005797091}
+=====Epoch 122
+{'Train': np.float64(3228.653446632006), 'Validation': np.float64(5141.756869571381)}
+=====Epoch 123
+{'Metric': 'RMSE', 'Train': np.float64(466.20985111952416), 'Validation': np.float64(1156.4079125344838), 'Test': np.float64(674.5633879092748), 'Test R2': 0.9044238500033804}
+=====Epoch 124
+{'Train': np.float64(544.7114433921296), 'Validation': np.float64(1167.0870720413538)}
+=====Epoch 125
+{'Train': np.float64(731.2855711672236), 'Validation': np.float64(1664.2321264632749)}
+=====Epoch 126
+{'Train': np.float64(530.8145410495906), 'Validation': np.float64(1268.0152841636075)}
+=====Epoch 127
+{'Train': np.float64(519.8320776594484), 'Validation': np.float64(1254.9141526975025)}
+=====Epoch 128
+{'Train': np.float64(590.805353357522), 'Validation': np.float64(1384.270258455722)}
+=====Epoch 129
+{'Train': np.float64(648.1533304172509), 'Validation': np.float64(1462.9015974713166)}
+=====Epoch 130
+{'Train': np.float64(1418.8261373544058), 'Validation': np.float64(2747.1835133099266)}
+=====Epoch 131
+{'Train': np.float64(1013.4029682066806), 'Validation': np.float64(1576.0148066878767)}
+=====Epoch 132
+{'Train': np.float64(741.902112470282), 'Validation': np.float64(1187.480496872986)}
+=====Epoch 133
+{'Train': np.float64(1649.5798370127752), 'Validation': np.float64(2848.622432126322)}
+=====Epoch 134
+{'Train': np.float64(1119.6805460204632), 'Validation': np.float64(2276.7057642832465)}
+=====Epoch 135
+{'Train': np.float64(1362.1063617184489), 'Validation': np.float64(2251.715067841961)}
+=====Epoch 136
+{'Train': np.float64(827.5998934388626), 'Validation': np.float64(1438.9982465706971)}
+=====Epoch 137
+{'Train': np.float64(702.8512423746577), 'Validation': np.float64(1450.1252370157133)}
+=====Epoch 138
+{'Train': np.float64(1129.305730931972), 'Validation': np.float64(2008.0899903384266)}
+=====Epoch 139
+{'Train': np.float64(683.8857924773133), 'Validation': np.float64(1500.5081390001023)}
+=====Epoch 140
+{'Train': np.float64(504.9449603816815), 'Validation': np.float64(1241.1238081294648)}
+=====Epoch 141
+{'Train': np.float64(784.8196610335989), 'Validation': np.float64(1542.2703790869255)}
+=====Epoch 142
+{'Train': np.float64(2451.3452484995055), 'Validation': np.float64(3877.250667115039)}
+=====Epoch 143
+{'Train': np.float64(573.2162831792137), 'Validation': np.float64(1395.753664045909)}
+=====Epoch 144
+{'Train': np.float64(570.3362299498127), 'Validation': np.float64(1342.1823996705814)}
+=====Epoch 145
+{'Train': np.float64(753.7242755245917), 'Validation': np.float64(1657.2778761573302)}
+=====Epoch 146
+{'Train': np.float64(918.0942143712294), 'Validation': np.float64(1756.5901715758112)}
+=====Epoch 147
+{'Train': np.float64(536.9759361565649), 'Validation': np.float64(1300.3403036268692)}
+=====Epoch 148
+{'Train': np.float64(481.25737853270687), 'Validation': np.float64(1191.9471620604309)}
+=====Epoch 149
+{'Train': np.float64(529.6682043365963), 'Validation': np.float64(1267.246368375673)}
+=====Epoch 150
+{'Train': np.float64(519.4550748326405), 'Validation': np.float64(1274.604105349624)}
+=====Epoch 151
+{'Train': np.float64(481.5843829251669), 'Validation': np.float64(1237.570529537148)}
+=====Epoch 152
+{'Metric': 'RMSE', 'Train': np.float64(422.91582421342764), 'Validation': np.float64(1106.6685457049005), 'Test': np.float64(533.1101770120702), 'Test R2': 0.940305001361829}
+=====Epoch 153
+{'Train': np.float64(555.667290111095), 'Validation': np.float64(1269.9976313063826)}
+=====Epoch 154
+{'Metric': 'RMSE', 'Train': np.float64(434.72961588894657), 'Validation': np.float64(982.5664337224607), 'Test': np.float64(557.2176685009915), 'Test R2': 0.9347840601107822}
+=====Epoch 155
+{'Train': np.float64(467.3783976175867), 'Validation': np.float64(1055.3999710099606)}
+=====Epoch 156
+{'Train': np.float64(649.5295770092863), 'Validation': np.float64(1370.4951232176218)}
+=====Epoch 157
+{'Train': np.float64(1479.366150331296), 'Validation': np.float64(2692.12117433831)}
+=====Epoch 158
+{'Train': np.float64(557.9423894982991), 'Validation': np.float64(1317.2625901077522)}
+=====Epoch 159
+{'Train': np.float64(1601.1068444618088), 'Validation': np.float64(3223.1735774917943)}
+=====Epoch 160
+{'Train': np.float64(1306.8104405026272), 'Validation': np.float64(2685.6641405386317)}
+=====Epoch 161
+{'Train': np.float64(606.6267160873194), 'Validation': np.float64(1315.3089421654588)}
+=====Epoch 162
+{'Train': np.float64(662.2368566013869), 'Validation': np.float64(1488.63134682534)}
+=====Epoch 163
+{'Train': np.float64(808.992511896869), 'Validation': np.float64(1731.4712430074371)}
+=====Epoch 164
+{'Train': np.float64(1489.896689878044), 'Validation': np.float64(2935.0359167147426)}
+=====Epoch 165
+{'Train': np.float64(562.8897734959633), 'Validation': np.float64(1331.1310758090594)}
+=====Epoch 166
+{'Train': np.float64(2660.135163734238), 'Validation': np.float64(4943.560279291559)}
+=====Epoch 167
+{'Train': np.float64(1760.4713322206346), 'Validation': np.float64(2961.4893181396715)}
+=====Epoch 168
+{'Train': np.float64(792.9296620243189), 'Validation': np.float64(1447.375990293374)}
+=====Epoch 169
+{'Train': np.float64(2785.41798205877), 'Validation': np.float64(3933.3723073090723)}
+=====Epoch 170
+{'Train': np.float64(792.0229949670401), 'Validation': np.float64(1573.0474986267482)}
+=====Epoch 171
+{'Train': np.float64(442.0911216874199), 'Validation': np.float64(1116.1305608089947)}
+=====Epoch 172
+{'Train': np.float64(556.4191304319435), 'Validation': np.float64(1346.8701405870083)}
+=====Epoch 173
+{'Train': np.float64(1818.1258999567808), 'Validation': np.float64(3498.62241479161)}
+=====Epoch 174
+{'Train': np.float64(626.0591314173333), 'Validation': np.float64(1294.1604231885326)}
+=====Epoch 175
+{'Train': np.float64(818.9998166043449), 'Validation': np.float64(1766.0451280257778)}
+=====Epoch 176
+{'Train': np.float64(694.2478707627336), 'Validation': np.float64(1557.1479638763049)}
+=====Epoch 177
+{'Train': np.float64(1519.6318692028717), 'Validation': np.float64(3094.7756525125865)}
+=====Epoch 178
+{'Train': np.float64(1021.736588149943), 'Validation': np.float64(2184.323679026784)}
+=====Epoch 179
+{'Train': np.float64(692.1818426503145), 'Validation': np.float64(1707.7817214535762)}
+=====Epoch 180
+{'Train': np.float64(853.8147009492291), 'Validation': np.float64(1988.4162620270179)}
+=====Epoch 181
+{'Train': np.float64(491.16524541242984), 'Validation': np.float64(1337.9744319034596)}
+=====Epoch 182
+{'Train': np.float64(877.4183903246087), 'Validation': np.float64(2008.072507241939)}
+=====Epoch 183
+{'Train': np.float64(805.1547924506197), 'Validation': np.float64(1633.582072798976)}
+=====Epoch 184
+{'Train': np.float64(640.5813713978904), 'Validation': np.float64(1460.905330808759)}
+=====Epoch 185
+{'Train': np.float64(1129.1759403607473), 'Validation': np.float64(2387.929719674249)}
+=====Epoch 186
+{'Train': np.float64(1611.2930718456842), 'Validation': np.float64(3369.5655587290566)}
+=====Epoch 187
+{'Train': np.float64(945.513629386766), 'Validation': np.float64(2364.849605455131)}
+=====Epoch 188
+{'Train': np.float64(1472.3187671472008), 'Validation': np.float64(3441.6508581761914)}
+=====Epoch 189
+{'Train': np.float64(1954.0086905242742), 'Validation': np.float64(4360.350238296878)}
+=====Epoch 190
+{'Train': np.float64(3845.494726201117), 'Validation': np.float64(6090.971318363461)}
+=====Epoch 191
+{'Train': np.float64(2807.1385259529993), 'Validation': np.float64(5669.980020961056)}
+=====Epoch 192
+{'Train': np.float64(1401.7066997562288), 'Validation': np.float64(3099.5802450629776)}
+=====Epoch 193
+{'Train': np.float64(718.27478831012), 'Validation': np.float64(1620.8389576806999)}
+=====Epoch 194
+{'Train': np.float64(977.4837336203304), 'Validation': np.float64(2182.127451521653)}
+=====Epoch 195
+{'Train': np.float64(494.229905425174), 'Validation': np.float64(1462.499501462823)}
+=====Epoch 196
+{'Train': np.float64(522.937548776712), 'Validation': np.float64(1582.0856532016348)}
+=====Epoch 197
+{'Train': np.float64(848.2419588017115), 'Validation': np.float64(1768.5658517184233)}
+=====Epoch 198
+{'Train': np.float64(643.1022445407684), 'Validation': np.float64(1854.8835592881865)}
+=====Epoch 199
+{'Train': np.float64(943.4872325854468), 'Validation': np.float64(2181.3829174803495)}
+=====Epoch 200
+{'Train': np.float64(702.9312573269159), 'Validation': np.float64(1688.1174505220033)}
+=====Epoch 201
+{'Train': np.float64(367.5370913315545), 'Validation': np.float64(1149.384710412547)}
+=====Epoch 202
+{'Train': np.float64(510.8956821738068), 'Validation': np.float64(1257.0657248530724)}
+=====Epoch 203
+{'Train': np.float64(369.08652394274753), 'Validation': np.float64(1218.6118861009684)}
+=====Epoch 204
+{'Train': np.float64(802.3639175452558), 'Validation': np.float64(1900.5406468683798)}
+=====Epoch 205
+{'Train': np.float64(1361.457027598353), 'Validation': np.float64(2730.9377327725488)}
+Finished training! Results from epoch 154 with best validation 982.5664337224607.
+Test rmse: 557.2176685009915, Test r2: 0.9347840601107822 
+
+valid_rmse: 844.7594+-237.4234 [np.float64(1006.6676223352207), np.float64(1071.1241586527742), np.float64(428.3846130357034), np.float64(735.0542299051949), np.float64(982.5664337224607)]
+test_rmse: 513.6000+-102.5922 [np.float64(681.0506849097767), np.float64(486.9705400974475), np.float64(371.55294849860076), np.float64(471.2083064886726), np.float64(557.2176685009915)]
+test_r2: 0.9424+-0.0230 [0.9025766928335481, 0.9501908216397367, 0.9710035103914597, 0.9533630784528997, 0.9347840601107822]
