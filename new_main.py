@@ -32,6 +32,182 @@ import numpy as np
 import torch
 import copy
 
+DATA_DIR="/kaggle/input/neurips-open-polymer-prediction-2025"
+TRAIN_FILE_NAME="train.csv"
+
+import torch
+import argparse
+from sklearn.metrics import r2_score
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Graph rationalization with Environment-based Augmentation')
+    parser.add_argument('--device', type=int, default=0,
+                        help='which gpu to use if any (default: 0)')
+    # model
+    parser.add_argument('--gnn', type=str, default='gin-virtual',
+                        help='GNN gin, gin-virtual, or gcn, or gcn-virtual (default: gin-virtual)')
+    parser.add_argument('--drop_ratio', type=float, default=0.5,
+                        help='dropout ratio (default: 0.5)')
+    parser.add_argument('--num_layer', type=int, default=5,
+                        help='number of GNN message passing layers (default: 5)')
+    parser.add_argument('--emb_dim', type=int, default=128,
+                        help='dimensionality of hidden units in GNNs (default: 128)')
+    parser.add_argument('--use_linear_predictor', default=False, action='store_true',
+                        help='Use Linear predictor')
+    parser.add_argument('--gamma', type=float, default=0.4,
+                        help='size ratio to regularize the rationale subgraph (default: 0.4)')
+
+    # training
+    parser.add_argument('--batch_size', type=int, default=256,
+                        help='input batch size for training (default: 256)')
+    parser.add_argument('--epochs', type=int, default=200,
+                        help='number of epochs to train (default: 200)')
+    parser.add_argument('--patience', type=int, default=50,
+                        help='patience for early stop (default: 50)')
+    parser.add_argument('--lr', type=float, default=1e-2,
+                        help='Learning rate (default: 1e-2)')
+    parser.add_argument('--l2reg', type=float, default=5e-6,
+                        help='L2 norm (default: 5e-6)')
+    parser.add_argument('--use_lr_scheduler', default=False, action='store_true',
+                        help='Use learning rate scheduler CosineAnnealingLR')
+    parser.add_argument('--use_clip_norm', default=False, action='store_true',
+                        help='Use learning rate clip norm')
+    parser.add_argument('--path_list', nargs="+", default=[1,4],
+                        help='path for alternative optimization')
+    parser.add_argument('--initw_name', type=str, default='default',
+                        choices=['default','orthogonal','normal','xavier','kaiming'],
+                        help='method name to initialize neural weights')
+
+    parser.add_argument('--dataset', type=str, default="ogbg-molbbbp",
+                        help='dataset name (default: ogbg-molhiv)')
+    parser.add_argument('--trails', type=int, default=5,
+                        help='numer of experiments (default: 5)')
+    parser.add_argument('--by_default', default=False, action='store_true',
+                        help='use default configuration for hyperparameters')
+    args = parser.parse_args()
+    
+    return args
+
+cls_criterion = torch.nn.BCEWithLogitsLoss()
+reg_criterion = torch.nn.MSELoss()
+def train(args, model, device, loader, optimizers, task_type, optimizer_name):
+    optimizer = optimizers[optimizer_name]
+    model.train()
+    if optimizer_name == 'predictor':
+        set_requires_grad([model.graph_encoder, model.predictor], requires_grad=True)
+        set_requires_grad([model.separator], requires_grad=False)
+    if optimizer_name == 'separator':
+        set_requires_grad([model.separator], requires_grad=True)
+        set_requires_grad([model.graph_encoder,model.predictor], requires_grad=False)
+        
+    for step, batch in enumerate(loader):
+        batch = batch.to(device)
+
+        if batch.x.shape[0] == 1 or batch.batch[-1] == 0:
+            pass
+        else:
+            optimizer.zero_grad()
+            pred = model(batch)
+            if "classification" in task_type:
+                criterion = cls_criterion
+            else:
+                criterion = reg_criterion
+
+            if args.dataset.startswith('plym'):
+                if args.plym_prop == 'density': 
+                    batch.y = torch.log(batch[args.plym_prop])
+                else:
+                    batch.y = batch[args.plym_prop]
+            target = batch.y.to(torch.float32)
+            is_labeled = batch.y == batch.y
+            loss = criterion(pred['pred_rem'].to(torch.float32)[is_labeled], target[is_labeled]) 
+            target_rep = batch.y.to(torch.float32).repeat_interleave(batch.batch[-1]+1,dim=0)
+            is_labeled_rep = target_rep == target_rep
+            loss += criterion(pred['pred_rep'].to(torch.float32)[is_labeled_rep], target_rep[is_labeled_rep])
+
+            if optimizer_name == 'separator': 
+                loss += pred['loss_reg']
+
+            loss.backward()
+            if args.use_clip_norm:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizer.step()
+
+
+def eval(args, model, device, loader, evaluator):
+    model.eval()
+    y_true = []
+    y_pred = []
+
+    for step, batch in enumerate(loader):
+        batch = batch.to(device)
+
+        if batch.x.shape[0] == 1:
+            pass
+        else:
+            with torch.no_grad():
+                pred = model.eval_forward(batch)
+    
+            if args.dataset.startswith('plym'):
+                if args.plym_prop == 'density' :
+                    batch.y = torch.log(batch[args.plym_prop])
+                else:
+                    batch.y = batch[args.plym_prop]
+            y_true.append(batch.y.view(pred.shape).detach().cpu())
+            y_pred.append(pred.detach().cpu())
+    y_true = torch.cat(y_true, dim = 0).numpy()
+    y_pred = torch.cat(y_pred, dim = 0).numpy()
+    input_dict = {"y_true": y_true, "y_pred": y_pred}
+    if args.dataset.startswith('plym'):
+        return [evaluator.eval(input_dict)['rmse'], r2_score(y_true, y_pred)]
+    elif args.dataset.startswith('ogbg'):
+        return [evaluator.eval(input_dict)['rocauc']]
+
+
+def init_weights(net, init_type='normal', init_gain=0.02):
+    """Initialize network weights.
+    Parameters:
+        net (network)   -- network to be initialized
+        init_type (str) -- the name of an initialization method: normal | xavier | kaiming | orthogonal
+        init_gain (float)    -- scaling factor for normal, xavier and orthogonal.
+    """
+    def init_func(m):  # define the initialization function
+        classname = m.__class__.__name__
+        if hasattr(m, 'weight') and (classname.find('Conv') != -1 or classname.find('Linear') != -1):
+            if init_type == 'normal':
+                torch.nn.init.normal_(m.weight.data, 0.0, init_gain)
+            elif init_type == 'xavier':
+                torch.nn.init.xavier_normal_(m.weight.data, gain=init_gain)
+            elif init_type == 'kaiming':
+                torch.nn.init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
+            elif init_type == 'orthogonal':
+                torch.nn.init.orthogonal_(m.weight.data, gain=init_gain)
+            elif init_type == 'default':
+                pass
+            else:
+                raise NotImplementedError('initialization method [%s] is not implemented' % init_type)
+            if hasattr(m, 'bias') and m.bias is not None:
+                torch.nn.init.constant_(m.bias.data, 0.0)
+        elif classname.find('BatchNorm2d') != -1:  # BatchNorm Layer's weight is not a matrix; only normal distribution applies.
+            torch.nn.init.normal_(m.weight.data, 1.0, init_gain)
+            torch.nn.init.constant_(m.bias.data, 0.0)
+
+    print('initialize network with %s' % init_type)
+    net.apply(init_func)  # apply the initialization function <init_func>
+
+
+def set_requires_grad(nets, requires_grad=False):
+    """Set requies_grad=Fasle for all the networks to avoid unnecessary computations
+    Parameters:
+        nets (network list)   -- a list of networks
+        requires_grad (bool)  -- whether the networks require gradients or not
+    """
+    if not isinstance(nets, list):
+        nets = [nets]
+    for net in nets:
+        if net is not None:
+            for param in net.parameters():
+                param.requires_grad = requires_grad
 
 class PolymerRegDataset(InMemoryDataset):
     def __init__(self, name="o2_prop", root="data", transform=None, pre_transform=None):
@@ -41,8 +217,6 @@ class PolymerRegDataset(InMemoryDataset):
         - transform, pre_transform (optional): transform/pre-transform graph objects
         """
         self.name = name
-        self.dir_name = "_".join(name.split("-"))
-        root = osp.join(root, name, "raw")
         self.original_root = root
         self.processed_root = osp.join(osp.dirname(osp.abspath(root)))
 
@@ -64,7 +238,8 @@ class PolymerRegDataset(InMemoryDataset):
         return "geometric_data_processed.pt"
 
     def process(self):
-        read_path = osp.join(self.original_root, self.name.split("_")[0] + "_raw.csv")
+        print("process")
+        read_path = osp.join(self.original_root, self.name)
         data_list = self.read_graph_pyg(read_path)
         print(data_list[:3])
         if self.pre_transform is not None:
@@ -95,7 +270,21 @@ class PolymerRegDataset(InMemoryDataset):
             df_full = pd.read_csv(raw_dir, engine="python")
             df_full.set_index("SMILES", inplace=True)
             print(df_full[:5])
+        # --- 追加: 目的列 Tg の欠損/非有限除去（存在すれば） ---
+        target_col = "Tg"
+        print("sssss")
+        if target_col in df_full.columns:
+            before = len(df_full)
+            print(df_full.columns)
+            df_full = df_full[np.isfinite(df_full[target_col])]
+            print(df_full.shape)
+            df_full = df_full.dropna(subset=[target_col])
+            after = len(df_full)
+            if before != after:
+                print(f"[clean] Dropped {before} -> {after} rows with invalid {target_col}")
         graph_list = []
+
+        # TODO:ここに各要素を指定する
         for smiles_idx in df_full.index[:]:
             graph_dict = smiles2graph(smiles_idx)
             props = df_full.loc[smiles_idx]
@@ -501,7 +690,7 @@ class GraphEnvAug(torch.nn.Module):
         drop_ratio=0.5,
         gamma=0.4,
         use_linear_predictor=False,
-        external_only=True
+        external_only=True,
     ):
         """
         num_tasks (int): number of labels to be predicted
@@ -597,7 +786,7 @@ class GraphEnvAug(torch.nn.Module):
         h_r, _, _, _ = self.separator(batched_data, h_node)
         pred_rem = self.predictor(h_r)
         return pred_rem
-    
+
     def encode(self, batched_data):
         """
         推論用特徴抽出。
@@ -662,248 +851,269 @@ class separator(torch.nn.Module):
         return h_out, c_out, r_node_num + 1e-8, env_node_num + 1e-8
 
 
-try:
-    import xgboost as xgb
-except ImportError:
-    raise ImportError("xgboost 未インストールです: pip install xgboost")
+
+import torch
+import torch.optim as optim
+import torch.nn.functional as F
+from torch_geometric.loader import DataLoader
+
+import numpy as np
+from tqdm import tqdm
+
+## dataset
+from sklearn.model_selection import train_test_split
+from ogb.graphproppred import PygGraphPropPredDataset, Evaluator
 
 
-def get_args():
-    p = argparse.ArgumentParser(description="GNN encoder + XGBoost")
-    p.add_argument("--device", type=int, default=0)
-    p.add_argument("--dataset", type=str, default="ogbg-molbbbp")
-    p.add_argument("--gnn", type=str, default="gin-virtual")
-    p.add_argument("--num_layer", type=int, default=5)
-    p.add_argument("--emb_dim", type=int, default=128)
-    p.add_argument("--drop_ratio", type=float, default=0.5)
-    p.add_argument("--gamma", type=float, default=0.4)
-    p.add_argument("--batch_size", type=int, default=256)
-    p.add_argument("--init_seed", type=int, default=0)
-    p.add_argument("--trails", type=int, default=1)
-    # XGBoost ハイパーパラメータ
-    p.add_argument("--xgb_estimators", type=int, default=500)
-    p.add_argument("--xgb_lr", type=float, default=0.05)
-    p.add_argument("--xgb_max_depth", type=int, default=6)
-    p.add_argument("--early_stop", type=int, default=30)
-    return p.parse_args()
-
-
-def collect_reps(args, model, loader, device, is_regression, plym_prop=None):
-    feats = []
-    ys = []
-    for batch in loader:
-        batch = batch.to(device)
-        if batch.x.size(0) == 1:
-            continue
-        with torch.no_grad():
-            h = model.encode(batch)  # (num_graphs, emb_dim)
-        if is_regression:
-            if plym_prop == "density":
-                y = torch.log(batch[plym_prop])
-            elif plym_prop and plym_prop != "none":
-                y = batch[plym_prop]
-            else:
-                y = batch.y
-        else:
-            y = batch.y
-        feats.append(h.cpu())
-        ys.append(y.view(h.size(0), -1).cpu())
-    if not feats:
-        return None, None
-    X = torch.cat(feats, 0).numpy()
-    Y = torch.cat(ys, 0).numpy()
-    return X, Y
-
-
-def run_once(args, seed_offset=0):
-    torch.manual_seed(args.init_seed + seed_offset)
-    np.random.seed(args.init_seed + seed_offset)
-
-    device = (
-        torch.device(f"cuda:{args.device}")
-        if torch.cuda.is_available()
-        else torch.device("cpu")
-    )
-
-    if args.dataset.startswith("ogbg"):
-        dataset = PygGraphPropPredDataset(name=args.dataset, root="data")
+def main(args):
+    print(args)
+    device = torch.device("cuda:" + str(args.device)) if torch.cuda.is_available() else torch.device("cpu")
+    if args.dataset.startswith('ogbg'):
+        dataset = PygGraphPropPredDataset(name = args.dataset, root='data')
+        
         split_idx = dataset.get_idx_split()
-        train_loader = DataLoader(
-            dataset[split_idx["train"]], batch_size=args.batch_size, shuffle=False
-        )
-        valid_loader = DataLoader(
-            dataset[split_idx["valid"]], batch_size=args.batch_size, shuffle=False
-        )
-        test_loader = DataLoader(
-            dataset[split_idx["test"]], batch_size=args.batch_size, shuffle=False
-        )
+        train_loader = DataLoader(dataset[split_idx["train"]], batch_size=args.batch_size, shuffle=True, num_workers = 0)
+        valid_loader = DataLoader(dataset[split_idx["valid"]], batch_size=args.batch_size, shuffle=False, num_workers = 0)
+        test_loader = DataLoader(dataset[split_idx["test"]], batch_size=args.batch_size, shuffle=False, num_workers = 0)
         evaluator = Evaluator(args.dataset)
-        is_classification = "classification" in dataset.task_type
-        plym_prop = None
-        num_tasks = dataset.num_tasks
-    else:
-        # Polymer regression
-        dataset = PolymerRegDataset(name=args.dataset.split("-")[1], root="data")
+
+    elif args.dataset.startswith('plym'):
+        dataset = PolymerRegDataset(name = TRAIN_FILE_NAME, root=DATA_DIR) # PolymerRegDataset
         full_idx = list(range(len(dataset)))
-        train_ratio, valid_ratio, test_ratio = 0.6, 0.1, 0.3
-        train_index, test_index, _, _ = train_test_split(
-            full_idx, full_idx, test_size=test_ratio, random_state=42
-        )
-        train_index, val_index, _, _ = train_test_split(
-            train_index,
-            train_index,
-            test_size=valid_ratio / (valid_ratio + train_ratio),
-            random_state=42,
-        )
-        train_loader = DataLoader(
-            dataset[torch.LongTensor(train_index)],
-            batch_size=args.batch_size,
-            shuffle=False,
-        )
-        valid_loader = DataLoader(
-            dataset[torch.LongTensor(val_index)],
-            batch_size=args.batch_size,
-            shuffle=False,
-        )
-        test_loader = DataLoader(
-            dataset[torch.LongTensor(test_index)],
-            batch_size=args.batch_size,
-            shuffle=False,
-        )
-        evaluator = Evaluator("ogbg-molesol")  # RMSE evaluator
-        is_classification = False
-        plym_prop = args.dataset.split("-")[1].split("_")[0]
-        num_tasks = 1
+        train_ratio = 0.6
+        valid_ratio = 0.1
+        test_ratio = 0.3
+        train_index, test_index, _, _ = train_test_split(full_idx, full_idx, test_size=test_ratio, random_state=42)
+        train_index, val_index, _, _ = train_test_split(train_index, train_index, test_size=valid_ratio/(valid_ratio+train_ratio), random_state=42)
 
-    model = GraphEnvAug(
-        num_tasks=num_tasks,
-        num_layer=args.num_layer,
-        emb_dim=args.emb_dim,
-        gnn_type=args.gnn,
-        drop_ratio=args.drop_ratio,
-        gamma=args.gamma,
-    ).to(device)
+        train_index = torch.LongTensor(train_index)
+        val_index = torch.LongTensor(val_index)
+        test_index = torch.LongTensor(test_index)
 
-    # (簡略化) 重み初期化はデフォルト (必要なら独自 init を追加)
+        train_loader = DataLoader(dataset[train_index], batch_size=args.batch_size, shuffle=True, num_workers = 0)
+        valid_loader = DataLoader(dataset[val_index], batch_size=args.batch_size, shuffle=False, num_workers = 0)
+        test_loader = DataLoader(dataset[test_index], batch_size=args.batch_size, shuffle=False, num_workers = 0)
+        evaluator = Evaluator('ogbg-molesol') # RMSE metric
+    n_train_data, n_val_data, n_test_data = len(train_loader.dataset), len(valid_loader.dataset), float(len(test_loader.dataset))
+    print(f"# Train: {n_train_data}  #Test: {n_test_data} #Val: {n_val_data}")
 
-    X_train, y_train = collect_reps(
-        args, model, train_loader, device, not is_classification, plym_prop
-    )
-    X_valid, y_valid = collect_reps(
-        args, model, valid_loader, device, not is_classification, plym_prop
-    )
-    X_test, y_test = collect_reps(
-        args, model, test_loader, device, not is_classification, plym_prop
-    )
-
-    if X_train is None:
-        raise RuntimeError("特徴量が空です。")
-
-    if is_classification:
-        # タスク毎に独立モデル (欠損ラベル NaN 対応)
-        preds_valid = []
-        preds_test = []
-        for t in range(y_train.shape[1]):
-            mask_tr = ~np.isnan(y_train[:, t])
-            mask_va = ~np.isnan(y_valid[:, t])
-            dtrain = xgb.DMatrix(X_train[mask_tr], label=y_train[mask_tr, t])
-            dvalid = xgb.DMatrix(X_valid[mask_va], label=y_valid[mask_va, t])
-            params = {
-                "objective": "binary:logistic",
-                "eval_metric": "auc",
-                "tree_method": "hist",
-                "eta": args.xgb_lr,
-                "max_depth": args.xgb_max_depth,
-            }
-            booster = xgb.train(
-                params,
-                dtrain,
-                num_boost_round=args.xgb_estimators,
-                evals=[(dvalid, "valid")],
-                early_stopping_rounds=args.early_stop,
-                verbose_eval=False,
-            )
-            preds_valid.append(booster.predict(xgb.DMatrix(X_valid)))
-            preds_test.append(booster.predict(xgb.DMatrix(X_test)))
-        y_pred_valid = np.vstack(preds_valid).T
-        y_pred_test = np.vstack(preds_test).T
-        input_valid = {"y_true": y_valid, "y_pred": y_pred_valid}
-        input_test = {"y_true": y_test, "y_pred": y_pred_test}
-        valid_auc = evaluator.eval(input_valid)["rocauc"]
-        test_auc = evaluator.eval(input_test)["rocauc"]
-        print({"Valid AUC": valid_auc, "Test AUC": test_auc})
-        return valid_auc, test_auc
+    model = GraphEnvAug(gnn_type = args.gnn, num_tasks = dataset.num_tasks, num_layer = args.num_layer,
+                         emb_dim = args.emb_dim, drop_ratio = args.drop_ratio, gamma=args.gamma, use_linear_predictor = args.use_linear_predictor).to(device)    
+    init_weights(model, args.initw_name, init_gain=0.02)
+    opt_separator = optim.Adam(model.separator.parameters(), lr=args.lr, weight_decay=args.l2reg)
+    opt_predictor = optim.Adam(list(model.graph_encoder.parameters())+list(model.predictor.parameters()), lr=args.lr, weight_decay=args.l2reg)
+    optimizers = {'separator': opt_separator, 'predictor': opt_predictor}
+    if args.use_lr_scheduler:
+        schedulers = {}
+        for opt_name, opt in optimizers.items():
+            schedulers[opt_name] = optim.lr_scheduler.CosineAnnealingLR(opt, T_max=100, eta_min=1e-4)
     else:
-        # 単一タスク回帰
-        from sklearn.metrics import mean_squared_error, r2_score
+        schedulers = None
+    cnt_wait = 0
+    best_epoch = 0
+    for epoch in range(args.epochs):
+        print("=====Epoch {}".format(epoch))
+        path = epoch % int(args.path_list[-1])
+        if path in list(range(int(args.path_list[0]))):
+            optimizer_name = 'separator' 
+        elif path in list(range(int(args.path_list[0]), int(args.path_list[1]))):
+            optimizer_name = 'predictor'
 
-        reg = xgb.XGBRegressor(
-            n_estimators=args.xgb_estimators,
-            learning_rate=args.xgb_lr,
-            max_depth=args.xgb_max_depth,
-            subsample=0.9,
-            colsample_bytree=0.9,
-            objective="reg:squarederror",
-            tree_method="hist",
-            early_stopping_rounds=args.early_stop,
-        )
-        reg.fit(
-            X_train,
-            y_train.reshape(-1),
-            eval_set=[(X_valid, y_valid.reshape(-1))],
-            verbose=False,
-        )
-        pred_valid = reg.predict(X_valid)
-        pred_test = reg.predict(X_test)
-        rmse_valid = mean_squared_error(y_valid, pred_valid, squared=False)
-        rmse_test = mean_squared_error(y_test, pred_test, squared=False)
-        r2 = r2_score(y_test, pred_test)
-        print({"Valid RMSE": rmse_valid, "Test RMSE": rmse_test, "Test R2": r2})
-        return rmse_valid, rmse_test, r2
+        train(args, model, device, train_loader, optimizers, dataset.task_type, optimizer_name)
+
+        if schedulers != None:
+            schedulers[optimizer_name].step()
+        train_perf = eval(args, model, device, train_loader, evaluator)[0]
+        valid_perf = eval(args, model, device, valid_loader, evaluator)[0]
+        update_test = False
+        if epoch != 0:
+            if 'classification' in dataset.task_type and valid_perf >  best_valid_perf:
+                update_test = True
+            elif 'classification' not in dataset.task_type and valid_perf <  best_valid_perf:
+                update_test = True
+        if update_test or epoch == 0:
+            best_valid_perf = valid_perf
+            cnt_wait = 0
+            best_epoch = epoch
+            test_perfs = eval(args, model, device, test_loader, evaluator)
+            if args.dataset.startswith('ogbg'):
+                test_auc  = test_perfs[0]
+                print({'Metric': 'AUC', 'Train': train_perf, 'Validation': valid_perf, 'Test': test_auc})
+            else:
+                test_rmse, test_r2 = test_perfs[0], test_perfs[1]
+                print({'Metric': 'RMSE', 'Train': train_perf, 'Validation': valid_perf, 'Test': test_rmse, 'Test R2': test_r2})
+        else:
+            print({'Train': train_perf, 'Validation': valid_perf})
+            cnt_wait += 1
+            if cnt_wait > args.patience:
+                break
+    print('Finished training! Results from epoch {} with best validation {}.'.format(best_epoch, best_valid_perf))
+    if args.dataset.startswith('ogbg'):
+        print('Test auc: {}'.format(test_auc))
+        return [best_valid_perf, test_auc]
+    if args.dataset.startswith('plym'):
+        print('Test rmse: {}, Test r2: {} \n'.format(test_rmse, test_r2))
+        return [best_valid_perf, test_rmse, test_r2]
+
+def config_and_run(args):
+    
+    if args.by_default:
+        if args.dataset == 'plym-o2_prop':
+            # oxygen permeability
+            args.gamma = 0.2
+            args.epochs = 400
+            args.num_layer = 3
+            args.drop_ratio = 0.1
+            args.batch_size = 32
+            args.l2reg = 1e-4
+            args.lr = 1e-2
+            if args.gnn == 'gcn-virtual':
+                args.lr = 1e-3
+                args.l2reg = 1e-5
+                args.patience = 100
+        if args.dataset == 'plym-mt_prop':
+            # melting temperature
+            args.epochs = 400
+            args.l2reg = 1e-5
+            args.gamma = 0.05
+            args.num_layer = 3
+            args.drop_ratio = 0.1
+            args.batch_size = 32
+            args.lr = 1e-2
+            if args.gnn == 'gcn-virtual':
+                args.lr = 1e-3
+            args.patience = 50
+        if args.dataset == 'plym-tg_prop':
+            # glass temperature
+            args.epochs = 400
+            args.l2reg = 1e-5 
+            args.gamma = 0.05
+            args.num_layer = 3
+            args.drop_ratio = 0.1
+            args.initw_name = 'orthogonal'
+            args.batch_size = 256
+            args.lr = 1e-2
+            args.patience = 50
+        if args.dataset == 'plym-density_prop':
+            # polymer density
+            args.epochs = 400
+            args.l2reg = 1e-5
+            args.gamma = 0.3
+            args.num_layer = 3
+            args.drop_ratio = 0.5
+            if args.gnn == 'gcn-virtual':
+                args.l2reg = 1e-4
+            args.batch_size = 32
+            args.lr = 1e-3
+            args.patience = 50
+            args.use_clip_norm = True
+        
+        if args.dataset == 'ogbg-molhiv':
+            args.gamma = 0.1
+            args.batch_size = 512
+            args.initw_name = 'orthogonal'
+            if args.gnn == 'gcn-virtual':
+                args.lr = 1e-3
+                args.l2reg = 1e-5
+                args.epochs = 100
+                args.num_layer = 3
+                args.use_clip_norm = True
+                args.path_list=[2, 4]
+        if args.dataset == 'ogbg-molbace':
+            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
+                args.gnn = 'gin'
+                args.l2reg = 7e-4
+                args.gamma = 0.55
+                args.num_layer = 4  
+                args.batch_size = 64
+                args.emb_dim = 64
+                args.use_lr_scheduler = True
+                args.patience = 100
+                args.drop_ratio = 0.3
+                args.initw_name = 'orthogonal' 
+            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
+                args.gnn = 'gcn'
+                args.patience = 100
+                args.initw_name = 'orthogonal' 
+                args.num_layer = 2
+                args.emb_dim = 64
+                args.batch_size = 128
+        if args.dataset == 'ogbg-molbbbp':
+            args.l2reg = 5e-6
+            args.initw_name = 'orthogonal'
+            args.num_layer = 2
+            args.emb_dim = 64
+            args.batch_size = 256 
+            args.use_lr_scheduler = True 
+            args.gamma = 0.2
+            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
+                args.gnn = 'gcn-virtual'
+                args.gamma = 0.4
+                args.emb_dim = 128
+                args.use_lr_scheduler = False 
+        if args.dataset == 'ogbg-molsider':
+            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
+                args.gnn = 'gin'
+            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
+                args.gnn = 'gcn'
+            args.l2reg = 1e-4
+            args.patience = 100
+            args.gamma = 0.65
+            args.num_layer =  5
+            args.epochs = 400
+        if args.dataset == 'ogbg-molclintox':
+            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
+                args.gnn = 'gin'
+            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
+                args.gnn = 'gcn'
+            args.use_linear_predictor = True
+            args.use_clip_norm = True
+            args.gamma = 0.2
+            args.patience = 100
+            args.batch_size = 64 
+            args.num_layer = 5
+            args.emb_dim = 300
+            args.l2reg = 1e-4
+            args.epochs = 400
+            args.drop_ratio=0.5
+        if args.dataset == 'ogbg-moltox21':
+            args.gamma = 0.8 
+        if args.dataset == 'ogbg-moltoxcast':
+            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
+                args.gnn = 'gin'
+            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
+                args.gnn = 'gcn'
+            args.patience = 50
+            args.epochs = 150
+            args.l2reg = 1e-5
+            args.gamma = 0.7
+            args.num_layer = 2
 
 
-def main():
-    args = get_args()
-    if args.dataset.startswith("ogbg"):
-        results_valid = []
-        results_test = []
-        for i in range(args.trails):
-            v, t = run_once(args, seed_offset=i)
-            results_valid.append(v)
-            results_test.append(t)
-        print(
-            "Valid AUC avg: {:.4f} +/- {:.4f}".format(
-                np.mean(results_valid), np.std(results_valid)
-            )
-        )
-        print(
-            "Test  AUC avg: {:.4f} +/- {:.4f}".format(
-                np.mean(results_test), np.std(results_test)
-            )
-        )
+    # args.plym_prop = 'none' if args.dataset.startswith('ogbg') else args.dataset.split('-')[1].split('_')[0]
+    args.plym_prop = 'Tg'
+    if args.dataset.startswith('ogbg'):
+        results = {'valid_auc': [], 'test_auc': []}
     else:
-        val_rmse_list, test_rmse_list, test_r2_list = [], [], []
-        for i in range(args.trails):
-            v_rmse, t_rmse, t_r2 = run_once(args, seed_offset=i)
-            val_rmse_list.append(v_rmse)
-            test_rmse_list.append(t_rmse)
-            test_r2_list.append(t_r2)
-        print(
-            "Valid RMSE avg: {:.4f} +/- {:.4f}".format(
-                np.mean(val_rmse_list), np.std(val_rmse_list)
-            )
-        )
-        print(
-            "Test  RMSE avg: {:.4f} +/- {:.4f}".format(
-                np.mean(test_rmse_list), np.std(test_rmse_list)
-            )
-        )
-        print(
-            "Test  R2   avg: {:.4f} +/- {:.4f}".format(
-                np.mean(test_r2_list), np.std(test_r2_list)
-            )
-        )
-
+        results = {'valid_rmse': [], 'test_rmse': [], 'test_r2':[]}
+    for _ in range(args.trails):
+        if args.dataset.startswith('plym'):
+            valid_rmse, test_rmse, test_r2 = main(args)
+            results['test_r2'].append(test_r2)
+            results['test_rmse'].append(test_rmse)
+            results['valid_rmse'].append(valid_rmse)
+        else:
+            valid_auc, test_auc = main(args)
+            results['valid_auc'].append(valid_auc)
+            results['test_auc'].append(test_auc)
+    for mode, nums in results.items():
+        print('{}: {:.4f}+-{:.4f} {}'.format(
+            mode, np.mean(nums), np.std(nums), nums))
 
 if __name__ == "__main__":
-    main()
+    args = get_args()
+    config_and_run(args)
+
+
+
+
