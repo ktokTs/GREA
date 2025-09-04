@@ -17,7 +17,8 @@ from torch_geometric.utils import softmax
 from torch_geometric.nn.norm import GraphNorm
 import math
 
-from ogb.utils.features import atom_to_feature_vector, bond_to_feature_vector
+from ogb.utils.features import bond_to_feature_vector, atom_to_feature_vector
+
 
 from torch_geometric.data import InMemoryDataset
 from torch_geometric.data import Data
@@ -32,74 +33,139 @@ import numpy as np
 import torch
 import copy
 
-DATA_DIR="/kaggle/input/neurips-open-polymer-prediction-2025"
-TRAIN_FILE_NAME="train.csv"
+DATA_DIR = "/kaggle/input/neurips-open-polymer-prediction-2025"
+TRAIN_FILE_NAME = "train.csv"
+TARGET = "Tg"
 
 import torch
 import argparse
 from sklearn.metrics import r2_score
 
+
 def get_args():
-    parser = argparse.ArgumentParser(description='Graph rationalization with Environment-based Augmentation')
-    parser.add_argument('--device', type=int, default=0,
-                        help='which gpu to use if any (default: 0)')
+    parser = argparse.ArgumentParser(
+        description="Graph rationalization with Environment-based Augmentation"
+    )
+    parser.add_argument(
+        "--device", type=int, default=0, help="which gpu to use if any (default: 0)"
+    )
     # model
-    parser.add_argument('--gnn', type=str, default='gin-virtual',
-                        help='GNN gin, gin-virtual, or gcn, or gcn-virtual (default: gin-virtual)')
-    parser.add_argument('--drop_ratio', type=float, default=0.5,
-                        help='dropout ratio (default: 0.5)')
-    parser.add_argument('--num_layer', type=int, default=5,
-                        help='number of GNN message passing layers (default: 5)')
-    parser.add_argument('--emb_dim', type=int, default=128,
-                        help='dimensionality of hidden units in GNNs (default: 128)')
-    parser.add_argument('--use_linear_predictor', default=False, action='store_true',
-                        help='Use Linear predictor')
-    parser.add_argument('--gamma', type=float, default=0.4,
-                        help='size ratio to regularize the rationale subgraph (default: 0.4)')
+    parser.add_argument(
+        "--gnn",
+        type=str,
+        default="gin-virtual",
+        help="GNN gin, gin-virtual, or gcn, or gcn-virtual (default: gin-virtual)",
+    )
+    parser.add_argument(
+        "--drop_ratio", type=float, default=0.5, help="dropout ratio (default: 0.5)"
+    )
+    parser.add_argument(
+        "--num_layer",
+        type=int,
+        default=5,
+        help="number of GNN message passing layers (default: 5)",
+    )
+    parser.add_argument(
+        "--emb_dim",
+        type=int,
+        default=128,
+        help="dimensionality of hidden units in GNNs (default: 128)",
+    )
+    parser.add_argument(
+        "--use_linear_predictor",
+        default=False,
+        action="store_true",
+        help="Use Linear predictor",
+    )
+    parser.add_argument(
+        "--gamma",
+        type=float,
+        default=0.4,
+        help="size ratio to regularize the rationale subgraph (default: 0.4)",
+    )
 
     # training
-    parser.add_argument('--batch_size', type=int, default=256,
-                        help='input batch size for training (default: 256)')
-    parser.add_argument('--epochs', type=int, default=200,
-                        help='number of epochs to train (default: 200)')
-    parser.add_argument('--patience', type=int, default=50,
-                        help='patience for early stop (default: 50)')
-    parser.add_argument('--lr', type=float, default=1e-2,
-                        help='Learning rate (default: 1e-2)')
-    parser.add_argument('--l2reg', type=float, default=5e-6,
-                        help='L2 norm (default: 5e-6)')
-    parser.add_argument('--use_lr_scheduler', default=False, action='store_true',
-                        help='Use learning rate scheduler CosineAnnealingLR')
-    parser.add_argument('--use_clip_norm', default=False, action='store_true',
-                        help='Use learning rate clip norm')
-    parser.add_argument('--path_list', nargs="+", default=[1,4],
-                        help='path for alternative optimization')
-    parser.add_argument('--initw_name', type=str, default='default',
-                        choices=['default','orthogonal','normal','xavier','kaiming'],
-                        help='method name to initialize neural weights')
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=256,
+        help="input batch size for training (default: 256)",
+    )
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=200,
+        help="number of epochs to train (default: 200)",
+    )
+    parser.add_argument(
+        "--patience", type=int, default=50, help="patience for early stop (default: 50)"
+    )
+    parser.add_argument(
+        "--lr", type=float, default=1e-2, help="Learning rate (default: 1e-2)"
+    )
+    parser.add_argument(
+        "--l2reg", type=float, default=5e-6, help="L2 norm (default: 5e-6)"
+    )
+    parser.add_argument(
+        "--use_lr_scheduler",
+        default=False,
+        action="store_true",
+        help="Use learning rate scheduler CosineAnnealingLR",
+    )
+    parser.add_argument(
+        "--use_clip_norm",
+        default=False,
+        action="store_true",
+        help="Use learning rate clip norm",
+    )
+    parser.add_argument(
+        "--path_list",
+        nargs="+",
+        default=[1, 4],
+        help="path for alternative optimization",
+    )
+    parser.add_argument(
+        "--initw_name",
+        type=str,
+        default="default",
+        choices=["default", "orthogonal", "normal", "xavier", "kaiming"],
+        help="method name to initialize neural weights",
+    )
 
-    parser.add_argument('--dataset', type=str, default="ogbg-molbbbp",
-                        help='dataset name (default: ogbg-molhiv)')
-    parser.add_argument('--trails', type=int, default=5,
-                        help='numer of experiments (default: 5)')
-    parser.add_argument('--by_default', default=False, action='store_true',
-                        help='use default configuration for hyperparameters')
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default="ogbg-molbbbp",
+        help="dataset name (default: ogbg-molhiv)",
+    )
+    parser.add_argument(
+        "--trails", type=int, default=5, help="numer of experiments (default: 5)"
+    )
+    parser.add_argument(
+        "--by_default",
+        default=False,
+        action="store_true",
+        help="use default configuration for hyperparameters",
+    )
     args = parser.parse_args()
-    
+
     return args
+
 
 cls_criterion = torch.nn.BCEWithLogitsLoss()
 reg_criterion = torch.nn.MSELoss()
+
+
 def train(args, model, device, loader, optimizers, task_type, optimizer_name):
     optimizer = optimizers[optimizer_name]
     model.train()
-    if optimizer_name == 'predictor':
+    if optimizer_name == "predictor":
         set_requires_grad([model.graph_encoder, model.predictor], requires_grad=True)
         set_requires_grad([model.separator], requires_grad=False)
-    if optimizer_name == 'separator':
+    if optimizer_name == "separator":
         set_requires_grad([model.separator], requires_grad=True)
-        set_requires_grad([model.graph_encoder,model.predictor], requires_grad=False)
-        
+        set_requires_grad([model.graph_encoder, model.predictor], requires_grad=False)
+
     for step, batch in enumerate(loader):
         batch = batch.to(device)
 
@@ -113,21 +179,28 @@ def train(args, model, device, loader, optimizers, task_type, optimizer_name):
             else:
                 criterion = reg_criterion
 
-            if args.dataset.startswith('plym'):
-                if args.plym_prop == 'density': 
+            if args.dataset.startswith("plym"):
+                if args.plym_prop == "density":
                     batch.y = torch.log(batch[args.plym_prop])
                 else:
                     batch.y = batch[args.plym_prop]
             target = batch.y.to(torch.float32)
             is_labeled = batch.y == batch.y
-            loss = criterion(pred['pred_rem'].to(torch.float32)[is_labeled], target[is_labeled]) 
-            target_rep = batch.y.to(torch.float32).repeat_interleave(batch.batch[-1]+1,dim=0)
+            loss = criterion(
+                pred["pred_rem"].to(torch.float32)[is_labeled], target[is_labeled]
+            )
+            target_rep = batch.y.to(torch.float32).repeat_interleave(
+                batch.batch[-1] + 1, dim=0
+            )
             is_labeled_rep = target_rep == target_rep
-            loss += criterion(pred['pred_rep'].to(torch.float32)[is_labeled_rep], target_rep[is_labeled_rep])
+            loss += criterion(
+                pred["pred_rep"].to(torch.float32)[is_labeled_rep],
+                target_rep[is_labeled_rep],
+            )
 
-            if optimizer_name == 'separator': 
-                loss += pred['loss_reg']
-
+            if optimizer_name == "separator":
+                loss += pred["loss_reg"]
+            # ここで学習
             loss.backward()
             if args.use_clip_norm:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -147,52 +220,86 @@ def eval(args, model, device, loader, evaluator):
         else:
             with torch.no_grad():
                 pred = model.eval_forward(batch)
-    
-            if args.dataset.startswith('plym'):
-                if args.plym_prop == 'density' :
+
+            if args.dataset.startswith("plym"):
+                if args.plym_prop == "density":
                     batch.y = torch.log(batch[args.plym_prop])
                 else:
                     batch.y = batch[args.plym_prop]
             y_true.append(batch.y.view(pred.shape).detach().cpu())
             y_pred.append(pred.detach().cpu())
-    y_true = torch.cat(y_true, dim = 0).numpy()
-    y_pred = torch.cat(y_pred, dim = 0).numpy()
+    y_true = torch.cat(y_true, dim=0).numpy()
+    y_pred = torch.cat(y_pred, dim=0).numpy()
     input_dict = {"y_true": y_true, "y_pred": y_pred}
-    if args.dataset.startswith('plym'):
-        return [evaluator.eval(input_dict)['rmse'], r2_score(y_true, y_pred)]
-    elif args.dataset.startswith('ogbg'):
-        return [evaluator.eval(input_dict)['rocauc']]
+    if args.dataset.startswith("plym"):
+        return [evaluator.eval(input_dict)["rmse"], r2_score(y_true, y_pred)]
+    elif args.dataset.startswith("ogbg"):
+        return [evaluator.eval(input_dict)["rocauc"]]
 
 
-def init_weights(net, init_type='normal', init_gain=0.02):
+def generate(args, model, device, loader):
+    model.eval()
+    graph_chunks = []
+    target_chunks = []
+    total_nodes = 0
+
+    for step, batch in enumerate(loader):
+        batch = batch.to(device)
+        n_nodes = batch.x.shape[0]
+        print(f"[generate] batch={step} nodes={n_nodes}")
+        if n_nodes <= 1:
+            continue
+        with torch.no_grad():
+            h_rep, target_rep = model.generate_graph(batch)
+            graph_chunks.append(h_rep)
+            target_chunks.append(target_rep)
+            total_nodes += h_rep.size(0)
+
+    if len(graph_chunks) == 0:
+        return {"graph": torch.empty(0, model.emb_dim), "y": torch.empty(0, 1)}
+
+    graphs_cat = torch.cat(graph_chunks, dim=0)
+    targets_cat = torch.cat(target_chunks, dim=0)
+    print(f"[generate] concatenated: {graphs_cat.shape}  targets: {targets_cat.shape}")
+    return {"graph": graphs_cat, "y": targets_cat}
+
+
+def init_weights(net, init_type="normal", init_gain=0.02):
     """Initialize network weights.
     Parameters:
         net (network)   -- network to be initialized
         init_type (str) -- the name of an initialization method: normal | xavier | kaiming | orthogonal
         init_gain (float)    -- scaling factor for normal, xavier and orthogonal.
     """
+
     def init_func(m):  # define the initialization function
         classname = m.__class__.__name__
-        if hasattr(m, 'weight') and (classname.find('Conv') != -1 or classname.find('Linear') != -1):
-            if init_type == 'normal':
+        if hasattr(m, "weight") and (
+            classname.find("Conv") != -1 or classname.find("Linear") != -1
+        ):
+            if init_type == "normal":
                 torch.nn.init.normal_(m.weight.data, 0.0, init_gain)
-            elif init_type == 'xavier':
+            elif init_type == "xavier":
                 torch.nn.init.xavier_normal_(m.weight.data, gain=init_gain)
-            elif init_type == 'kaiming':
-                torch.nn.init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
-            elif init_type == 'orthogonal':
+            elif init_type == "kaiming":
+                torch.nn.init.kaiming_normal_(m.weight.data, a=0, mode="fan_in")
+            elif init_type == "orthogonal":
                 torch.nn.init.orthogonal_(m.weight.data, gain=init_gain)
-            elif init_type == 'default':
+            elif init_type == "default":
                 pass
             else:
-                raise NotImplementedError('initialization method [%s] is not implemented' % init_type)
-            if hasattr(m, 'bias') and m.bias is not None:
+                raise NotImplementedError(
+                    "initialization method [%s] is not implemented" % init_type
+                )
+            if hasattr(m, "bias") and m.bias is not None:
                 torch.nn.init.constant_(m.bias.data, 0.0)
-        elif classname.find('BatchNorm2d') != -1:  # BatchNorm Layer's weight is not a matrix; only normal distribution applies.
+        elif (
+            classname.find("BatchNorm2d") != -1
+        ):  # BatchNorm Layer's weight is not a matrix; only normal distribution applies.
             torch.nn.init.normal_(m.weight.data, 1.0, init_gain)
             torch.nn.init.constant_(m.bias.data, 0.0)
 
-    print('initialize network with %s' % init_type)
+    print("initialize network with %s" % init_type)
     net.apply(init_func)  # apply the initialization function <init_func>
 
 
@@ -208,6 +315,7 @@ def set_requires_grad(nets, requires_grad=False):
         if net is not None:
             for param in net.parameters():
                 param.requires_grad = requires_grad
+
 
 class PolymerRegDataset(InMemoryDataset):
     def __init__(self, name="o2_prop", root="data", transform=None, pre_transform=None):
@@ -270,8 +378,8 @@ class PolymerRegDataset(InMemoryDataset):
             df_full = pd.read_csv(raw_dir, engine="python")
             df_full.set_index("SMILES", inplace=True)
             print(df_full[:5])
-        # --- 追加: 目的列 Tg の欠損/非有限除去（存在すれば） ---
-        target_col = "Tg"
+
+        target_col = TARGET
         print("sssss")
         if target_col in df_full.columns:
             before = len(df_full)
@@ -281,7 +389,9 @@ class PolymerRegDataset(InMemoryDataset):
             df_full = df_full.dropna(subset=[target_col])
             after = len(df_full)
             if before != after:
-                print(f"[clean] Dropped {before} -> {after} rows with invalid {target_col}")
+                print(
+                    f"[clean] Dropped {before} -> {after} rows with invalid {target_col}"
+                )
         graph_list = []
 
         # TODO:ここに各要素を指定する
@@ -378,10 +488,155 @@ def smiles2graph(smiles_string):
     return graph
 
 
+
+allowable_features = {
+    'possible_atomic_num_list': list(range(1, 119)),
+    'possible_chirality_list': [
+        Chem.rdchem.ChiralType.CHI_UNSPECIFIED,
+        Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CW,
+        Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CCW,
+        Chem.rdchem.ChiralType.CHI_OTHER
+    ],
+    'possible_formal_charge_list': [-5,-4,-3,-2,-1,0,1,2,3,4,5],
+    'possible_number_radical_e_list': [0,1,2,3,4],
+    'possible_bond_type_list': [
+        Chem.BondType.SINGLE, Chem.BondType.DOUBLE,
+        Chem.BondType.TRIPLE, Chem.BondType.AROMATIC
+    ],
+    'possible_bond_stereo_list': [
+        Chem.BondStereo.STEREONONE,
+        Chem.BondStereo.STEREOZ,
+        Chem.BondStereo.STEREOE,
+        Chem.BondStereo.STEREOANY
+    ],
+    'possible_is_conjugated_list': [False, True],
+}
+
+def _decode(lst, idx, default):
+    return lst[idx] if 0 <= idx < len(lst) else default
+
+def decode_atom_feature(row):
+    r = np.asarray(row)
+    atomic_idx = int(r[0])
+    # 未知 = dummy(*) 扱い
+    if atomic_idx == len(allowable_features['possible_atomic_num_list']):
+        atomic_num = 0
+    else:
+        atomic_num = _decode(allowable_features['possible_atomic_num_list'], atomic_idx, 6)
+    chiral = _decode(allowable_features['possible_chirality_list'], int(r[1]),
+                     Chem.rdchem.ChiralType.CHI_UNSPECIFIED)
+    formal = _decode(allowable_features['possible_formal_charge_list'], int(r[3]), 0)
+    radical = _decode(allowable_features['possible_number_radical_e_list'], int(r[5]), 0)
+    aromatic = (int(r[7]) == 1)
+    return dict(atomic_num=atomic_num, chiral=chiral,
+                formal=formal, radical=radical, aromatic=aromatic)
+
+def decode_bond_feature(row):
+    r = np.asarray(row)
+    bt = _decode(allowable_features['possible_bond_type_list'], int(r[0]), Chem.BondType.SINGLE)
+    st = _decode(allowable_features['possible_bond_stereo_list'], int(r[1]), Chem.BondStereo.STEREONONE)
+    cj = _decode(allowable_features['possible_is_conjugated_list'], int(r[2]), False)
+    return bt, st, cj
+
+def _partial_sanitize(mol):
+    ops = (Chem.SanitizeFlags.SANITIZE_FINDRADICALS |
+           Chem.SanitizeFlags.SANITIZE_SETAROMATICITY |
+           Chem.SanitizeFlags.SANITIZE_SETCONJUGATION |
+           Chem.SanitizeFlags.SANITIZE_SETHYBRIDIZATION |
+           Chem.SanitizeFlags.SANITIZE_ADJUSTHS)
+    try:
+        Chem.SanitizeMol(mol, sanitizeOps=ops)
+    except Exception:
+        pass
+
+def _normalize_implicit_hs(mol):
+    # 明示Hを削除可能な形に調整
+    for a in mol.GetAtoms():
+        if a.GetAtomicNum() == 0:
+            a.SetNoImplicit(True)
+            continue
+        # 余計な explicit H を一旦 0 に戻し再計算を許可
+        if a.GetNumExplicitHs() > 0:
+            a.SetNumExplicitHs(0)
+        a.SetNoImplicit(False)
+        a.UpdatePropertyCache(strict=False)
+    # 暗黙H再調整
+    try:
+        Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ADJUSTHS)
+    except Exception:
+        pass
+    # Remove explicit H
+    mol2 = Chem.RemoveHs(mol, sanitize=False)
+    return mol2
+
+def graph2smiles(graph,
+                 canonical=False,
+                 sanitize_mode="partial",  # "none" | "partial"
+                 isomeric=True):
+    edge_index = graph["edge_index"]
+    edge_feat  = graph["edge_feat"]
+    node_feat  = graph["node_feat"]
+    n = graph["num_nodes"]
+
+    rw = Chem.RWMol()
+
+    # 原子追加 (hybridization/implicitH 推定は sanitize に任せる)
+    for i in range(n):
+        attr = decode_atom_feature(node_feat[i])
+        if attr['atomic_num'] == 0:
+            atom = Chem.Atom("*")
+            atom.SetNoImplicit(True)
+        else:
+            atom = Chem.Atom(attr['atomic_num'])
+            atom.SetFormalCharge(attr['formal'])
+            if attr['radical'] > 0:
+                atom.SetNumRadicalElectrons(attr['radical'])
+            atom.SetChiralTag(attr['chiral'])
+            if attr['aromatic']:
+                atom.SetIsAromatic(True)
+            atom.SetNoImplicit(False)
+        rw.AddAtom(atom)
+
+    # ボンド（双方向重複排除）
+    added = set()
+    E = edge_index.shape[1]
+    for k in range(E):
+        u = int(edge_index[0, k]); v = int(edge_index[1, k])
+        if u == v: continue
+        key = (u, v) if u < v else (v, u)
+        if key in added: continue
+        bt, st, cj = decode_bond_feature(edge_feat[k])
+        rw.AddBond(u, v, bt)
+        b = rw.GetBondBetweenAtoms(u, v)
+        if b:
+            if bt == Chem.BondType.AROMATIC:
+                b.SetIsAromatic(True)
+                for aidx in (u, v):
+                    a = rw.GetAtomWithIdx(aidx)
+                    if a.GetAtomicNum() != 0:
+                        a.SetIsAromatic(True)
+            if cj:
+                b.SetIsConjugated(True)
+            if st != Chem.BondStereo.STEREONONE:
+                b.SetStereo(st)
+        added.add(key)
+
+    mol = rw.GetMol()
+
+    if sanitize_mode == "partial":
+        _partial_sanitize(mol)
+
+    mol = _normalize_implicit_hs(mol)
+
+    smiles = Chem.MolToSmiles(mol, canonical=canonical, isomericSmiles=isomeric)
+    return smiles
+
 nn_act = torch.nn.ReLU()  # ReLU()
 F_act = F.relu
 
 
+# MessagePassing = グラフ間のメッセージ伝達を行うための基底クラス
+# CNNのConv2dに相当
 class GINConv(MessagePassing):
     def __init__(self, emb_dim):
         """
@@ -390,6 +645,7 @@ class GINConv(MessagePassing):
 
         super(GINConv, self).__init__(aggr="add")
 
+        # Dense（全結合に対応？）
         self.mlp = torch.nn.Sequential(
             torch.nn.Linear(emb_dim, 2 * emb_dim),
             torch.nn.BatchNorm1d(2 * emb_dim),
@@ -402,6 +658,7 @@ class GINConv(MessagePassing):
 
     def forward(self, x, edge_index, edge_attr):
         edge_embedding = self.bond_encoder(edge_attr)
+        # edge_embedding = 結合ごとの性質を表す学習中に更新される数列。
         out = self.mlp(
             (1 + self.eps) * x
             + self.propagate(edge_index, x=x, edge_attr=edge_embedding)
@@ -769,8 +1026,11 @@ class GraphEnvAug(torch.nn.Module):
             )
 
     def forward(self, batched_data):
+        print(batched_data)
         h_node = self.graph_encoder(batched_data)
         h_r, h_env, r_node_num, env_node_num = self.separator(batched_data, h_node)
+        # グラフ拡張
+        # h_r.unsqueeze(1): (G, 1, D) + h_env.unsqueeze(0): (1, G, D) view(-1, self.emb_dim):(G, G, D) → (G*G, D)
         h_rep = (h_r.unsqueeze(1) + h_env.unsqueeze(0)).view(-1, self.emb_dim)
         pred_rem = self.predictor(h_r)
         pred_rep = self.predictor(h_rep)
@@ -787,19 +1047,24 @@ class GraphEnvAug(torch.nn.Module):
         pred_rem = self.predictor(h_r)
         return pred_rem
 
-    def encode(self, batched_data):
-        """
-        推論用特徴抽出。
-        external_only=True の場合は rationale 部分 (h_r)、
-        False の場合は rationale を返す（用途未定なら h_r で十分）。
-        """
-        with torch.no_grad():
-            h_node = self.graph_encoder(batched_data)
-            h_r, h_env, _, _ = self.separator(batched_data, h_node)
-            if self.external_only:
-                return h_r
+    def generate_graph(self, batched_data):
+        h_node = self.graph_encoder(batched_data)
+        h_r, h_env, r_node_num, env_node_num = self.separator(batched_data, h_node)
+        G = h_r.size(0)
+        h_rep = (h_r.unsqueeze(1) + h_env.unsqueeze(0)).view(-1, self.emb_dim)
+
+        if args.dataset.startswith("plym"):
+            if args.plym_prop == "density":
+                y = torch.log(batched_data[args.plym_prop])
             else:
-                return h_r  # 拡張予定: h_r と h_env の結合など
+                y = batched_data[args.plym_prop]
+        # y 次元を (G, y_dim) に整形
+        if y.dim() == 1:
+            y = y.unsqueeze(-1)
+        # repeat_interleave で各 i の y[i] を G 回並べる → h_rep 並びと一致
+        target_rep = y.repeat_interleave(G, dim=0)
+
+        return h_rep, target_rep
 
 
 class separator(torch.nn.Module):
@@ -851,7 +1116,6 @@ class separator(torch.nn.Module):
         return h_out, c_out, r_node_num + 1e-8, env_node_num + 1e-8
 
 
-
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
@@ -863,50 +1127,116 @@ from tqdm import tqdm
 ## dataset
 from sklearn.model_selection import train_test_split
 from ogb.graphproppred import PygGraphPropPredDataset, Evaluator
+from pprint import pformat
 
 
 def main(args):
     print(args)
-    device = torch.device("cuda:" + str(args.device)) if torch.cuda.is_available() else torch.device("cpu")
-    if args.dataset.startswith('ogbg'):
-        dataset = PygGraphPropPredDataset(name = args.dataset, root='data')
-        
+    device = (
+        torch.device("cuda:" + str(args.device))
+        if torch.cuda.is_available()
+        else torch.device("cpu")
+    )
+    if args.dataset.startswith("ogbg"):
+        dataset = PygGraphPropPredDataset(name=args.dataset, root="data")
+
         split_idx = dataset.get_idx_split()
-        train_loader = DataLoader(dataset[split_idx["train"]], batch_size=args.batch_size, shuffle=True, num_workers = 0)
-        valid_loader = DataLoader(dataset[split_idx["valid"]], batch_size=args.batch_size, shuffle=False, num_workers = 0)
-        test_loader = DataLoader(dataset[split_idx["test"]], batch_size=args.batch_size, shuffle=False, num_workers = 0)
+        train_loader = DataLoader(
+            dataset[split_idx["train"]],
+            batch_size=args.batch_size,
+            shuffle=True,
+            num_workers=0,
+        )
+        valid_loader = DataLoader(
+            dataset[split_idx["valid"]],
+            batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=0,
+        )
+        test_loader = DataLoader(
+            dataset[split_idx["test"]],
+            batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=0,
+        )
+        all_loader = DataLoader(
+            dataset, batch_size=args.batch_size, shuffle=False, num_workers=0
+        )
         evaluator = Evaluator(args.dataset)
 
-    elif args.dataset.startswith('plym'):
-        dataset = PolymerRegDataset(name = TRAIN_FILE_NAME, root=DATA_DIR) # PolymerRegDataset
+    elif args.dataset.startswith("plym"):
+        dataset = PolymerRegDataset(
+            name=TRAIN_FILE_NAME, root=DATA_DIR
+        )  # PolymerRegDataset
         full_idx = list(range(len(dataset)))
         train_ratio = 0.6
         valid_ratio = 0.1
         test_ratio = 0.3
-        train_index, test_index, _, _ = train_test_split(full_idx, full_idx, test_size=test_ratio, random_state=42)
-        train_index, val_index, _, _ = train_test_split(train_index, train_index, test_size=valid_ratio/(valid_ratio+train_ratio), random_state=42)
+        train_index, test_index, _, _ = train_test_split(
+            full_idx, full_idx, test_size=test_ratio, random_state=42
+        )
+        train_index, val_index, _, _ = train_test_split(
+            train_index,
+            train_index,
+            test_size=valid_ratio / (valid_ratio + train_ratio),
+            random_state=42,
+        )
 
         train_index = torch.LongTensor(train_index)
         val_index = torch.LongTensor(val_index)
         test_index = torch.LongTensor(test_index)
 
-        train_loader = DataLoader(dataset[train_index], batch_size=args.batch_size, shuffle=True, num_workers = 0)
-        valid_loader = DataLoader(dataset[val_index], batch_size=args.batch_size, shuffle=False, num_workers = 0)
-        test_loader = DataLoader(dataset[test_index], batch_size=args.batch_size, shuffle=False, num_workers = 0)
-        evaluator = Evaluator('ogbg-molesol') # RMSE metric
-    n_train_data, n_val_data, n_test_data = len(train_loader.dataset), len(valid_loader.dataset), float(len(test_loader.dataset))
+        train_loader = DataLoader(
+            dataset[train_index],
+            batch_size=args.batch_size,
+            shuffle=True,
+            num_workers=0,
+        )
+        valid_loader = DataLoader(
+            dataset[val_index], batch_size=args.batch_size, shuffle=False, num_workers=0
+        )
+        test_loader = DataLoader(
+            dataset[test_index],
+            batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=0,
+        )
+        all_loader = DataLoader(
+            dataset, batch_size=args.batch_size, shuffle=False, num_workers=0
+        )
+        evaluator = Evaluator("ogbg-molesol")  # RMSE metric
+    n_train_data, n_val_data, n_test_data = (
+        len(train_loader.dataset),
+        len(valid_loader.dataset),
+        float(len(test_loader.dataset)),
+    )
     print(f"# Train: {n_train_data}  #Test: {n_test_data} #Val: {n_val_data}")
 
-    model = GraphEnvAug(gnn_type = args.gnn, num_tasks = dataset.num_tasks, num_layer = args.num_layer,
-                         emb_dim = args.emb_dim, drop_ratio = args.drop_ratio, gamma=args.gamma, use_linear_predictor = args.use_linear_predictor).to(device)    
+    model = GraphEnvAug(
+        gnn_type=args.gnn,
+        num_tasks=dataset.num_tasks,
+        num_layer=args.num_layer,
+        emb_dim=args.emb_dim,
+        drop_ratio=args.drop_ratio,
+        gamma=args.gamma,
+        use_linear_predictor=args.use_linear_predictor,
+    ).to(device)
     init_weights(model, args.initw_name, init_gain=0.02)
-    opt_separator = optim.Adam(model.separator.parameters(), lr=args.lr, weight_decay=args.l2reg)
-    opt_predictor = optim.Adam(list(model.graph_encoder.parameters())+list(model.predictor.parameters()), lr=args.lr, weight_decay=args.l2reg)
-    optimizers = {'separator': opt_separator, 'predictor': opt_predictor}
+    opt_separator = optim.Adam(
+        model.separator.parameters(), lr=args.lr, weight_decay=args.l2reg
+    )
+    opt_predictor = optim.Adam(
+        list(model.graph_encoder.parameters()) + list(model.predictor.parameters()),
+        lr=args.lr,
+        weight_decay=args.l2reg,
+    )
+    optimizers = {"separator": opt_separator, "predictor": opt_predictor}
     if args.use_lr_scheduler:
         schedulers = {}
         for opt_name, opt in optimizers.items():
-            schedulers[opt_name] = optim.lr_scheduler.CosineAnnealingLR(opt, T_max=100, eta_min=1e-4)
+            schedulers[opt_name] = optim.lr_scheduler.CosineAnnealingLR(
+                opt, T_max=100, eta_min=1e-4
+            )
     else:
         schedulers = None
     cnt_wait = 0
@@ -915,11 +1245,19 @@ def main(args):
         print("=====Epoch {}".format(epoch))
         path = epoch % int(args.path_list[-1])
         if path in list(range(int(args.path_list[0]))):
-            optimizer_name = 'separator' 
+            optimizer_name = "separator"
         elif path in list(range(int(args.path_list[0]), int(args.path_list[1]))):
-            optimizer_name = 'predictor'
+            optimizer_name = "predictor"
 
-        train(args, model, device, train_loader, optimizers, dataset.task_type, optimizer_name)
+        train(
+            args,
+            model,
+            device,
+            train_loader,
+            optimizers,
+            dataset.task_type,
+            optimizer_name,
+        )
 
         if schedulers != None:
             schedulers[optimizer_name].step()
@@ -927,38 +1265,89 @@ def main(args):
         valid_perf = eval(args, model, device, valid_loader, evaluator)[0]
         update_test = False
         if epoch != 0:
-            if 'classification' in dataset.task_type and valid_perf >  best_valid_perf:
+            if "classification" in dataset.task_type and valid_perf > best_valid_perf:
                 update_test = True
-            elif 'classification' not in dataset.task_type and valid_perf <  best_valid_perf:
+            elif (
+                "classification" not in dataset.task_type
+                and valid_perf < best_valid_perf
+            ):
                 update_test = True
         if update_test or epoch == 0:
             best_valid_perf = valid_perf
             cnt_wait = 0
             best_epoch = epoch
             test_perfs = eval(args, model, device, test_loader, evaluator)
-            if args.dataset.startswith('ogbg'):
-                test_auc  = test_perfs[0]
-                print({'Metric': 'AUC', 'Train': train_perf, 'Validation': valid_perf, 'Test': test_auc})
+            if args.dataset.startswith("ogbg"):
+                test_auc = test_perfs[0]
+                print(
+                    {
+                        "Metric": "AUC",
+                        "Train": train_perf,
+                        "Validation": valid_perf,
+                        "Test": test_auc,
+                    }
+                )
             else:
                 test_rmse, test_r2 = test_perfs[0], test_perfs[1]
-                print({'Metric': 'RMSE', 'Train': train_perf, 'Validation': valid_perf, 'Test': test_rmse, 'Test R2': test_r2})
+                print(
+                    {
+                        "Metric": "RMSE",
+                        "Train": train_perf,
+                        "Validation": valid_perf,
+                        "Test": test_rmse,
+                        "Test R2": test_r2,
+                    }
+                )
         else:
-            print({'Train': train_perf, 'Validation': valid_perf})
+            print({"Train": train_perf, "Validation": valid_perf})
             cnt_wait += 1
             if cnt_wait > args.patience:
                 break
-    print('Finished training! Results from epoch {} with best validation {}.'.format(best_epoch, best_valid_perf))
-    if args.dataset.startswith('ogbg'):
-        print('Test auc: {}'.format(test_auc))
+    print(
+        "Finished training! Results from epoch {} with best validation {}.".format(
+            best_epoch, best_valid_perf
+        )
+    )
+    graphs = generate(args, model, device, all_loader)
+    print("Generated {} graphs.".format(len(graphs["graph"])))
+    print("Generated {} graphs.".format(len(graphs["y"])))
+
+    for i in graphs["graph"]:
+        print(i)
+        smi = graph2smiles(i)
+        # print(smi)
+        graphs["graph"][i] = smi
+
+    # CSV 出力 (埋め込み + target)
+    from pathlib import Path
+    import pandas as pd
+
+    if graphs["graph"].numel() == 0:
+        print("No graph embeddings to save.")
+    else:
+        out_dir = Path("tmp")
+        out_dir.mkdir(exist_ok=True, parents=True)
+        emb = graphs["graph"].detach().cpu().numpy()
+        tgt = graphs["y"].detach().cpu().numpy()
+        # tgt は (N, 1) 想定
+        df = pd.DataFrame(emb)
+        df.insert(0, "target", tgt.reshape(-1))
+        out_path = out_dir / "graph_embeddings.csv"
+        df.to_csv(out_path, index=False)
+        print(f"Saved embeddings to {out_path} shape={df.shape}")
+
+    if args.dataset.startswith("ogbg"):
+        print("Test auc: {}".format(test_auc))
         return [best_valid_perf, test_auc]
-    if args.dataset.startswith('plym'):
-        print('Test rmse: {}, Test r2: {} \n'.format(test_rmse, test_r2))
+    if args.dataset.startswith("plym"):
+        print("Test rmse: {}, Test r2: {} \n".format(test_rmse, test_r2))
         return [best_valid_perf, test_rmse, test_r2]
 
+
 def config_and_run(args):
-    
+    print(args.by_default, args.dataset)
     if args.by_default:
-        if args.dataset == 'plym-o2_prop':
+        if args.dataset == "plym-o2_prop":
             # oxygen permeability
             args.gamma = 0.2
             args.epochs = 400
@@ -967,153 +1356,161 @@ def config_and_run(args):
             args.batch_size = 32
             args.l2reg = 1e-4
             args.lr = 1e-2
-            if args.gnn == 'gcn-virtual':
+            if args.gnn == "gcn-virtual":
                 args.lr = 1e-3
                 args.l2reg = 1e-5
                 args.patience = 100
-        if args.dataset == 'plym-mt_prop':
+        if args.dataset == "plym-mt_prop":
             # melting temperature
-            args.epochs = 400
+            args.epochs = 1#400
             args.l2reg = 1e-5
             args.gamma = 0.05
             args.num_layer = 3
             args.drop_ratio = 0.1
             args.batch_size = 32
             args.lr = 1e-2
-            if args.gnn == 'gcn-virtual':
+            if args.gnn == "gcn-virtual":
                 args.lr = 1e-3
             args.patience = 50
-        if args.dataset == 'plym-tg_prop':
+        if args.dataset == "plym-tg_prop":
             # glass temperature
-            args.epochs = 400
-            args.l2reg = 1e-5 
+            args.epochs = 1#400
+            args.l2reg = 1e-5
             args.gamma = 0.05
             args.num_layer = 3
             args.drop_ratio = 0.1
-            args.initw_name = 'orthogonal'
+            args.initw_name = "orthogonal"
             args.batch_size = 256
             args.lr = 1e-2
             args.patience = 50
-        if args.dataset == 'plym-density_prop':
+        if args.dataset == "plym-density_prop":
             # polymer density
             args.epochs = 400
             args.l2reg = 1e-5
             args.gamma = 0.3
             args.num_layer = 3
             args.drop_ratio = 0.5
-            if args.gnn == 'gcn-virtual':
+            if args.gnn == "gcn-virtual":
                 args.l2reg = 1e-4
             args.batch_size = 32
             args.lr = 1e-3
             args.patience = 50
             args.use_clip_norm = True
-        
-        if args.dataset == 'ogbg-molhiv':
+
+        if args.dataset == "ogbg-molhiv":
             args.gamma = 0.1
             args.batch_size = 512
-            args.initw_name = 'orthogonal'
-            if args.gnn == 'gcn-virtual':
+            args.initw_name = "orthogonal"
+            if args.gnn == "gcn-virtual":
                 args.lr = 1e-3
                 args.l2reg = 1e-5
                 args.epochs = 100
                 args.num_layer = 3
                 args.use_clip_norm = True
-                args.path_list=[2, 4]
-        if args.dataset == 'ogbg-molbace':
-            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
-                args.gnn = 'gin'
+                args.path_list = [2, 4]
+        if args.dataset == "ogbg-molbace":
+            if args.gnn == "gin-virtual" or args.gnn == "gin":
+                args.gnn = "gin"
                 args.l2reg = 7e-4
                 args.gamma = 0.55
-                args.num_layer = 4  
+                args.num_layer = 4
                 args.batch_size = 64
                 args.emb_dim = 64
                 args.use_lr_scheduler = True
                 args.patience = 100
                 args.drop_ratio = 0.3
-                args.initw_name = 'orthogonal' 
-            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
-                args.gnn = 'gcn'
+                args.initw_name = "orthogonal"
+            if args.gnn == "gcn-virtual" or args.gnn == "gcn":
+                args.gnn = "gcn"
                 args.patience = 100
-                args.initw_name = 'orthogonal' 
+                args.initw_name = "orthogonal"
                 args.num_layer = 2
                 args.emb_dim = 64
                 args.batch_size = 128
-        if args.dataset == 'ogbg-molbbbp':
+        if args.dataset == "ogbg-molbbbp":
             args.l2reg = 5e-6
-            args.initw_name = 'orthogonal'
+            args.initw_name = "orthogonal"
             args.num_layer = 2
             args.emb_dim = 64
-            args.batch_size = 256 
-            args.use_lr_scheduler = True 
+            args.batch_size = 256
+            args.use_lr_scheduler = True
             args.gamma = 0.2
-            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
-                args.gnn = 'gcn-virtual'
+            if args.gnn == "gcn-virtual" or args.gnn == "gcn":
+                args.gnn = "gcn-virtual"
                 args.gamma = 0.4
                 args.emb_dim = 128
-                args.use_lr_scheduler = False 
-        if args.dataset == 'ogbg-molsider':
-            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
-                args.gnn = 'gin'
-            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
-                args.gnn = 'gcn'
+                args.use_lr_scheduler = False
+        if args.dataset == "ogbg-molsider":
+            if args.gnn == "gin-virtual" or args.gnn == "gin":
+                args.gnn = "gin"
+            if args.gnn == "gcn-virtual" or args.gnn == "gcn":
+                args.gnn = "gcn"
             args.l2reg = 1e-4
             args.patience = 100
             args.gamma = 0.65
-            args.num_layer =  5
+            args.num_layer = 5
             args.epochs = 400
-        if args.dataset == 'ogbg-molclintox':
-            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
-                args.gnn = 'gin'
-            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
-                args.gnn = 'gcn'
+        if args.dataset == "ogbg-molclintox":
+            if args.gnn == "gin-virtual" or args.gnn == "gin":
+                args.gnn = "gin"
+            if args.gnn == "gcn-virtual" or args.gnn == "gcn":
+                args.gnn = "gcn"
             args.use_linear_predictor = True
             args.use_clip_norm = True
             args.gamma = 0.2
             args.patience = 100
-            args.batch_size = 64 
+            args.batch_size = 64
             args.num_layer = 5
             args.emb_dim = 300
             args.l2reg = 1e-4
             args.epochs = 400
-            args.drop_ratio=0.5
-        if args.dataset == 'ogbg-moltox21':
-            args.gamma = 0.8 
-        if args.dataset == 'ogbg-moltoxcast':
-            if args.gnn == 'gin-virtual' or args.gnn == 'gin':
-                args.gnn = 'gin'
-            if args.gnn == 'gcn-virtual' or args.gnn == 'gcn':
-                args.gnn = 'gcn'
+            args.drop_ratio = 0.5
+        if args.dataset == "ogbg-moltox21":
+            args.gamma = 0.8
+        if args.dataset == "ogbg-moltoxcast":
+            if args.gnn == "gin-virtual" or args.gnn == "gin":
+                args.gnn = "gin"
+            if args.gnn == "gcn-virtual" or args.gnn == "gcn":
+                args.gnn = "gcn"
             args.patience = 50
             args.epochs = 150
             args.l2reg = 1e-5
             args.gamma = 0.7
             args.num_layer = 2
 
-
     # args.plym_prop = 'none' if args.dataset.startswith('ogbg') else args.dataset.split('-')[1].split('_')[0]
-    args.plym_prop = 'Tg'
-    if args.dataset.startswith('ogbg'):
-        results = {'valid_auc': [], 'test_auc': []}
+    args.plym_prop = TARGET
+    if args.dataset.startswith("ogbg"):
+        results = {"valid_auc": [], "test_auc": []}
     else:
-        results = {'valid_rmse': [], 'test_rmse': [], 'test_r2':[]}
+        results = {"valid_rmse": [], "test_rmse": [], "test_r2": []}
     for _ in range(args.trails):
-        if args.dataset.startswith('plym'):
+        if args.dataset.startswith("plym"):
             valid_rmse, test_rmse, test_r2 = main(args)
-            results['test_r2'].append(test_r2)
-            results['test_rmse'].append(test_rmse)
-            results['valid_rmse'].append(valid_rmse)
+            results["test_r2"].append(test_r2)
+            results["test_rmse"].append(test_rmse)
+            results["valid_rmse"].append(valid_rmse)
         else:
             valid_auc, test_auc = main(args)
-            results['valid_auc'].append(valid_auc)
-            results['test_auc'].append(test_auc)
+            results["valid_auc"].append(valid_auc)
+            results["test_auc"].append(test_auc)
     for mode, nums in results.items():
-        print('{}: {:.4f}+-{:.4f} {}'.format(
-            mode, np.mean(nums), np.std(nums), nums))
+        print("{}: {:.4f}+-{:.4f} {}".format(mode, np.mean(nums), np.std(nums), nums))
+
+
+def graph_decode_test(smiles):
+    g = smiles2graph(smiles)
+    s = graph2smiles(g)
+    if smiles != s:
+        print(f"{smiles} => {s}")
 
 if __name__ == "__main__":
+    
+    print(smiles2graph("C1=CC=CC=C1"))
+    # df_full = pd.read_csv(DATA_DIR + "/" + TRAIN_FILE_NAME, engine="python")
+    # for smiles in df_full["SMILES"].tolist():
+    #     graph_decode_test(smiles)
+
+    # exit(0)
     args = get_args()
     config_and_run(args)
-
-
-
-
