@@ -35,11 +35,11 @@ import copy
 
 DATA_DIR = "/kaggle/input/neurips-open-polymer-prediction-2025"
 TRAIN_FILE_NAME = "train.csv"
-TARGET = "Tg"
+TARGET = "FFV"
 
 import torch
 import argparse
-from sklearn.metrics import r2_score
+from sklearn.metrics import mean_absolute_error, r2_score
 
 
 def get_args():
@@ -232,36 +232,9 @@ def eval(args, model, device, loader, evaluator):
     y_pred = torch.cat(y_pred, dim=0).numpy()
     input_dict = {"y_true": y_true, "y_pred": y_pred}
     if args.dataset.startswith("plym"):
-        return [evaluator.eval(input_dict)["rmse"], r2_score(y_true, y_pred)]
+        return [evaluator.eval(input_dict)["rmse"], r2_score(y_true, y_pred), mean_absolute_error(y_true, y_pred)]
     elif args.dataset.startswith("ogbg"):
         return [evaluator.eval(input_dict)["rocauc"]]
-
-
-def generate(args, model, device, loader):
-    model.eval()
-    graph_chunks = []
-    target_chunks = []
-    total_nodes = 0
-
-    for step, batch in enumerate(loader):
-        batch = batch.to(device)
-        n_nodes = batch.x.shape[0]
-        print(f"[generate] batch={step} nodes={n_nodes}")
-        if n_nodes <= 1:
-            continue
-        with torch.no_grad():
-            h_rep, target_rep = model.generate_graph(batch)
-            graph_chunks.append(h_rep)
-            target_chunks.append(target_rep)
-            total_nodes += h_rep.size(0)
-
-    if len(graph_chunks) == 0:
-        return {"graph": torch.empty(0, model.emb_dim), "y": torch.empty(0, 1)}
-
-    graphs_cat = torch.cat(graph_chunks, dim=0)
-    targets_cat = torch.cat(target_chunks, dim=0)
-    print(f"[generate] concatenated: {graphs_cat.shape}  targets: {targets_cat.shape}")
-    return {"graph": graphs_cat, "y": targets_cat}
 
 
 def init_weights(net, init_type="normal", init_gain=0.02):
@@ -380,12 +353,9 @@ class PolymerRegDataset(InMemoryDataset):
             print(df_full[:5])
 
         target_col = TARGET
-        print("sssss")
         if target_col in df_full.columns:
             before = len(df_full)
-            print(df_full.columns)
             df_full = df_full[np.isfinite(df_full[target_col])]
-            print(df_full.shape)
             df_full = df_full.dropna(subset=[target_col])
             after = len(df_full)
             if before != after:
@@ -487,149 +457,6 @@ def smiles2graph(smiles_string):
     graph["num_nodes"] = len(x)
     return graph
 
-
-
-allowable_features = {
-    'possible_atomic_num_list': list(range(1, 119)),
-    'possible_chirality_list': [
-        Chem.rdchem.ChiralType.CHI_UNSPECIFIED,
-        Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CW,
-        Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CCW,
-        Chem.rdchem.ChiralType.CHI_OTHER
-    ],
-    'possible_formal_charge_list': [-5,-4,-3,-2,-1,0,1,2,3,4,5],
-    'possible_number_radical_e_list': [0,1,2,3,4],
-    'possible_bond_type_list': [
-        Chem.BondType.SINGLE, Chem.BondType.DOUBLE,
-        Chem.BondType.TRIPLE, Chem.BondType.AROMATIC
-    ],
-    'possible_bond_stereo_list': [
-        Chem.BondStereo.STEREONONE,
-        Chem.BondStereo.STEREOZ,
-        Chem.BondStereo.STEREOE,
-        Chem.BondStereo.STEREOANY
-    ],
-    'possible_is_conjugated_list': [False, True],
-}
-
-def _decode(lst, idx, default):
-    return lst[idx] if 0 <= idx < len(lst) else default
-
-def decode_atom_feature(row):
-    r = np.asarray(row)
-    atomic_idx = int(r[0])
-    # 未知 = dummy(*) 扱い
-    if atomic_idx == len(allowable_features['possible_atomic_num_list']):
-        atomic_num = 0
-    else:
-        atomic_num = _decode(allowable_features['possible_atomic_num_list'], atomic_idx, 6)
-    chiral = _decode(allowable_features['possible_chirality_list'], int(r[1]),
-                     Chem.rdchem.ChiralType.CHI_UNSPECIFIED)
-    formal = _decode(allowable_features['possible_formal_charge_list'], int(r[3]), 0)
-    radical = _decode(allowable_features['possible_number_radical_e_list'], int(r[5]), 0)
-    aromatic = (int(r[7]) == 1)
-    return dict(atomic_num=atomic_num, chiral=chiral,
-                formal=formal, radical=radical, aromatic=aromatic)
-
-def decode_bond_feature(row):
-    r = np.asarray(row)
-    bt = _decode(allowable_features['possible_bond_type_list'], int(r[0]), Chem.BondType.SINGLE)
-    st = _decode(allowable_features['possible_bond_stereo_list'], int(r[1]), Chem.BondStereo.STEREONONE)
-    cj = _decode(allowable_features['possible_is_conjugated_list'], int(r[2]), False)
-    return bt, st, cj
-
-def _partial_sanitize(mol):
-    ops = (Chem.SanitizeFlags.SANITIZE_FINDRADICALS |
-           Chem.SanitizeFlags.SANITIZE_SETAROMATICITY |
-           Chem.SanitizeFlags.SANITIZE_SETCONJUGATION |
-           Chem.SanitizeFlags.SANITIZE_SETHYBRIDIZATION |
-           Chem.SanitizeFlags.SANITIZE_ADJUSTHS)
-    try:
-        Chem.SanitizeMol(mol, sanitizeOps=ops)
-    except Exception:
-        pass
-
-def _normalize_implicit_hs(mol):
-    # 明示Hを削除可能な形に調整
-    for a in mol.GetAtoms():
-        if a.GetAtomicNum() == 0:
-            a.SetNoImplicit(True)
-            continue
-        # 余計な explicit H を一旦 0 に戻し再計算を許可
-        if a.GetNumExplicitHs() > 0:
-            a.SetNumExplicitHs(0)
-        a.SetNoImplicit(False)
-        a.UpdatePropertyCache(strict=False)
-    # 暗黙H再調整
-    try:
-        Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ADJUSTHS)
-    except Exception:
-        pass
-    # Remove explicit H
-    mol2 = Chem.RemoveHs(mol, sanitize=False)
-    return mol2
-
-def graph2smiles(graph,
-                 canonical=False,
-                 sanitize_mode="partial",  # "none" | "partial"
-                 isomeric=True):
-    edge_index = graph["edge_index"]
-    edge_feat  = graph["edge_feat"]
-    node_feat  = graph["node_feat"]
-    n = graph["num_nodes"]
-
-    rw = Chem.RWMol()
-
-    # 原子追加 (hybridization/implicitH 推定は sanitize に任せる)
-    for i in range(n):
-        attr = decode_atom_feature(node_feat[i])
-        if attr['atomic_num'] == 0:
-            atom = Chem.Atom("*")
-            atom.SetNoImplicit(True)
-        else:
-            atom = Chem.Atom(attr['atomic_num'])
-            atom.SetFormalCharge(attr['formal'])
-            if attr['radical'] > 0:
-                atom.SetNumRadicalElectrons(attr['radical'])
-            atom.SetChiralTag(attr['chiral'])
-            if attr['aromatic']:
-                atom.SetIsAromatic(True)
-            atom.SetNoImplicit(False)
-        rw.AddAtom(atom)
-
-    # ボンド（双方向重複排除）
-    added = set()
-    E = edge_index.shape[1]
-    for k in range(E):
-        u = int(edge_index[0, k]); v = int(edge_index[1, k])
-        if u == v: continue
-        key = (u, v) if u < v else (v, u)
-        if key in added: continue
-        bt, st, cj = decode_bond_feature(edge_feat[k])
-        rw.AddBond(u, v, bt)
-        b = rw.GetBondBetweenAtoms(u, v)
-        if b:
-            if bt == Chem.BondType.AROMATIC:
-                b.SetIsAromatic(True)
-                for aidx in (u, v):
-                    a = rw.GetAtomWithIdx(aidx)
-                    if a.GetAtomicNum() != 0:
-                        a.SetIsAromatic(True)
-            if cj:
-                b.SetIsConjugated(True)
-            if st != Chem.BondStereo.STEREONONE:
-                b.SetStereo(st)
-        added.add(key)
-
-    mol = rw.GetMol()
-
-    if sanitize_mode == "partial":
-        _partial_sanitize(mol)
-
-    mol = _normalize_implicit_hs(mol)
-
-    smiles = Chem.MolToSmiles(mol, canonical=canonical, isomericSmiles=isomeric)
-    return smiles
 
 nn_act = torch.nn.ReLU()  # ReLU()
 F_act = F.relu
@@ -1026,7 +853,6 @@ class GraphEnvAug(torch.nn.Module):
             )
 
     def forward(self, batched_data):
-        print(batched_data)
         h_node = self.graph_encoder(batched_data)
         h_r, h_env, r_node_num, env_node_num = self.separator(batched_data, h_node)
         # グラフ拡張
@@ -1046,25 +872,6 @@ class GraphEnvAug(torch.nn.Module):
         h_r, _, _, _ = self.separator(batched_data, h_node)
         pred_rem = self.predictor(h_r)
         return pred_rem
-
-    def generate_graph(self, batched_data):
-        h_node = self.graph_encoder(batched_data)
-        h_r, h_env, r_node_num, env_node_num = self.separator(batched_data, h_node)
-        G = h_r.size(0)
-        h_rep = (h_r.unsqueeze(1) + h_env.unsqueeze(0)).view(-1, self.emb_dim)
-
-        if args.dataset.startswith("plym"):
-            if args.plym_prop == "density":
-                y = torch.log(batched_data[args.plym_prop])
-            else:
-                y = batched_data[args.plym_prop]
-        # y 次元を (G, y_dim) に整形
-        if y.dim() == 1:
-            y = y.unsqueeze(-1)
-        # repeat_interleave で各 i の y[i] を G 回並べる → h_rep 並びと一致
-        target_rep = y.repeat_interleave(G, dim=0)
-
-        return h_rep, target_rep
 
 
 class separator(torch.nn.Module):
@@ -1261,8 +1068,8 @@ def main(args):
 
         if schedulers != None:
             schedulers[optimizer_name].step()
-        train_perf = eval(args, model, device, train_loader, evaluator)[0]
-        valid_perf = eval(args, model, device, valid_loader, evaluator)[0]
+        train_perf = eval(args, model, device, train_loader, evaluator)
+        valid_perf = eval(args, model, device, valid_loader, evaluator)
         update_test = False
         if epoch != 0:
             if "classification" in dataset.task_type and valid_perf > best_valid_perf:
@@ -1308,33 +1115,6 @@ def main(args):
             best_epoch, best_valid_perf
         )
     )
-    graphs = generate(args, model, device, all_loader)
-    print("Generated {} graphs.".format(len(graphs["graph"])))
-    print("Generated {} graphs.".format(len(graphs["y"])))
-
-    for i in graphs["graph"]:
-        print(i)
-        smi = graph2smiles(i)
-        # print(smi)
-        graphs["graph"][i] = smi
-
-    # CSV 出力 (埋め込み + target)
-    from pathlib import Path
-    import pandas as pd
-
-    if graphs["graph"].numel() == 0:
-        print("No graph embeddings to save.")
-    else:
-        out_dir = Path("tmp")
-        out_dir.mkdir(exist_ok=True, parents=True)
-        emb = graphs["graph"].detach().cpu().numpy()
-        tgt = graphs["y"].detach().cpu().numpy()
-        # tgt は (N, 1) 想定
-        df = pd.DataFrame(emb)
-        df.insert(0, "target", tgt.reshape(-1))
-        out_path = out_dir / "graph_embeddings.csv"
-        df.to_csv(out_path, index=False)
-        print(f"Saved embeddings to {out_path} shape={df.shape}")
 
     if args.dataset.startswith("ogbg"):
         print("Test auc: {}".format(test_auc))
@@ -1362,7 +1142,7 @@ def config_and_run(args):
                 args.patience = 100
         if args.dataset == "plym-mt_prop":
             # melting temperature
-            args.epochs = 1#400
+            args.epochs = 400
             args.l2reg = 1e-5
             args.gamma = 0.05
             args.num_layer = 3
@@ -1374,7 +1154,7 @@ def config_and_run(args):
             args.patience = 50
         if args.dataset == "plym-tg_prop":
             # glass temperature
-            args.epochs = 1#400
+            args.epochs = 400
             args.l2reg = 1e-5
             args.gamma = 0.05
             args.num_layer = 3
@@ -1497,20 +1277,9 @@ def config_and_run(args):
     for mode, nums in results.items():
         print("{}: {:.4f}+-{:.4f} {}".format(mode, np.mean(nums), np.std(nums), nums))
 
-
-def graph_decode_test(smiles):
-    g = smiles2graph(smiles)
-    s = graph2smiles(g)
-    if smiles != s:
-        print(f"{smiles} => {s}")
-
 if __name__ == "__main__":
-    
-    print(smiles2graph("C1=CC=CC=C1"))
-    # df_full = pd.read_csv(DATA_DIR + "/" + TRAIN_FILE_NAME, engine="python")
-    # for smiles in df_full["SMILES"].tolist():
-    #     graph_decode_test(smiles)
-
-    # exit(0)
     args = get_args()
     config_and_run(args)
+
+
+#  Tg 39.2757790700606
