@@ -41,6 +41,8 @@ import torch
 import argparse
 from sklearn.metrics import mean_absolute_error, r2_score
 
+from torchvista import trace_model
+
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -158,6 +160,7 @@ reg_criterion = torch.nn.MSELoss()
 
 def train(args, model, device, loader, optimizers, task_type, optimizer_name):
     optimizer = optimizers[optimizer_name]
+
     model.train()
     if optimizer_name == "predictor":
         set_requires_grad([model.graph_encoder, model.predictor], requires_grad=True)
@@ -166,8 +169,29 @@ def train(args, model, device, loader, optimizers, task_type, optimizer_name):
         set_requires_grad([model.separator], requires_grad=True)
         set_requires_grad([model.graph_encoder, model.predictor], requires_grad=False)
 
+    traced = False  # 1回だけトレース
+
     for step, batch in enumerate(loader):
         batch = batch.to(device)
+
+        if (not traced) and batch.x.size(0) > 1:
+            traced = True
+            try:
+                from IPython.display import display
+                import copy as _copy
+
+                with torch.no_grad():
+                    html_obj = trace_model(
+                        model,
+                        batch,
+                        export_format="html",
+                        collapse_modules_after_depth=3,
+                    )
+                # Notebook 環境なら整形表示（端末なら単純 print）
+                display(html_obj)
+                exit(0)
+            except Exception as e:
+                print(f"[trace_model skipped] {e}")
 
         if batch.x.shape[0] == 1 or batch.batch[-1] == 0:
             pass
@@ -232,7 +256,11 @@ def eval(args, model, device, loader, evaluator):
     y_pred = torch.cat(y_pred, dim=0).numpy()
     input_dict = {"y_true": y_true, "y_pred": y_pred}
     if args.dataset.startswith("plym"):
-        return [evaluator.eval(input_dict)["rmse"], r2_score(y_true, y_pred), mean_absolute_error(y_true, y_pred)]
+        return [
+            evaluator.eval(input_dict)["rmse"],
+            r2_score(y_true, y_pred),
+            mean_absolute_error(y_true, y_pred),
+        ]
     elif args.dataset.startswith("ogbg"):
         return [evaluator.eval(input_dict)["rocauc"]]
 
@@ -944,6 +972,7 @@ def main(args):
         if torch.cuda.is_available()
         else torch.device("cpu")
     )
+    print("device: {}".format(device))
     if args.dataset.startswith("ogbg"):
         dataset = PygGraphPropPredDataset(name=args.dataset, root="data")
 
@@ -1276,6 +1305,7 @@ def config_and_run(args):
             results["test_auc"].append(test_auc)
     for mode, nums in results.items():
         print("{}: {:.4f}+-{:.4f} {}".format(mode, np.mean(nums), np.std(nums), nums))
+
 
 if __name__ == "__main__":
     args = get_args()
